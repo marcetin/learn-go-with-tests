@@ -1,6 +1,6 @@
 package iteration
 
-// Repeat returns character repeated 5 times.
+// Repeat враћа знак поновљен 5 пута.
 func Repeat(character string) string {
 	var repeated string
 	for i := 0; i < 5; i++ {

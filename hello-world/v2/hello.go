@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// Hello returns a greeting.
+// Hello враћа поздрав.
 func Hello() string {
 	return "Hello, world"
 }

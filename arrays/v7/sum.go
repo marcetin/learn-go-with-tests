@@ -1,6 +1,6 @@
 package main
 
-// Sum calculates the total from a slice of numbers.
+// Sum израчунава укупан износ из парчета бројева.
 func Sum(numbers []int) int {
 	sum := 0
 	for _, number := range numbers {
@@ -9,7 +9,7 @@ func Sum(numbers []int) int {
 	return sum
 }
 
-// SumAllTails calculates the sums of all but the first number given a collection of slices.
+// SumAllTails израчунава суме свих осим првог броја датог у колекцији кришки.
 func SumAllTails(numbersToSum ...[]int) []int {
 	var sums []int
 	for _, numbers := range numbersToSum {

@@ -4,7 +4,7 @@ import "fmt"
 
 const englishHelloPrefix = "Hello, "
 
-// Hello returns a personalised greeting, defaulting to Hello, world if an empty name is passed.
+// Hello враћа персонализовани поздрав, подразумевано је "Hello, world" ако се проследи празно име.
 func Hello(name string) string {
 	if name == "" {
 		name = "World"

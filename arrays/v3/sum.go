@@ -1,6 +1,6 @@
 package main
 
-// Sum calculates the total from a slice of numbers.
+// Sum израчунава укупан износ из кришки бројева.
 func Sum(numbers []int) int {
 	sum := 0
 	for _, number := range numbers {

@@ -1,6 +1,6 @@
 package integers
 
-// Add takes two integers and returns the sum of them.
+// Add узима две целобројне вредности и враћа њихов збир.
 func Add(x, y int) int {
 	return x + y
 }

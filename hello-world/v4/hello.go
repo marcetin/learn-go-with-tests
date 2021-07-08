@@ -4,7 +4,7 @@ import "fmt"
 
 const englishHelloPrefix = "Hello, "
 
-// Hello returns a personalised greeting.
+// Hello враћа персонализовани поздрав.
 func Hello(name string) string {
 	return englishHelloPrefix + name
 }
