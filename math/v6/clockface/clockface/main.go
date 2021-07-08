@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/quii/learn-go-with-tests/math/v6/clockface"
+	"github.com/marcetin/nauci-go-sa-testovima/math/v6/clockface"
 )
 
 func main() {

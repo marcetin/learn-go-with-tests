@@ -1,6 +1,6 @@
 # JSON, routing & embedding
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/json)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/json)**
 
 [In the previous chapter](http-server.md) we created a web server to store how many games players have won.
 
@@ -538,7 +538,7 @@ func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 Try and run the tests.
 
 ```
-# github.com/quii/learn-go-with-tests/json-and-io/v4
+# github.com/marcetin/nauci-go-sa-testovima/json-and-io/v4
 ./main.go:9:50: cannot use NewInMemoryPlayerStore() (type *InMemoryPlayerStore) as type PlayerStore in argument to NewPlayerServer:
     *InMemoryPlayerStore does not implement PlayerStore (missing GetLeague method)
 ./server_integration_test.go:11:27: cannot use store (type *InMemoryPlayerStore) as type PlayerStore in argument to NewPlayerServer:

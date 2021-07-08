@@ -1,6 +1,6 @@
 # Integers
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/integers)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/integers)**
 
 Integers work as you would expect. Let's write an `Add` function to try things out. Create a test file called `adder_test.go` and write this code.
 
@@ -140,7 +140,7 @@ To try this out, run `godoc -http=:6060` and navigate to `http://localhost:6060/
 
 Inside here you'll see a list of all the packages in your `$GOPATH`, so assuming you wrote this code in somewhere like `$GOPATH/src/github.com/{your_id}` you'll be able to find your example documentation.
 
-If you publish your code with examples to a public URL, you can share the documentation of your code at [pkg.go.dev](https://pkg.go.dev/). For example, [here](https://pkg.go.dev/github.com/quii/learn-go-with-tests/integers/v2) is the finalised API for this chapter. This web interface allows you to search for documentation of standard library packages and third-party packages.
+If you publish your code with examples to a public URL, you can share the documentation of your code at [pkg.go.dev](https://pkg.go.dev/). For example, [here](https://pkg.go.dev/github.com/marcetin/nauci-go-sa-testovima/integers/v2) is the finalised API for this chapter. This web interface allows you to search for documentation of standard library packages and third-party packages.
 
 ## Wrapping up
 

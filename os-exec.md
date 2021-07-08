@@ -1,6 +1,6 @@
 # OS Exec
 
-**[You can find all the code here](https://github.com/marcetin/learn-go-with-tests/tree/main/q-and-a/os-exec)**
+**[You can find all the code here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/q-and-a/os-exec)**
 
 [keith6014](https://www.reddit.com/user/keith6014) asks on [reddit](https://www.reddit.com/r/golang/comments/aaz8ji/testdata_and_function_setup_help/)
 

@@ -1,6 +1,6 @@
 # Reflection
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/reflection)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/reflection)**
 
 [From Twitter](https://twitter.com/peterbourgon/status/1011403901419937792?s=09)
 

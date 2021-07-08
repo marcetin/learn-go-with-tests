@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	poker "github.com/quii/learn-go-with-tests/time/v3"
+	poker "github.com/marcetin/nauci-go-sa-testovima/time/v3"
 )
 
 var dummyBlindAlerter = &poker.SpyBlindAlerter{}

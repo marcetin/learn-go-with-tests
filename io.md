@@ -1,6 +1,6 @@
 # IO and sorting
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/io)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/io)**
 
 [In the previous chapter](json.md) we continued iterating on our application by adding a new endpoint `/league`. Along the way we learned about how to deal with JSON, embedding types and routing.
 
@@ -177,7 +177,7 @@ We're using `strings.NewReader` which will return us a `Reader`, which is what o
 ## Try to run the test
 
 ```
-# github.com/quii/learn-go-with-tests/io/v1
+# github.com/marcetin/nauci-go-sa-testovima/io/v1
 ./file_system_store_test.go:15:12: undefined: FileSystemPlayerStore
 ```
 
@@ -193,7 +193,7 @@ type FileSystemPlayerStore struct {}
 Try again
 
 ```
-# github.com/quii/learn-go-with-tests/io/v1
+# github.com/marcetin/nauci-go-sa-testovima/io/v1
 ./file_system_store_test.go:15:28: too many values in struct initializer
 ./file_system_store_test.go:17:15: store.GetLeague undefined (type FileSystemPlayerStore has no field or method GetLeague)
 ```

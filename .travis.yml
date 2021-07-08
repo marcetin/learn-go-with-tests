@@ -5,7 +5,7 @@ go:
   - 1.16.x
 
 before_install:
-  - go get github.com/quii/learn-go-with-tests/command-line/v1
+  - go get github.com/marcetin/nauci-go-sa-testovima/command-line/v1
 
 install: true
 

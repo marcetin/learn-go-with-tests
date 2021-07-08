@@ -1,6 +1,6 @@
 # Здраво Свете
 
-**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/learn-go-with-tests/tree/main/hello-world)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/hello-world)**
 
 Традиционално је да то буде ваш први програм на новом језику [Здраво, Свете](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 

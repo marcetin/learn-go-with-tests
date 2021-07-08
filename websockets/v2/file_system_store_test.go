@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	poker "github.com/quii/learn-go-with-tests/websockets/v2"
+	poker "github.com/marcetin/nauci-go-sa-testovima/websockets/v2"
 )
 
 func createTempFile(t testing.TB, initialData string) (*os.File, func()) {

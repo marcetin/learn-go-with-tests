@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quii/learn-go-with-tests/math/v1/clockface"
+	"github.com/marcetin/nauci-go-sa-testovima/math/v1/clockface"
 )
 
 func TestSecondHandAtMidnight(t *testing.T) {

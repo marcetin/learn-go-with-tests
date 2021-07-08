@@ -1,6 +1,6 @@
 # Iteration
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/for)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/for)**
 
 To do stuff repeatedly in Go, you'll need `for`. In Go there are no `while`, `do`, `until` keywords, you can only use `for`. Which is a good thing!
 
@@ -116,7 +116,7 @@ To run the benchmarks do `go test -bench=.` (or if you're in Windows Powershell 
 ```text
 goos: darwin
 goarch: amd64
-pkg: github.com/quii/learn-go-with-tests/for/v4
+pkg: github.com/marcetin/nauci-go-sa-testovima/for/v4
 10000000           136 ns/op
 PASS
 ```

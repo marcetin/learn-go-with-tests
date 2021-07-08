@@ -1,6 +1,6 @@
 # Command line and project structure
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/command-line)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/command-line)**
 
 Our product owner now wants to _pivot_ by introducing a second application - a command line application.
 
@@ -72,7 +72,7 @@ The paths will be different on your computer, but it should be similar to this:
 package main
 
 import (
-	"github.com/quii/learn-go-with-tests/command-line/v1"
+	"github.com/marcetin/nauci-go-sa-testovima/command-line/v1"
 	"log"
 	"net/http"
 	"os"
@@ -103,7 +103,7 @@ The full path may seem a bit jarring, but this is how you can import _any_ publi
 
 By separating our domain code into a separate package and committing it to a public repo like GitHub any Go developer can write their own code which imports that package the features we've written available. The first time you try and run it will complain it is not existing but all you need to do is run `go get`.
 
-In addition, users can view [the documentation at godoc.org](https://godoc.org/github.com/quii/learn-go-with-tests/command-line/v1).
+In addition, users can view [the documentation at godoc.org](https://godoc.org/github.com/marcetin/nauci-go-sa-testovima/command-line/v1).
 
 ### Final checks
 
@@ -161,7 +161,7 @@ func TestCLI(t *testing.T) {
 ## Try to run the test
 
 ```
-# github.com/quii/learn-go-with-tests/command-line/v2
+# github.com/marcetin/nauci-go-sa-testovima/command-line/v2
 ./cli_test.go:25:10: undefined: CLI
 ```
 
@@ -387,7 +387,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/quii/learn-go-with-tests/command-line/v3"
+	"github.com/marcetin/nauci-go-sa-testovima/command-line/v3"
 	"log"
 	"os"
 )
@@ -627,7 +627,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/quii/learn-go-with-tests/command-line/v3"
+	"github.com/marcetin/nauci-go-sa-testovima/command-line/v3"
 	"log"
 	"os"
 )
@@ -655,7 +655,7 @@ func main() {
 package main
 
 import (
-	"github.com/quii/learn-go-with-tests/command-line/v3"
+	"github.com/marcetin/nauci-go-sa-testovima/command-line/v3"
 	"log"
 	"net/http"
 )

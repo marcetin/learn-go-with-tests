@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/quii/learn-go-with-tests/math/v11/clockface"
+	"github.com/marcetin/nauci-go-sa-testovima/math/v11/clockface"
 )
 
 type SVG struct {

@@ -1,6 +1,6 @@
 # WebSockets
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/websockets)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/websockets)**
 
 In this chapter we'll learn how to use WebSockets to improve our application.
 
@@ -657,9 +657,9 @@ var (
 The final error is where we are trying to pass in `Game` to `NewPlayerServer` but it doesn't support it yet
 
 ```
-./server_test.go:21:38: too many arguments in call to "github.com/quii/learn-go-with-tests/WebSockets/v2".NewPlayerServer
-	have ("github.com/quii/learn-go-with-tests/WebSockets/v2".PlayerStore, "github.com/quii/learn-go-with-tests/WebSockets/v2".Game)
-	want ("github.com/quii/learn-go-with-tests/WebSockets/v2".PlayerStore)
+./server_test.go:21:38: too many arguments in call to "github.com/marcetin/nauci-go-sa-testovima/WebSockets/v2".NewPlayerServer
+	have ("github.com/marcetin/nauci-go-sa-testovima/WebSockets/v2".PlayerStore, "github.com/marcetin/nauci-go-sa-testovima/WebSockets/v2".Game)
+	want ("github.com/marcetin/nauci-go-sa-testovima/WebSockets/v2".PlayerStore)
 ```
 
 ## Write the minimal amount of code for the test to run and check the failing test output

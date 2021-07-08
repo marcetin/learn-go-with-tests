@@ -1,4 +1,4 @@
-module github.com/quii/learn-go-with-tests
+module github.com/marcetin/nauci-go-sa-testovima
 
 go 1.14
 

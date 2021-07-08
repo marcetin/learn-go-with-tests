@@ -2,7 +2,7 @@ package poker_test
 
 import (
 	"fmt"
-	"github.com/quii/learn-go-with-tests/time/v1"
+	"github.com/marcetin/nauci-go-sa-testovima/time/v1"
 	"io"
 	"strings"
 	"testing"

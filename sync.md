@@ -1,6 +1,6 @@
 # Sync
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/sync)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/sync)**
 
 We want to make a counter which is safe to use concurrently.
 

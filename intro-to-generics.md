@@ -393,7 +393,7 @@ func (s *Stack) Pop() (interface{}, bool) {
 ```
 
 - We're aliasing our previous implementations of `StackOfInts` and `StackOfStrings` to a new unified type `Stack`
-- We've removed the type safety from the `Stack` by making it so `values` is a [slice](https://github.com/marcetin/learn-go-with-tests/blob/main/arrays-and-slices.md) of `interface{}`
+- We've removed the type safety from the `Stack` by making it so `values` is a [slice](https://github.com/marcetin/nauci-go-sa-testovima/blob/main/arrays-and-slices.md) of `interface{}`
 
 ... And our tests still pass. Who needs generics?
 
@@ -549,7 +549,7 @@ If you're inexperienced with statically-typed languages, the point of generics m
 
 - Less safe (mix apples and oranges), requires more error handling
 - Less expressive, `interface{}` tells you nothing about the data
-- More likely to rely on [reflection](https://github.com/marcetin/learn-go-with-tests/blob/main/reflection.md), type-assertions etc which makes your code more difficult to work with and more error prone as it pushes checks from compile-time to runtime
+- More likely to rely on [reflection](https://github.com/marcetin/nauci-go-sa-testovima/blob/main/reflection.md), type-assertions etc which makes your code more difficult to work with and more error prone as it pushes checks from compile-time to runtime
 
 Using statically typed languages is an act of describing constraints. If you do it well, you create code that is not only safe and simple to use but also simpler to write because the possible solution space is smaller.
 

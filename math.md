@@ -1,6 +1,6 @@
 # Mathematics
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/math)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/math)**
 
 For all the power of modern computers to perform huge sums at
 lightning speed, the average developer rarely uses any mathematics
@@ -507,7 +507,7 @@ PASS
 ok      clockface     0.005s
 ```
 
-It should all look [something like this](https://github.com/marcetin/learn-go-with-tests/tree/main/math/v3/clockface).
+It should all look [something like this](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/math/v3/clockface).
 
 ### A note on dividing by zero
 
@@ -743,7 +743,7 @@ ok  	clockface	0.007s
 I'm still pretty happy with this.
 
 
-Here's [what it looks like now](https://github.com/marcetin/learn-go-with-tests/tree/main/math/v4/clockface)
+Here's [what it looks like now](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/math/v4/clockface)
 
 <!---
 v4 ends
@@ -859,7 +859,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/quii/learn-go-with-tests/math/clockface" // REPLACE THIS!
+	"github.com/marcetin/nauci-go-sa-testovima/math/clockface" // REPLACE THIS!
 )
 
 func main() {
@@ -908,7 +908,7 @@ We should see something like
 
 ![a clock with only a second hand](math/v6/clockface/clockface/clock.svg)
 
-And this is [how the code looks](https://github.com/marcetin/learn-go-with-tests/tree/main/math/v6/clockface).
+And this is [how the code looks](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/math/v6/clockface).
 
 <!--
 Here ends v6
@@ -1143,7 +1143,7 @@ func main() {
 }
 ```
 
-This is what [things should look like now](https://github.com/marcetin/learn-go-with-tests/blob/main/math/v7b/clockface).
+This is what [things should look like now](https://github.com/marcetin/nauci-go-sa-testovima/blob/main/math/v7b/clockface).
 
 And we can write a test for another time following the same pattern, but not
 before...
@@ -1271,7 +1271,7 @@ func containsLine(l Line, ls []Line) bool {
 }
 ```
 
-Here's what [it looks like](https://github.com/marcetin/learn-go-with-tests/blob/main/math/v7c/clockface)
+Here's what [it looks like](https://github.com/marcetin/nauci-go-sa-testovima/blob/main/math/v7c/clockface)
 
 Now _that's_ what I call an acceptance test!
 
@@ -1433,7 +1433,7 @@ PASS
 ok  	clockface	0.007s
 ```
 
-Nice and easy. This is what things [look like now](https://github.com/marcetin/learn-go-with-tests/blob/main/math/v8/clockface/clockface_acceptance_test.go)
+Nice and easy. This is what things [look like now](https://github.com/marcetin/nauci-go-sa-testovima/blob/main/math/v8/clockface/clockface_acceptance_test.go)
 
 ### Repeat for new requirements
 
@@ -1663,7 +1663,7 @@ PASS
 ok  	clockface	0.007s
 ```
 
-This is [where we're up to now](https://github.com/marcetin/learn-go-with-tests/tree/main/math/v9/clockface).
+This is [where we're up to now](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/math/v9/clockface).
 
 There... now it's just the hour hand to do!
 
@@ -1928,7 +1928,7 @@ ok  	clockface	0.007s
 
 If we're going to use `roughlyEqualFloat64` in _one_ of our radians tests, we
 should probably use it for _all_ of them. That's a nice and simple refactor,
-which will leave things [looking like this](https://github.com/marcetin/learn-go-with-tests/tree/main/math/v10/clockface).
+which will leave things [looking like this](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/math/v10/clockface).
 
 <!--
 end of v10
@@ -2153,7 +2153,7 @@ document how it works.
 > a C program.
 >			-- Henry Spencer, in _The Art of Unix Programming_
 
-In [my final take on this program](https://github.com/marcetin/learn-go-with-tests/tree/main/math/vFinal/clockface), I've made the
+In [my final take on this program](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/math/vFinal/clockface), I've made the
 unexported functions within `clockface` into a public API for the library, with
 functions to calculate the angle and unit vector for each of the clock hands.
 I've also split the SVG generation part into its own package, `svg`, which is

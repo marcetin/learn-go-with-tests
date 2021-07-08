@@ -1,6 +1,6 @@
 # Pointers & errors
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/pointers)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/pointers)**
 
 We learned about structs in the last section which let us capture a number of values related around a concept.
 

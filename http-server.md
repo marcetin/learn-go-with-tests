@@ -1,6 +1,6 @@
 # HTTP Server
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/http-server)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/http-server)**
 
 You have been asked to create a web server where users can track how many games players have won.
 

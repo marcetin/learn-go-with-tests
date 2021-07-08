@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	poker "github.com/quii/learn-go-with-tests/websockets/v1"
+	poker "github.com/marcetin/nauci-go-sa-testovima/websockets/v1"
 )
 
 const dbFileName = "game.db.json"

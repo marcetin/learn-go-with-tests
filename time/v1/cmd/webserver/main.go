@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/quii/learn-go-with-tests/time/v1"
+	"github.com/marcetin/nauci-go-sa-testovima/time/v1"
 	"log"
 	"net/http"
 	"os"

@@ -1,6 +1,6 @@
 # Error types
 
-**[You can find all the code here](https://github.com/marcetin/learn-go-with-tests/tree/main/q-and-a/error-types)**
+**[You can find all the code here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/q-and-a/error-types)**
 
 **Creating your own types for errors can be an elegant way of tidying up your code, making your code easier to use and test.**
 

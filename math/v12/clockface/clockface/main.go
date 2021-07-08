@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/quii/learn-go-with-tests/math/v12/clockface"
+	"github.com/marcetin/nauci-go-sa-testovima/math/v12/clockface"
 )
 
 func main() {

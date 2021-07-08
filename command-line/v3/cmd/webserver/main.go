@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	poker "github.com/quii/learn-go-with-tests/command-line/v3"
+	poker "github.com/marcetin/nauci-go-sa-testovima/command-line/v3"
 )
 
 const dbFileName = "game.db.json"

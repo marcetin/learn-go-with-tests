@@ -7,12 +7,12 @@
 [Art by Denise](https://twitter.com/deniseyu21)
 
 [![Build Status](https://travis-ci.org/quii/learn-go-with-tests.svg?branch=main)](https://travis-ci.org/quii/learn-go-with-tests)
-[![Go Report Card](https://goreportcard.com/badge/github.com/quii/learn-go-with-tests)](https://goreportcard.com/report/github.com/quii/learn-go-with-tests)
+[![Go Report Card](https://goreportcard.com/badge/github.com/marcetin/nauci-go-sa-testovima)](https://goreportcard.com/report/github.com/marcetin/nauci-go-sa-testovima)
 
 ## Формати
 
 - [Gitbook](https://quii.gitbook.io/learn-go-with-tests)
-- [EPUB or PDF](https://github.com/marcetin/learn-go-with-tests/releases)
+- [EPUB or PDF](https://github.com/marcetin/nauci-go-sa-testovima/releases)
 
 ## Преводи
 
@@ -100,7 +100,7 @@
 ## Допринос
 
 * _Овај пројекат је у току._ Ако желите да дате свој допринос, контактирајте нас.
-* Прочитај [contributing.md](https://github.com/marcetin/learn-go-with-tests/tree/842f4f24d1f1c20ba3bb23cbc376c7ca6f7ca79a/contributing.md) за смернице
+* Прочитај [contributing.md](https://github.com/marcetin/nauci-go-sa-testovima/tree/842f4f24d1f1c20ba3bb23cbc376c7ca6f7ca79a/contributing.md) за смернице
 * Има ли идеја? Направите дебату
 
 ## Позадина
@@ -158,7 +158,7 @@
 
 ## Повратна информација
 
-* Додајте издања / пошаљите PRs [овде](https://github.com/marcetin/learn-go-with-tests) or [tweet me @quii](https://twitter.com/quii)
+* Додајте издања / пошаљите PRs [овде](https://github.com/marcetin/nauci-go-sa-testovima) or [tweet me @quii](https://twitter.com/quii)
 
 [MIT лиценца](LICENSE.md)
 
