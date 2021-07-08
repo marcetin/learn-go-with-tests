@@ -1,49 +1,49 @@
-# Table of contents
+# Sадржај
 
-* [Learn Go with Tests](gb-readme.md)
+* [Научи Го са тестовима](gb-readme.md)
 
-## Go fundamentals
+## Го основе
 
-* [Install Go](install-go.md)
-* [Hello, World](hello-world.md)
-* [Integers](integers.md)
-* [Iteration](iteration.md)
-* [Arrays and slices](arrays-and-slices.md)
-* [Structs, methods & interfaces](structs-methods-and-interfaces.md)
-* [Pointers & errors](pointers-and-errors.md)
-* [Maps](maps.md)
+* [Инсталирајте Го](install-go.md)
+* [Здраво Свете](hello-world.md)
+* [Цели бројеви](integers.md)
+* [Понављање](iteration.md)
+* [Низови и кришке](arrays-and-slices.md)
+* [Структуре, методе и интерфејси](structs-methods-and-interfaces.md)
+* [Показивачи и грешке](pointers-and-errors.md)
+* [Мапе](maps.md)
 * [Dependency Injection](dependency-injection.md)
 * [Mocking](mocking.md)
 * [Concurrency](concurrency.md)
 * [Select](select.md)
 * [Reflection](reflection.md)
-* [Sync](sync.md)
-* [Context](context.md)
-* [Intro to property based tests](roman-numerals.md)
-* [Maths](math.md)
-* [Reading files](reading-files.md)
+* [Синхронизација](sync.md)
+* [Контекст](context.md)
+* [Увод у тестове засноване на својствима](roman-numerals.md)
+* [Математика](math.md)
+* [Читање датотека](reading-files.md)
 
-## Build an application
+## Направите апликацију
 
-* [Intro](app-intro.md)
-* [HTTP server](http-server.md)
-* [JSON, routing and embedding](json.md)
-* [IO and sorting](io.md)
-* [Command line & package structure](command-line.md)
-* [Time](time.md)
+* [Интро](app-intro.md)
+* [HTTP сервер](http-server.md)
+* [JSON, рутирање и уграђивање](json.md)
+* [ИО и сортирање](io.md)
+* [Командна линија и структура пакета](command-line.md)
+* [Време](time.md)
 * [WebSockets](websockets.md)
 
-## Questions and answers
+## Питања и одговори
 
 * [OS Exec](os-exec.md)
-* [Error types](error-types.md)
-* [Context-aware Reader](context-aware-reader.md)
-* [Revisiting HTTP Handlers](http-handlers-revisited.md)
+* [Врсте грешака](error-types.md)
+* [Читач који је свестан контекста](context-aware-reader.md)
+* [Поновно посећивање HTTP руковаоца](http-handlers-revisited.md)
 
-## Meta
+## Мета
 
-* [Why unit tests and how to make them work for you](why.md)
-* [Anti-patterns](anti-patterns.md)
-* [Intro to generics](intro-to-generics.md)
-* [Contributing](contributing.md)
-* [Chapter Template](template.md)
+* [Зашто јединствени тестови и како их натерати да раде за вас](why.md)
+* [Анти-шаре](anti-patterns.md)
+* [Увод у генерике](intro-to-generics.md)
+* [Допринос](contributing.md)
+* [Предложак поглавља](template.md)

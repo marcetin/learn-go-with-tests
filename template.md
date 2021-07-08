@@ -1,12 +1,12 @@
-# Chapter template
+# Предложак поглавља
 
-Some intro
+Неки увод
 
-## Write the test first
-## Try to run the test
-## Write the minimal amount of code for the test to run and check the failing test output
-## Write enough code to make it pass
-## Refactor
+## Прво напишите тест
+## Покушајте да покренете тест
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
+## Напишите довољно кода да прође
+## Рефактор
 
-## Repeat for new requirements
-## Wrapping up
+## Поновите за нове захтеве
+## Окончање
