@@ -1,4 +1,4 @@
-# Learn Go with Tests
+# Научите Го са тестовима
 
 <p align="center">
   <img src="red-green-blue-gophers-smaller.png" />
@@ -6,81 +6,81 @@
 
 [Art by Denise](https://twitter.com/deniseyu21)
 
-## Support me
+## Подржи ме
 
-I am proud to offer this resource for free, but if you wish to give some appreciation
+Поносно нудим овај садржај бесплатно, али ако желите да захвалите:
 
 - [Tweet me @quii](https://twitter.com/quii)
 - [Buy me a coffee](https://www.buymeacoffee.com/quii)
 - [Sponsor me on GitHub](https://github.com/sponsors/quii)
 
-## Learn test-driven development with Go
+## Научите развој вођен тестом са Го-ом
 
-* Explore the Go language by writing tests
-* **Get a grounding with TDD**. Go is a good language for learning TDD because it is a simple language to learn and testing is built-in
-* Be confident that you'll be able to start writing robust, well-tested systems in Go
+* Истражите језик Го писањем тестова
+* ** Набавите уземљење са ТДД **. Го је добар језик за учење ТДД-а јер је то једноставан језик за учење и уграђено је тестирање
+* Будите уверени да ћете моћи да започнете писање робусних, добро тестираних система у програму Го
 
-Translations:
+Преводи:
 
 - [中文](https://studygolang.gitbook.io/learn-go-with-tests)
 - [Português](https://larien.gitbook.io/aprenda-go-com-testes/)
 - [日本語](https://andmorefine.gitbook.io/learn-go-with-tests/)
 
-## Background
+## Позадина
 
-I have some experience introducing Go to development teams and have tried different approaches as to how to grow a team from some people curious about Go into highly effective writers of Go systems.
+Имам неко искуство са увођењем Гоа у развојне тимове и испробао сам различите приступе како да од неких људи радозналих о Гоу развијем високоефикасне писце Го система.
 
-### What didn't work
+### Шта није успело
 
-#### Read _the_ book
+#### Прочитајте књигу
 
-An approach we tried was to take [the blue book](https://www.amazon.co.uk/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440) and every week discuss the next chapter along with the exercises.
+Приступ који смо покушали је да заузмемо [the blue book](https://www.amazon.co.uk/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440) и сваке недеље разговарамо о следећем поглављу заједно са вежбама.
 
-I love this book but it requires a high level of commitment. The book is very detailed in explaining concepts, which is obviously great but it means that the progress is slow and steady - this is not for everyone.
+Волим ову књигу, али она захтева висок ниво посвећености. Књига врло детаљно објашњава концепте, што је очигледно сјајно, али то значи да је напредак спор и стабилан - ово није за свакога.
 
-I found that whilst a small number of people would read chapter X and do the exercises, many people didn't.
+Открио сам да док је мали број људи читао поглавље X и изводио вежбе, многи људи то нису чинили.
 
-#### Solve some problems
+#### Решите неке проблеме
 
-Katas are fun but they are usually limited in their scope for learning a language; you're unlikely to use goroutines to solve a kata.
+Кате су забавне, али су обично ограничене у свом обиму за учење језика; мало је вероватно да ћете користити гороутине за решавање кате.
 
-Another problem is when you have varying levels of enthusiasm. Some people just learn way more of the language than others and when demonstrating what they have done end up confusing people with features the others are not familiar with.
+Други проблем је када имате различит ниво ентузијазма. Неки људи само науче језик много више од других, а када демонстрирају шта су урадили, збуњују људе особинама којима другима нису познате.
 
-This ends up making the learning feel quite _unstructured_ and _ad hoc_.
+То на крају чини да се учење осећа прилично _неструктурирано_ и _ад хок_.
 
-### What did work
+### Шта је успело
 
-By far the most effective way was by slowly introducing the fundamentals of the language by reading through [go by example](https://gobyexample.com/), exploring them with examples and discussing them as a group. This was a more interactive approach than "read chapter x for homework".
+Убедљиво најефикаснији начин био је полаганим увођењем основа језика читањем [go by example](https://gobyexample.com/), истражујући их на примерима и расправљајући о њима у групи. Ово је био интерактивнији приступ од „читања поглавља x за домаћи задатак“.
 
-Over time the team gained a solid foundation of the _grammar_ of the language so we could then start to build systems.
+Временом је тим стекао чврсте темеље _граматике_ језика, тако да смо могли почети да градимо системе.
 
-This to me seems analogous to practicing scales when trying to learn guitar.
+Ово ми се чини аналогно вежбању скала приликом покушаја учења гитаре.
 
-It doesn't matter how artistic you think you are, you are unlikely to write good music without understanding the fundamentals and practicing the mechanics.
+Није важно колико уметнички мислите да сте, мало је вероватно да ћете писати добру музику без разумевања основа и вежбања механике.
 
-### What works for me
+### Шта ми одговара
 
-When _I_ learn a new programming language I usually start by messing around in a REPL but eventually, I need more structure.
+Када научим нови програмски језик, обично почнем да се петљам у REPL, али на крају, треба ми више структуре.
 
-What I like to do is explore concepts and then solidify the ideas with tests. Tests verify the code I write is correct and documents the feature I have learned.
+Оно што волим да радим је да истражујем концепте, а затим идеје учврстим тестовима. Тестови потврђују тачност кода који пишем и документује особину коју сам научио.
 
-Taking my experience of learning with a group and my own personal way I am going to try and create something that hopefully proves useful to other teams. Learning the fundamentals by writing small tests so that you can then take your existing software design skills and ship some great systems.
+Користећи своје искуство учења са групом и свој лични начин, покушаћу да створим нешто што се надам да ће се показати корисним другим тимовима. Учење основа писањем малих тестова, да бисте затим могли да искористите постојеће вештине дизајнирања софтвера и испоручите неке сјајне системе.
 
-## Who this is for
+## Коме је ово намењено
 
-* People who are interested in picking up Go
-* People who already know some Go, but want to explore testing more
+* Људи који су заинтересовани да науче Го.
+* Људи који већ знају нешто о Го-у, али желе да истраже тестирање са ТДД-ом.
 
-## What you'll need
+## Шта ће вам требати
 
-* A computer!
-* [Installed Go](https://golang.org/)
-* A text editor
-* Some experience with programming. Understanding of concepts like `if`, variables, functions etc.
-* Comfortable with using the terminal
+* Компјутер!
+* [Инсталиран Го](https://golang.org/)
+* Уређивач текста
+* Неко искуство са програмирањем. Разумевање појмова попут `if`, променљивих, функција итд.
+* Лежерност у коришћењу терминала
 
-## Feedback
+## Повратна информација
 
-* Add issues/submit PRs [here](https://github.com/marcetin/nauci-go-sa-testovima) or [tweet me @quii](https://twitter.com/quii)
+* Додајте издања / пошаљите PRs [овде](https://github.com/marcetin/nauci-go-sa-testovima) or [tweet me @quii](https://twitter.com/quii)
 
-[MIT license](LICENSE.md)
+[MIT лиценца](LICENSE.md)

@@ -21,9 +21,9 @@
 - [日本語](https://andmorefine.gitbook.io/learn-go-with-tests/)
 - [한국어](https://miryang.gitbook.io/learn-go-with-tests/)
 
-## Support me
+## Подржи ме
 
-Поносано нудим овај садржај бесплатно, али ако желите да захвалите:
+Поносно нудим овај садржај бесплатно, али ако желите да захвалите:
 
 - [Tweet me @quii](https://twitter.com/quii)
 - [Buy me a coffee :coffee:](https://www.buymeacoffee.com/quii)
