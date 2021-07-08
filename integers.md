@@ -1,12 +1,12 @@
-# Integers
+# Цели бројеви
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/integers)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/integers)**
 
-Integers work as you would expect. Let's write an `Add` function to try things out. Create a test file called `adder_test.go` and write this code.
+Цели бројеви раде онако како бисте очекивали. Напишимо функцију `Add` да испробамо ствари. Направите тест датотеку под називом `adder_test.go` и напишите овај код.
 
-**Note:** Go source files can only have one `package` per directory, make sure that your files are organised separately. [Here is a good explanation on this.](https://dave.cheney.net/2014/12/01/five-suggestions-for-setting-up-a-go-project)
+** Напомена: ** Го изворне датотеке могу имати само један `package` по директоријуму, побрините се да су ваше датотеке организоване одвојено. [Ево доброг објашњења о овоме.](https://dave.cheney.net/2014/12/01/five-suggestions-for-setting-up-a-go-project)
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 package integers
@@ -23,21 +23,21 @@ func TestAdder(t *testing.T) {
 }
 ```
 
-You will notice that we're using `%d` as our format strings rather than `%q`. That's because we want it to print an integer rather than a string.
+Приметићете да користимо `%d` као низове формата, а не `%q`. То је зато што желимо да исписује цели број, а не низ.
 
-Also note that we are no longer using the main package, instead we've defined a package named `integers`, as the name suggests this will group functions for working with integers such as `Add`.
+Такође имајте на уму да више не користимо главни пакет, већ смо дефинисали пакет под називом `integers`, као што назив сугерише да ће ово груписати функције за рад са целим бројевима као што је` Add`.
 
-## Try and run the test
+## Покушајте и покрените тест
 
-Run the test `go test`
+Покрените тест `go test`
 
-Inspect the compilation error
+Прегледајте грешку компилације
 
 `./adder_test.go:6:9: undefined: Add`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-Write enough code to satisfy the compiler _and that's all_ - remember we want to check that our tests fail for the correct reason.
+Напишите довољно кода да задовољи компајлер _и то је све_ - не заборавите да желимо да проверимо да ли наши тестови из тачног разлога не успевају.
 
 ```go
 package integers
@@ -47,17 +47,17 @@ func Add(x, y int) int {
 }
 ```
 
-When you have more than one argument of the same type \(in our case two integers\) rather than having `(x int, y int)` you can shorten it to `(x, y int)`.
+Када имате више аргумената истог типа \ (у нашем случају две целобројне \), уместо да имате `(x int, y int)`, можете га скратити на `(x, y int)`.
 
-Now run the tests and we should be happy that the test is correctly reporting what is wrong.
+Сада покрените тестове и требало би да будемо сретни што тест исправно извештава шта није у реду.
 
 `adder_test.go:10: expected '4' but got '0'`
 
-If you have noticed we learnt about _named return value_ in the [last](hello-world.md#one...last...refactor?) section but aren't using the same here. It should generally be used when the meaning of the result isn't clear from context, in our case it's pretty much clear that `Add` function will add the parameters. You can refer [this](https://github.com/golang/go/wiki/CodeReviewComments#named-result-parameters) wiki for more details.
+Ако сте приметили, научили смо о _названој повраћајној вредности_ у [последњем](hello-world.md#one...last...refactor?) одељку, али овде не користе исти. Генерално би га требало користити када значење резултата није јасно из контекста, у нашем случају је прилично јасно да ће функција `Add` додати параметре. За више детаља можете упутити вики [тхис](https://github.com/golang/go/wiki/CodeReviewComments#named-result-parameters).
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
-In the strictest sense of TDD we should now write the _minimal amount of code to make the test pass_. A pedantic programmer may do this
+У најстрожем смислу ТДД-а, сада бисмо требали написати _минималну количину кода да би тест прошао_. Педантни програмер то може учинити
 
 ```go
 func Add(x, y int) int {
@@ -65,13 +65,13 @@ func Add(x, y int) int {
 }
 ```
 
-Ah hah! Foiled again, TDD is a sham right?
+Ах хах! Опет осујећен, ТДД је лаж, зар не?
 
-We could write another test, with some different numbers to force that test to fail but that feels like [a game of cat and mouse](https://en.m.wikipedia.org/wiki/Cat_and_mouse).
+Могли бисмо да напишемо још један тест, са неким другачијим бројевима да присилимо тај тест да пропадне, али то се чини [игра мачке и миша](https://en.m.wikipedia.org/wiki/Cat_and_mouse).
 
-Once we're more familiar with Go's syntax I will introduce a technique called *"Property Based Testing"*, which would stop annoying developers and help you find bugs.
+Након што се боље упознамо са Го-овом синтаксом, увешћу технику која се зове *"Тестирање засновано на својствима"*, која ће зауставити досадне програмере и помоћи вам да пронађете грешке.
 
-For now, let's fix it properly
+За сада, исправимо то исправно
 
 ```go
 func Add(x, y int) int {
@@ -79,17 +79,17 @@ func Add(x, y int) int {
 }
 ```
 
-If you re-run the tests they should pass.
+Ако поново покренете тестове, они би требали да прођу.
 
-## Refactor
+## Рефактор
 
-There's not a lot in the _actual_ code we can really improve on here.
+У стварном коду нема много тога што овде заиста можемо побољшати.
 
-We explored earlier how by naming the return argument it appears in the documentation but also in most developer's text editors.
+Раније смо истражили како се именовањем повратног аргумента појављује у документацији, али и у уређивачима текста већине програмера.
 
-This is great because it aids the usability of code you are writing. It is preferable that a user can understand the usage of your code by just looking at the type signature and documentation.
+Ово је сјајно јер помаже у употребљивости кода који пишете. Пожељно је да корисник може разумети употребу вашег кода само гледајући потпис типа и документацију.
 
-You can add documentation to functions with comments, and these will appear in Go Doc just like when you look at the standard library's documentation.
+Функцијама с коментарима можете додати документацију, а оне ће се појавити у Го Доц-у, баш као када погледате документацију стандардне библиотеке.
 
 ```go
 // Add takes two integers and returns the sum of them.
@@ -98,17 +98,17 @@ func Add(x, y int) int {
 }
 ```
 
-### Examples
+### Примери
 
-If you really want to go the extra mile you can make [examples](https://blog.golang.org/examples). You will find a lot of examples in the documentation of the standard library.
+Ако заиста желите да пређете још који метар можете да направите [примере](https://blog.golang.org/examples). Много примера ћете наћи у документацији стандардне библиотеке.
 
-Often code examples that can be found outside the codebase, such as a readme file often become out of date and incorrect compared to the actual code because they don't get checked.
+Примери кода који се могу наћи изван базе кода, као што је датотека реадме, често застаревају и постају нетачни у поређењу са стварним кодом, јер се не проверавају.
 
-Go examples are executed just like tests so you can be confident examples reflect what the code actually does.
+Примери го извршавају се баш као и тестови, тако да можете бити сигурни да примери одражавају оно што код заправо ради.
 
-Examples are compiled \(and optionally executed\) as part of a package's test suite.
+Примери се компајлирају \ (и опционално извршавају \) као део пакета за тестирање.
 
-As with typical tests, examples are functions that reside in a package's `_test.go` files. Add the following `ExampleAdd` function to the `adder_test.go` file.
+Као и код типичних тестова, примери су функције које се налазе у датотекама `_test.go` пакета. Додајте следећу функцију `ExampleAdd` у датотеку `adder_test.go`.
 
 ```go
 func ExampleAdd() {
@@ -118,11 +118,11 @@ func ExampleAdd() {
 }
 ```
 
-(If your editor doesn't automatically import packages for you, the compilation step will fail because you will be missing `import "fmt"` in `adder_test.go`. It is strongly recommended you research how to have these kind of errors fixed for you automatically in whatever editor you are using.)
+(Ако ваш уредник аутоматски не увози пакете за вас, корак компајлирања неће успети јер ће вам недостајати `import "fmt"` у `аддерadder_testтест.go`. Топло се препоручује да истражите како да поправите ову врсту грешака за вас аутоматски у било ком едитору који користите.)
 
-If your code changes so that the example is no longer valid, your build will fail.
+Ако се ваш код промени тако да пример више није важећи, ваша изградња неће успети.
 
-Running the package's test suite, we can see the example function is executed with no further arrangement from us:
+Покретањем пакета за тестирање пакета, можемо видети да се функција примера извршава без даљег договора од нас:
 
 ```bash
 $ go test -v
@@ -132,21 +132,21 @@ $ go test -v
 --- PASS: ExampleAdd (0.00s)
 ```
 
-Please note that the example function will not be executed if you remove the comment `// Output: 6`. Although the function will be compiled, it won't be executed.
+Имајте на уму да се пример функције неће извршити ако уклоните коментар `// Output: 6`. Иако ће се функција компајлирати, неће се извршити.
 
-By adding this code the example will appear in the documentation inside `godoc`, making your code even more accessible.
+Додавањем овог кода пример ће се појавити у документацији унутар `godoc`, чинећи ваш код још доступнијим.
 
-To try this out, run `godoc -http=:6060` and navigate to `http://localhost:6060/pkg/`
+Да бисте испробали ово, покрените `godoc -http=:6060` и идите на `http://localhost:6060/pkg/`
 
-Inside here you'll see a list of all the packages in your `$GOPATH`, so assuming you wrote this code in somewhere like `$GOPATH/src/github.com/{your_id}` you'll be able to find your example documentation.
+Овде ћете видети листу свих пакета у вашем `$GOPATH`, па под претпоставком да сте овај код написали негде попут `$GOPATH/src/github.com/{your_id}`, моћи ћете да пронађете свој пример документације.
 
-If you publish your code with examples to a public URL, you can share the documentation of your code at [pkg.go.dev](https://pkg.go.dev/). For example, [here](https://pkg.go.dev/github.com/marcetin/nauci-go-sa-testovima/integers/v2) is the finalised API for this chapter. This web interface allows you to search for documentation of standard library packages and third-party packages.
+Ако код са примерима објавите на јавном УРЛ-у, можете делити документацију кода на [pkg.go.dev](https://pkg.go.dev/). На пример, [овде](https://pkg.go.dev/github.com/marcetin/nauci-go-sa-testovima/integers/v2) је завршни АПИ за ово поглавље. Овај веб интерфејс вам омогућава да тражите документацију стандардних библиотечких пакета и независних пакета.
 
-## Wrapping up
+## Завршница
 
-What we have covered:
+Шта смо покрили:
 
-* More practice of the TDD workflow
-* Integers, addition
-* Writing better documentation so users of our code can understand its usage quickly
-* Examples of how to use our code, which are checked as part of our tests
+* Више праксе ТДД процеса рада
+* Цели бројеви, сабирање
+* Писање боље документације како би корисници нашег кода могли брзо да разумеју његову употребу
+* Примери употребе нашег кода који се проверавају у оквиру наших тестова
