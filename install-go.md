@@ -1,52 +1,52 @@
-# Install Go, set up environment for productivity
+# Инсталирајте Го, подесите окружење за rad
 
-The official installation instructions for Go are available [here](https://golang.org/doc/install).
+Званична упутства за инсталацију програма Го доступна су [овде](https://golang.org/doc/install).
 
-This guide will assume that you are using a package manager for e.g. [Homebrew](https://brew.sh), [Chocolatey](https://chocolatey.org), [Apt](https://help.ubuntu.com/community/AptGet/Howto) or [yum](https://access.redhat.com/solutions/9934).
+Овај водич ће претпоставити да користите менаџер пакета као нпр. [Homebrew](https://brew.sh), [Chocolatey](https://chocolatey.org), [Apt](https://help.ubuntu.com/community/AptGet/Howto) or [yum](https://access.redhat.com/solutions/9934).
 
-For demonstration purposes we will show the installation procedure for OSX using Homebrew.
+У сврху демонстрације приказаћемо поступак инсталације за OSX користећи Homebrew.
 
-## Installation
+## Инсталација
 
-The process of installation is very easy. First, what you have to do is to run this command to install homebrew. It has a dependency on Xcode so you should ensure this is installed first.
+Процес инсталације је врло једноставан. Прво, морате покренути ову команду да бисте инсталирали `homebrew`. Зависи од Xcode-а, па би требало да будете сигурни да је ово прво инсталиран.
 
 ```sh
 xcode-select --install
 ```
 
-Then you run the following to install homebrew:
+Затим покрените следеће за инсталирање `homebrew`-а:
 
 ```sh
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 ```
 
-At this point you can now install Go with:
+У овом тренутку можете да инсталирате Го са:
 
 ```sh
 brew install go
 ```
 
-*You should follow any instructions recommended by your package manager. **Note** these may be host os specific*.
+* Требали бисте следити упутства која вам је препоручио ваш менаџер пакета. ** Напомена **, ови подаци могу бити специфични за хоста *.
 
-You can verify the installation with:
+Инсталацију можете проверити помоћу:
 
 ```sh
 $ go version
 go version go1.14 darwin/amd64
 ```
 
-## Go Environment
+## Го окружење
 
-### Go Modules
-Go 1.11 introduced [Modules](https://github.com/golang/go/wiki/Modules). This approach is the default build mode since Go 1.16, therefore the use of `GOPATH` is not recommended.
+### Го модули
+Го 1.11 је представио [Модуле](https://github.com/golang/go/wiki/Modules). Овај приступ је задати начин израде од Го 1.16, па се употреба `GOPATH`-а не препоручује.
 
-Modules aim to solve problems related to dependency management, version selection and reproducible builds; they also enable users to run Go code outside of `GOPATH`.
+Модули имају за циљ решавање проблема везаних за управљање пакета од којих зависи апликација, одабир верзија и поновљиве израде; они такође омогућавају корисницима да покрећу Го код изван `GOPATH`.
 
-Using Modules is pretty straightforward. Select any directory outside `GOPATH` as the root of your project, and create a new module with the `go mod init` command.
+Коришћење модула је прилично једноставно. Изаберите било који директоријум изван `GOPATH` као корен вашег пројекта и креирајте нови модул помоћу команде `go mod init`.
 
-A `go.mod` file will be generated, containing the module path, a Go version, and its dependency requirements, which are the other modules needed for a successful build.
+Генерираће се датотека `go.mod` која садржи путању модула, Го верзију и захтеве за пакете од којих апликација зависи, који су остали модули потребни за успешну израду.
 
-If no `<modulepath>` is specified, `go mod init` will try to guess the module path from the directory structure, but it can also be overrided, by supplying an argument.
+Ако није наведен `<modulepath>`, `go mod init` ће покушати да погоди путању модула из структуре директоријума, али се такође може надјачати давањем аргумента.
 
 ```sh
 mkdir my-project
@@ -54,7 +54,7 @@ cd my-project
 go mod init <modulepath>
 ```
 
-A `go.mod` file could look like this:
+Датотека `go.mod` може изгледати овако:
 
 ```
 module cmd
@@ -63,24 +63,25 @@ go 1.16
 
 ```
 
-The built-in documentation provides an overview of all available `go mod` commands.
+Уграђена документација пружа преглед свих расположивих наредби `go mod`.
 
 ```sh
 go help mod
 go help mod init
 ```
 
-## Go Editor
+## Го Едитор
 
-Editor preference is very individualistic, you may already have a preference that supports Go. If you don't you should consider an Editor such as [Visual Studio Code](https://code.visualstudio.com), which has exceptional Go support.
+Подешавања уредника су индивидуалне, можда већ имате поставке које подржавају Го. Ако не, покушајте са уређивачем као што је [Visual Studio Code](https://code.visualstudio.com), који има изузетну Го подршку.
 
-You can install it using the following command:
+Можете га инсталирати помоћу следеће наредбе:
 
 ```sh
 brew install --cask visual-studio-code
 ```
 
 You can confirm VS Code installed correctly you can run the following in your shell.
+Можете потврдити да је `VS Code` исправно инсталиран, можете да покренете следеће у свом `shell`-у.
 
 ```sh
 code .
@@ -92,50 +93,49 @@ VS Code is shipped with very little software enabled, you can enable new softwar
 code --install-extension golang.go
 ```
 
-When you open a Go file for the first time in VS Code, it will indicate that the Analysis tools are missing, you should click the button to install these. The list of tools that gets installed (and used) by VS Code are available [here](https://github.com/golang/vscode-go/blob/master/docs/tools.md).
+Када отворите датотеку Го први пут у `VS Code`, указаће вам да недостају алати за анализу, требало би да кликнете на дугме да бисте их инсталирали. Списак алата који се инсталира (и користи) помоћу ВС кода доступан је [овде](https://github.com/golang/vscode-go/blob/master/docs/tools.md).
 
-## Go Debugger
+## Го програм за отклањање грешака
 
-A good option for debugging Go (that's integrated with VS Code) is Delve. This can be installed as follows:
+Добра опција за отклањање грешака у програму Го (који је интегрисан са `VS Code`-ом) је `Delve`. Инсталира се на следећи начин:
 
 ```sh
 go get -u github.com/go-delve/delve/cmd/dlv
 ```
+За додатну помоћ у конфигурисању и покретању програма за проналажење грешака Го у `VS Code`-у, погледајте [VS Code документацију отклањања грешака](https://github.com/golang/vscode-go/blob/master/docs/debugging.md).
 
-For additional help configuring and running the Go debugger in VS Code, please reference the [VS Code debugging documentation](https://github.com/golang/vscode-go/blob/master/docs/debugging.md).
+## Го Линтинг
 
-## Go Linting
+Побољшање у односу на подразумевани линтер може се конфигурисати помоћу[GolangCI-Lint](https://golangci-lint.run).
 
-An improvement over the default linter can be configured using [GolangCI-Lint](https://golangci-lint.run).
-
-This can be installed as follows:
+Инсталира се на следећи начин:
 
 ```sh
 brew install golangci/tap/golangci-lint
 ```
 
-## Refactoring and your tooling
+## Рефакторирање и ваш алат
 
-A big emphasis of this book is around the importance of refactoring.
+Велики нагласак ове књиге је на важности рефакторирања.
 
-Your tools can help you do bigger refactoring with confidence.
+Ваши алати могу вам помоћи да с поуздањем направите већи рефакторинг.
 
-You should be familiar enough with your editor to perform the following with a simple key combination:
+Требали бисте бити довољно упознати са својим уређивачем да бисте помоћу једноставне комбинације тастера извршили следеће:
 
-- **Extract/Inline variable**. Being able to take magic values and give them a name lets you simplify your code quickly
-- **Extract method/function**. It is vital to be able to take a section of code and extract functions/methods
-- **Rename**. You should be able to confidently rename symbols across files.
-- **go fmt**. Go has an opinioned formatter called `go fmt`. Your editor should be running this on every file save.
-- **Run tests**. It goes without saying that you should be able to do any of the above and then quickly re-run your tests to ensure your refactoring hasn't broken anything
+- ** Екстракт / У реду променљива **. Могућност узимања магичних вредности и давања њиховог имена омогућава вам брзо поједностављивање кода
+- ** Издвајање методе / функције **. Витално је бити у могућности да узмете део кода и издвојите функције / методе
+- ** Преименуј **. Требали бисте бити у могућности да преименујете симболе у датотекама.
+- ** go fmt **. Го има опцију за форматирање названу `go fmt`. Ваш уредник би ово требао покретати на сваком спремању датотеке.
+- ** Покрени тестове **. Подразумева се да бисте требали бити у могућности да урадите било шта од наведеног, а затим брзо поново покренете тестове како бисте били сигурни да ваше рефакторирање није ништа покварило
 
-In addition, to help you work with your code you should be able to:
+Поред тога, за помоћ у раду са кодом требали бисте бити у могућности да:
 
-- **View function signature** - You should never be unsure how to call a function in Go. Your IDE should describe a function in terms of its documentation, its parameters and what it returns.
-- **View function definition** - If it's still not clear what a function does, you should be able to jump to the source code and try and figure it out yourself.
-- **Find usages of a symbol** - Being able to see the context of a function being called can help your decision process when refactoring.
+- ** Прегледајте потпис функције ** - Никада не бисте требали бити сигурни како да позовете функцију у програму Го. Ваш ИДЕ треба да опише функцију у смислу њене документације, параметара и онога што враћа.
+- ** Погледајте дефиницију функције ** - Ако и даље није јасно шта функција ради, требали бисте бити у могућности да пређете на изворни код и покушате сами да то схватите.
+- ** Пронађите употребе симбола ** - Способност да видите контекст функције која се позива може вам помоћи у процесу доношења одлуке приликом рефакторирања.
 
-Mastering your tools will help you concentrate on the code and reduce context switching.
+Овладавање вашим алатима помоћи ће вам да се концентришете на код и смањите пребацивање контекста.
 
-## Wrapping up
+## Окончање
 
-At this point you should have Go installed, an editor available and some basic tooling in place. Go has a very large ecosystem of third party products. We have identified a few useful components here, for a more complete list see https://awesome-go.com.
+У овом тренутку требало би да имате инсталиран Го, доступан едитор и неки основни алат. Го има веома велики екосистем независних производа. Овде смо идентификовали неколико корисних компонената, а потпунију листу потражите на https://awesome-go.com.
