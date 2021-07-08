@@ -1,34 +1,34 @@
-# Contributing
+# Доприношење
 
-Contributions are very welcome. I hope for this to become a great home for guides of how to learn Go by writing tests. Consider submitting a PR or creating an issue which you can do [here](https://github.com/marcetin/nauci-go-sa-testovima/issues).
+Доприноси су врло добродошли. Надам се да ће ово постати сјајан дом за водиче како научити Го писањем тестова. Размислите о подношењу ПР-а или стварању проблема који можете да урадите [овде](https://github.com/marcetin/nauci-go-sa-testovima/issues).
 
-## What we're looking for
+## Шта тражимо
 
-* Teaching Go features \(e.g things like `if`, `select`, structs, methods, etc\).
-* Showcase interesting functionality within the standard library. Show off how easy it is to TDD a HTTP server for instance.
-* Show how Go's tooling, like benchmarking, race detectors, etc can help you arrive at great software.
+* Теацхинг Го функције \ (нпр. Ствари попут `if`,` select`, структуре, методе итд. \).
+* Изложите занимљиве функције у оквиру стандардне библиотеке. Покажите како је лако ТДД-у додати ХТТП сервер, на пример.
+* Покажите како вам Го-ови алати, као што су бенчмаркинг, детектори трка итд., Могу помоћи да дођете до сјајног софтвера.
 
-If you don't feel confident to submit your own guide, submitting an issue for something you want to learn is still a valuable contribution.
+Ако се не осећате сигурним да предате свој водич, предавање издања за нешто што желите да научите је и даље драгоцен допринос.
 
-### ⚠️ Get feedback quickly for new content ⚠️
+### ⚠ Брзо добијте повратне информације за нови садржај ⚠
 
-- TDD teaches us to work iteratively and get feedback and I strongly suggest you do the same if you wish to contribute
-    - Open a PR with your first test and implementation, discuss your approach so I can offer feedback and course correct
-- This is of course open-source but I do have strong opinions on the content. The sooner you talk to me the better.
+- ТДД нас учи да радимо итеративно и да добијамо повратне информације и топло вам предлажем да учините исто ако желите да дате свој допринос
+    - Отворите ПР са првим тестом и применом, разговарајте о свом приступу како бих могао да понудим повратне информације и курс тачан
+- Ово је наравно опен соурце, али имам чврста мишљења о садржају. Што пре разговараш са мном то боље.
 
-## Style guide
+## Водич за стил
 
-* Always be reinforcing the TDD cycle. Take a look at the [Chapter Template](template.md).
-* Emphasis on iterating over functionality driven by tests. The Hello, world example works well because we gradually make it more sophisticated and learning new techniques _driven_ by the tests. For example:
-  * `Hello()` &lt;- how to write functions, return types.
-  * `Hello(name string)` &lt;- arguments, constants.
+* Увек појачавајте ТДД циклус. Погледајте [Предложак поглавља](template.md).
+* Нагласак на понављању функционалности вођене тестовима. Пример Hello, ворлд добро функционише јер га поступно унапређујемо и учимо нове технике _вођени_ помоћу тестова. На пример:
+  * `Hello()` &lt;- како писати функције, враћати типове.
+  * `Hello(name string)` &lt;- аргументи, константе.
   * `Hello(name string)` &lt;- default to "world" using `if`.
   * `Hello(name, language string)` &lt;- `switch`.
-* Try and minimise the surface area of required knowledge.
-  * Thinking of examples that showcase what you're trying to teach without confusing the reader with other features is important.
-  * For example you can learn about `struct`s without understanding pointers.
-  * Brevity is king.
-* Follow the [Code Review Comments style guide](https://github.com/golang/go/wiki/CodeReviewComments). It's important for a consistent style across all the sections.
-* Your section should have a runnable application at the end \(e.g `package main` with a `main` func\) so users can see it in action and play with it.
-* All tests should pass.
-* Run `./build.sh` before raising PR.
+* Покушајте да смањите површину потребног знања.
+    * Важно је размишљати о примерима који приказују оно што покушавате да подучавате, а да читаоца не збуните другим карактеристикама.
+    * На пример, можете научити о `struct` без разумевања показивача.
+    * Краткоћа је краљ.
+* Пратите [Водич за стил прегледа коментара кода](https://github.com/golang/go/wiki/CodeReviewComments). Важно је за доследан стил у свим одељцима.
+* Ваш одељак на крају треба да има покренути апликацију \ (нпр. `package main` са` main` функцијом \) како би га корисници могли видети у акцији и играти се с њом.
+* Сви тестови треба да прођу.
+* Покрените `./build.sh` пре подизања ПР-а.

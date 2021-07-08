@@ -1,17 +1,17 @@
-# Build an application
+# Направите апликацију
 
-Now that you have hopefully digested the _Go Fundamentals_ section you have a solid grounding of a majority of Go's language features and how to do TDD.
+Сад кад сте надам се да сте пробавили одељак _Го Фундаменталс_, имате чврсто утемељење за већину Го-ових језичких карактеристика и како да урадите ТДД.
 
-This next section will involve building an application.
+Овај следећи одељак укључује израду апликације.
 
-Each chapter will iterate on the previous one, expanding the application's functionality as our product owner dictates.
+Свако поглавље ће поновити претходно, проширујући функционалност апликације онако како налаже наш власник производа.
 
-New concepts will be introduced to help facilitate writing great code but most of the new material will be learning what can be accomplished from Go's standard library.
+Биће представљени нови концепти који ће олакшати писање сјајног кода, али већина новог материјала ће научити шта се може постићи из Го-ове стандардне библиотеке.
 
-By the end of this you should have a strong grasp as to how to iteratively write an application in Go, backed by tests.
+На крају овога требали бисте добро схватити како итеративно написати апликацију у Го-у, поткрепљену тестовима.
 
-- [HTTP server](http-server.md) - We will create an application which listens to HTTP requests and responds to them.
-- [JSON, routing and embedding](json.md) - We will make our endpoints return JSON, explore how to do routing and learn about type embedding.
-- [IO ](io.md) - We will persist and read our data from disk and we'll cover sorting data.
-- [Command line](command-line.md) - We will create a new program leveraging the code we've made so far to make a command line interface. This will involve us restructuring our project to support multiple binaries
-- [Time](time.md) - We will schedule some activities that happen at different times depending on user input. 
+- [HTTP сервер](http-server.md) - Направићемо апликацију која преслушава `HTTP` захтеве и одговара на њих.
+- [JSON, усмеравање и уграђивање](json.md) - Натераћемо да наше крајње тачке врате `JSON`, истражити како се врши рутирање и научити о уграђивању типова.
+- [IO ](io.md) - Ми ћемо истрајати и читати своје податке са диска и покриваћемо сортирање података.
+- [Командна линија](command-line.md) - Направићемо нови програм који користи код који смо до сада направили да би створио интерфејс командне линије. То ће укључивати реструктурирање нашег пројекта за подршку више бинарних датотека
+- [Време](time.md) - Заказаћемо неке активности које се дешавају у различито време, у зависности од корисничког уноса.
