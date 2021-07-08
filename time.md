@@ -1,6 +1,6 @@
 # Time
 
-**[You can find all the code for this chapter here](https://github.com/quii/learn-go-with-tests/tree/main/time)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/time)**
 
 The product owner wants us to expand the functionality of our command line application by helping a group of people play Texas-Holdem Poker.
 

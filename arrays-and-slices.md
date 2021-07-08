@@ -1,6 +1,6 @@
 # Arrays and slices
 
-**[You can find all the code for this chapter here](https://github.com/quii/learn-go-with-tests/tree/main/arrays)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/arrays)**
 
 Arrays allow you to store multiple elements of the same type in a variable in
 a particular order.

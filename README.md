@@ -12,7 +12,7 @@
 ## Формати
 
 - [Gitbook](https://quii.gitbook.io/learn-go-with-tests)
-- [EPUB or PDF](https://github.com/quii/learn-go-with-tests/releases)
+- [EPUB or PDF](https://github.com/marcetin/learn-go-with-tests/releases)
 
 ## Преводи
 
@@ -100,7 +100,7 @@
 ## Допринос
 
 * _Овај пројекат је у току._ Ако желите да дате свој допринос, контактирајте нас.
-* Прочитај [contributing.md](https://github.com/quii/learn-go-with-tests/tree/842f4f24d1f1c20ba3bb23cbc376c7ca6f7ca79a/contributing.md) за смернице
+* Прочитај [contributing.md](https://github.com/marcetin/learn-go-with-tests/tree/842f4f24d1f1c20ba3bb23cbc376c7ca6f7ca79a/contributing.md) за смернице
 * Има ли идеја? Направите дебату
 
 ## Позадина
@@ -158,7 +158,7 @@
 
 ## Повратна информација
 
-* Додајте издања / пошаљите PRs [овде](https://github.com/quii/learn-go-with-tests) or [tweet me @quii](https://twitter.com/quii)
+* Додајте издања / пошаљите PRs [овде](https://github.com/marcetin/learn-go-with-tests) or [tweet me @quii](https://twitter.com/quii)
 
 [MIT лиценца](LICENSE.md)
 

@@ -1,6 +1,6 @@
 # IO and sorting
 
-**[You can find all the code for this chapter here](https://github.com/quii/learn-go-with-tests/tree/main/io)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/io)**
 
 [In the previous chapter](json.md) we continued iterating on our application by adding a new endpoint `/league`. Along the way we learned about how to deal with JSON, embedding types and routing.
 

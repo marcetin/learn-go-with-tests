@@ -1,6 +1,6 @@
 # WebSockets
 
-**[You can find all the code for this chapter here](https://github.com/quii/learn-go-with-tests/tree/main/websockets)**
+**[You can find all the code for this chapter here](https://github.com/marcetin/learn-go-with-tests/tree/main/websockets)**
 
 In this chapter we'll learn how to use WebSockets to improve our application.
 

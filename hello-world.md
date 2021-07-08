@@ -1,11 +1,11 @@
-# Hello, World
+# Здраво Свете
 
-**[You can find all the code for this chapter here](https://github.com/quii/learn-go-with-tests/tree/main/hello-world)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/learn-go-with-tests/tree/main/hello-world)**
 
-It is traditional for your first program in a new language to be [Hello, World](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
+Традиционално је да то буде ваш први програм на новом језику [Здраво, Свете](https://en.m.wikipedia.org/wiki/%22Hello,_World!%22_program).
 
 - Create a folder wherever you like
-- Put a new file in it called `hello.go` and put the following code inside it
+- У њу ставите нову датотеку под називом `hello.go` и у њу ставите следећи код
 
 ```go
 package main
@@ -13,25 +13,25 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("Hello, world")
+	fmt.Println("Здраво, Свете")
 }
 ```
 
-To run it type `go run hello.go`.
+Да бисте га покренули, откуцајте `go run hello.go`.
 
-## How it works
+## Како то ради
 
-When you write a program in Go you will have a `main` package defined with a `main` func inside it. Packages are ways of grouping up related Go code together.
+Када напишете програм у Го-у, имаћете `main` пакет дефинисан са` main` функцијама унутар њега. Пакети су начини за груписање сродног Го кода.
 
-The `func` keyword is how you define a function with a name and a body.
+Кључна реч `func` је начин на који дефинишете функцију са именом и телом.
 
-With `import "fmt"` we are importing a package which contains the `Println` function that we use to print.
+Са `import "fmt"` увозимо пакет који садржи функцију `Println` коју користимо за штампање.
 
-## How to test
+## Како тестирати
 
-How do you test this? It is good to separate your "domain" code from the outside world \(side-effects\). The `fmt.Println` is a side effect \(printing to stdout\) and the string we send in is our domain.
+Како се ово тестира? Добро је одвојити свој „доменски“ код од спољног света \ (нуспојаве \). `fmt.Println` је нежељени ефекат \ (штампање у стдоут \), а низ који шаљемо је наша домена.
 
-So let's separate these concerns so it's easier to test
+Па хајде да раздвојимо ове бриге како би било лакше тестирати
 
 ```go
 package main
@@ -39,7 +39,7 @@ package main
 import "fmt"
 
 func Hello() string {
-	return "Hello, world"
+	return "Здраво, Свете"
 }
 
 func main() {
@@ -47,9 +47,9 @@ func main() {
 }
 ```
 
-We have created a new function again with `func` but this time we've added another keyword `string` in the definition. This means this function returns a `string`.
+Поново смо креирали нову функцију са `func`, али овог пута смо у дефиницију додали још једну кључну реч` string`. То значи да ова функција враћа `string`.
 
-Now create a new file called `hello_test.go` where we are going to write a test for our `Hello` function
+Сада креирајте нову датотеку под називом `hello_test.go` где ћемо написати тест за нашу функцију` Hello`
 
 ```go
 package main
@@ -66,16 +66,16 @@ func TestHello(t *testing.T) {
 }
 ```
 
-## Go modules?
+## Го модули?
 
-The next step is to run the tests. Enter `go test` in your terminal. If the tests pass, then you are probably using an earlier version of Go. However, if you are using Go 1.16 or later, then the tests will likely not run at all. Instead, you will see an error message like this in the terminal:
+Следећи корак је покретање тестова. Унесите `go test` у свом терминалу. Ако тестови прођу, вероватно користите старију верзију Го-а. Међутим, ако користите Го 1.16 или новију верзију, тестови се вероватно неће покретати. Уместо тога, видећете поруку о грешци попут ове у терминалу:
 
 ```shell
 $ go test
 go: cannot find main module; see 'go help modules'
 ```
 
-What's the problem? In a word, [modules](https://blog.golang.org/go116-module-changes). Luckily, the problem is easy to fix. Enter `go mod init hello` in your terminal. That will create a new file with the following contents:
+У чему је проблем? У речи, [модули](https://blog.golang.org/go116-module-changes). Срећом, проблем је лако решити. Унесите `go mod init hello` у свом терминалу. То ће створити нову датотеку са следећим садржајем:
 
 ```go
 module hello
@@ -83,41 +83,41 @@ module hello
 go 1.16
 ```
 
-This file tells the `go` tools essential information about your code. If you planned to distribute your application, you would include where the code was available for download as well as information about dependencies. For now, your module file is minimal, and you can leave it that way. To read more about modules, [you can check out the reference in the Golang documentation](https://golang.org/doc/modules/gomod-ref). We can get back to testing and learning Go now since the tests should run, even on Go 1.16.
+Ова датотека говори алаткама `go` основне информације о вашем коду. Ако планирате да дистрибуирате своју апликацију, навели бисте где је код доступан за преузимање, као и информације о пакетима о којима зависи апликација. За сада је датотека вашег модула минимална и можете је тако и оставити. Да бисте прочитали више о модулима, [референцу можете погледати у документацији Голанг](https://golang.org/doc/modules/gomod-ref). Сад се можемо вратити тестирању и учењу Го-а јер би тестови требали да се покрећу, чак и на Го 1.16.
 
-In future chapters you will need to run `go mod init SOMENAME` in each new folder before running commands like `go test` or `go build`.
+У будућим поглављима мораћете да покренете `go mod init НЕКОИМЕ` у свакој новој фасцикли пре покретања команди попут `go test` или `go build`.
 
-## Back to Testing
+## Повратак на тестирање
 
-Run `go test` in your terminal. It should've passed! Just to check, try deliberately breaking the test by changing the `want` string.
+Покрените `go test` на свом терминалу. Требало је да прође! Само да бисте проверили, покушајте намерно да прекинете тест променом низа `want`.
 
-Notice how you have not had to pick between multiple testing frameworks and then figure out how to install. Everything you need is built in to the language and the syntax is the same as the rest of the code you will write.
+Приметите како нисте морали да бирате између више оквира за тестирање, а затим смислите како да инсталирате. Све што вам је потребно уграђено је у језик, а синтакса је иста као и остатак кода који ћете написати.
 
-### Writing tests
+### Писање тестова
 
-Writing a test is just like writing a function, with a few rules
+Писање теста је попут писања функције, са неколико правила
 
-* It needs to be in a file with a name like `xxx_test.go`
-* The test function must start with the word `Test`
-* The test function takes one argument only `t *testing.T`
-* In order to use the `*testing.T` type, you need to `import "testing"`, like we did with `fmt` in the other file
+* То мора бити у датотеци са именом попут `xxx_test.go`
+* Тест функција мора започети речју `Test`
+* Тест функција узима само један аргумент `t *testing.T`
+* Да бисте користили тип `*testing.T`, морате `import "testing"`, као што смо то урадили са` fmt` у другој датотеци
 
-For now, it's enough to know that your `t` of type `*testing.T` is your "hook" into the testing framework so you can do things like `t.Fail()` when you want to fail.
+За сада је довољно да знате да је ваше `t` типа `*testing.T` ваше "закачење" за оквир тестирања, па можете да радите ствари попут `t.Fail()` када желите да не успете.
 
-We've covered some new topics:
+Обрадили смо неке нове теме:
 
 #### `if`
-If statements in Go are very much like other programming languages.
+`if` искази у Го-у су слични као у другим програмским језицима.
 
-#### Declaring variables
+#### Декларисање променљивих
 
-We're declaring some variables with the syntax `varName := value`, which lets us re-use some values in our test for readability.
+Декларишемо неке променљиве синтаксом `varName := value`, што нам омогућава да поново користимо неке вредности у нашем тесту за читљивост.
 
 #### `t.Errorf`
 
-We are calling the `Errorf` _method_ on our `t` which will print out a message and fail the test. The `f` stands for format which allows us to build a string with values inserted into the placeholder values `%q`. When you made the test fail it should be clear how it works.
+Позивамо `Errorf` _метод_ на нашем `t` који ће исписати поруку и пасти на тесту. `f` означава формат који нам омогућава да направимо низ са вредностима уметнутим у вредности резервисаног места `%q`. Када направите тест неуспешним, требало би да буде јасно како то функционише.
 
-You can read more about the placeholder strings in the [fmt go doc](https://golang.org/pkg/fmt/#hdr-Printing). For tests `%q` is very useful as it wraps your values in double quotes.
+Можете прочитати више о низовима чувара места у [fmt go doc](https://golang.org/pkg/fmt/#hdr-Printing). За тестове `%q` је веома користан јер ваше вредности умотава у двоструке наводнике.
 
 We will later explore the difference between methods and functions.
 
@@ -129,15 +129,15 @@ The vast majority of the standard library has excellent documentation with examp
 
 If you don't have `godoc` command, then maybe you are using the newer version of Go (1.14 or later) which is [no longer including `godoc`](https://golang.org/doc/go1.14#godoc). You can manually install it with `go get golang.org/x/tools/cmd/godoc`.
 
-### Hello, YOU
+### Здраво ТИ
 
-Now that we have a test we can iterate on our software safely.
+Сад кад имамо тест, можемо безбедно да га поновимо на нашем софтверу.
 
-In the last example we wrote the test _after_ the code had been written just so you could get an example of how to write a test and declare a function. From this point on we will be _writing tests first_.
+У последњем примеру написали смо тест _након_ што је код написан само да бисте могли добити пример како написати тест и декларисати функцију. Од овог тренутка ћемо _прво писање тестова_.
 
-Our next requirement is to let us specify the recipient of the greeting.
+Наш следећи услов је да нам одредимо примаоца честитке.
 
-Let's start by capturing these requirements in a test. This is basic test driven development and allows us to make sure our test is _actually_ testing what we want. When you retrospectively write tests there is the risk that your test may continue to pass even if the code doesn't work as intended.
+Почнимо са хватањем ових захтева у тесту. Ово је основни развој вођен тестом и омогућава нам да се уверимо да наш тест _заправо_ тестира оно што желимо. Када ретроспективно пишете тестове, постоји ризик да ваш тест настави да пролази, чак и ако код не ради како је предвиђено.
 
 ```go
 package main
@@ -154,7 +154,7 @@ func TestHello(t *testing.T) {
 }
 ```
 
-Now run `go test`, you should have a compilation error
+Сада покрените `go test`, требало би да имате грешку у компилацији
 
 ```text
 ./hello_test.go:6:18: too many arguments in call to Hello
@@ -162,11 +162,11 @@ Now run `go test`, you should have a compilation error
     want ()
 ```
 
-When using a statically typed language like Go it is important to _listen to the compiler_. The compiler understands how your code should snap together and work so you don't have to.
+Када користите статички куцани језик попут Го, важно је _слушати компајлер_. Преводник разуме како ваш код треба да се спаја и ради тако да не морате.
 
-In this case the compiler is telling you what you need to do to continue. We have to change our function `Hello` to accept an argument.
+У овом случају компајлер вам говори шта треба да урадите да бисте наставили. Морамо да променимо нашу функцију `Hello` да бисмо прихватили аргумент.
 
-Edit the `Hello` function to accept an argument of type string
+Уредите функцију `Hello` како бисте прихватили аргумент типа стринг
 
 ```go
 func Hello(name string) string {
@@ -174,7 +174,7 @@ func Hello(name string) string {
 }
 ```
 
-If you try and run your tests again your `hello.go` will fail to compile because you're not passing an argument. Send in "world" to make it pass.
+Ако поново покушате да покренете тестове, `hello.go` неће успети да се компајлира јер не предајете аргумент. Пошаљите у „свет“ да то прође.
 
 ```go
 func main() {
@@ -182,15 +182,15 @@ func main() {
 }
 ```
 
-Now when you run your tests you should see something like
+Сада када покренете тестове, требало би да видите нешто слично
 
 ```text
 hello_test.go:10: got 'Hello, world' want 'Hello, Chris''
 ```
 
-We finally have a compiling program but it is not meeting our requirements according to the test.
+Напокон имамо програм за компајлирање, али он не испуњава наше захтеве према тесту.
 
-Let's make the test pass by using the name argument and concatenate it with `Hello,`
+Направимо да тест прође помоћу аргумента наме и спојимо га са `Hello,`
 
 ```go
 func Hello(name string) string {
@@ -198,27 +198,26 @@ func Hello(name string) string {
 }
 ```
 
-When you run the tests they should now pass. Normally as part of the TDD cycle we should now _refactor_.
+Када покренете тестове, они би сада требали да прођу. Обично као део ТДД циклуса сада бисмо требали _рефактор_.
 
-### A note on source control
+### Напомена о контроли извора
 
-At this point, if you are using source control \(which you should!\) I would
-`commit` the code as it is. We have working software backed by a test.
+У овом тренутку, ако користите контролу извора \ (што би требало! \), Ја бих
+`commit` код какав је. Имамо радни софтвер подржан тестом.
 
-I _wouldn't_ push to master though, because I plan to refactor next. It is nice
-to commit at this point in case you somehow get into a mess with refactoring - you can always go back to the working version.
+Ипак _не бих желео_ да пуштам на мастер, јер следеће планирам да га преправљам. То је лепо да се обавежете у овом тренутку у случају да на неки начин упаднете у неред са рефакторингом - увек се можете вратити на радну верзију.
 
-There's not a lot to refactor here, but we can introduce another language feature, _constants_.
+Овде нема много тога за рефакторирање, али можемо увести још једну језичку функцију, _константе_.
 
-### Constants
+### Константе
 
-Constants are defined like so
+Константе су дефинисане овако
 
 ```go
 const englishHelloPrefix = "Hello, "
 ```
 
-We can now refactor our code
+Сада можемо да преправимо наш код
 
 ```go
 const englishHelloPrefix = "Hello, "
@@ -228,17 +227,17 @@ func Hello(name string) string {
 }
 ```
 
-After refactoring, re-run your tests to make sure you haven't broken anything.
+Након рефакторирања, поново покрените тестове како бисте били сигурни да нисте ништа покварили.
 
-Constants should improve performance of your application as it saves you creating the `"Hello, "` string instance every time `Hello` is called.
+Константе би требале побољшати перформансе ваше апликације јер вам штеди стварање инстанце `"Hello, "` стринг сваки пут када се позове `Hello`.
 
-To be clear, the performance boost is incredibly negligible for this example! But it's worth thinking about creating constants to capture the meaning of values and sometimes to aid performance.
+Да будемо јасни, повећање перформанси је невероватно занемарљиво за овај пример! Али вреди размислити о стварању константи које ће ухватити значење вредности, а понекад и да помогну учинку.
 
-## Hello, world... again
+## Здраво, свете ... опет
 
-The next requirement is when our function is called with an empty string it defaults to printing "Hello, World", rather than "Hello, ".
+Следећи захтев је када се наша функција позива са празним низом, а она подразумевано исписује "Hello, World", уместо "Hello, ".
 
-Start by writing a new failing test
+Започните са писањем новог неуспелог теста
 
 ```go
 func TestHello(t *testing.T) {
@@ -264,17 +263,17 @@ func TestHello(t *testing.T) {
 }
 ```
 
-Here we are introducing another tool in our testing arsenal, subtests. Sometimes it is useful to group tests around a "thing" and then have subtests describing different scenarios.
+Овде уводимо још један алат у наш арсенал тестирања, субтестове. Понекад је корисно груписати тестове око „неке ствари“, а затим имати подтестове који описују различите сценарије.
 
-A benefit of this approach is you can set up shared code that can be used in the other tests.
+Предност овог приступа је што можете поставити заједнички код који се може користити у осталим тестовима.
 
-There is repeated code when we check if the message is what we expect.
+Понавља се код када проверимо да ли је порука оно што очекујемо.
 
-Refactoring is not _just_ for the production code!
+Препрабљање није само у вези са производним кодом!
 
-It is important that your tests _are clear specifications_ of what the code needs to do.
+Важно је да ваши тестови _буду јасне спецификације_ онога што код треба да уради.
 
-We can and should refactor our tests.
+Можемо и треба да преправимо своје тестове.
 
 ```go
 func TestHello(t *testing.T) {
@@ -301,15 +300,15 @@ func TestHello(t *testing.T) {
 }
 ```
 
-What have we done here?
+Шта смо ми овде урадили?
 
-We've refactored our assertion into a function. This reduces duplication and improves readability of our tests. In Go you can declare functions inside other functions and assign them to variables. You can then call them, just like normal functions. We need to pass in `t *testing.T` so that we can tell the test code to fail when we need to.
+Нашу тврдњу смо преобликовали у функцију. Ово смањује дуплирање и побољшава читљивост наших тестова. У програму Го можете декларисати функције унутар других функција и доделити их променљивим. Тада их можете позвати, баш као и уобичајене функције. Морамо да прођемо у `t *testing.T` да бисмо могли да кажемо да тест код не успе када то треба.
 
-For helper functions, it's a good idea to accept a `testing.TB` which is an interface that `*testing.T` and `*testing.B` both satisfy, so you can call helper functions from a test, or a benchmark.
+За помоћне функције, добра идеја је прихватити `testing.TB` који је интерфејс који задовољава `*testing.T` и `*testing.B`, тако да помоћне функције можете позвати из теста или референтне вредности .
 
-`t.Helper()` is needed to tell the test suite that this method is a helper. By doing this when it fails the line number reported will be in our _function call_ rather than inside our test helper. This will help other developers track down problems easier. If you still don't understand, comment it out, make a test fail and observe the test output. Comments in Go are a great way to add additional information to your code, or in this case, a quick way to tell the compiler to ignore a line. You can comment out the `t.Helper()` code by adding two forward slashes `//` at the beginning of the line. You should see that line turn grey or change to another color than the rest of your code to indicate it's now commented out.
+`t.Helper()` је потребан да би тест пакету рекао да је овај метод помоћник. Радећи ово када закаже, пријављени број линије биће у нашем _функцијском позиву_, а не у нашем помоћнику за тестирање. Ово ће помоћи другим програмерима да лакше пронађу проблеме. Ако и даље не разумете, коментаришите га, направите тест неуспешан и посматрајте резултат теста. Коментари у Го-у су одличан начин да додате додатне информације у свој код, или у овом случају, брзи начин да кажете компајлеру да занемари ред. Можете `прокоментарисати` т.Хелпер () `код додавањем две косе црте` // `на почетку реда. Требало би да видите како та линија постаје сива или се мења у другу боју од остатка вашег кода да бисте означили да је сада коментарисан.
 
-Now that we have a well-written failing test, let's fix the code, using an `if`.
+Сад кад имамо добро написан тест неуспеха, поправимо код помоћу `if`.
 
 ```go
 const englishHelloPrefix = "Hello, "
@@ -322,41 +321,40 @@ func Hello(name string) string {
 }
 ```
 
-If we run our tests we should see it satisfies the new requirement and we haven't accidentally broken the other functionality.
+Ако покренемо тестове, требало би да видимо да задовољава нови захтев и да нисмо случајно прекршили остале функције.
 
-### Back to source control
+### Повратак на контролу извора
 
-Now we are happy with the code I would amend the previous commit so we only
-check in the lovely version of our code with its test.
+Сада смо задовољни кодом који бих изменио у претходном урезивању, тако да само
+проверите дивну верзију нашег кода са својим тестом.
 
-### Discipline
+### Дисциплина
 
-Let's go over the cycle again
+Идемо поново преко циклуса
 
-* Write a test
-* Make the compiler pass
-* Run the test, see that it fails and check the error message is meaningful
-* Write enough code to make the test pass
-* Refactor
+* Напишите тест
+* Нека компајлер прође
+* Покрените тест, уверите се да не успе и проверите да ли је порука о грешци значајна
+* Напишите довољно кода да тест прође
+* Рефактор
 
-On the face of it this may seem tedious but sticking to the feedback loop is important.
+На први поглед, ово може изгледати досадно, али држање повратне спреге је важно.
 
-Not only does it ensure that you have _relevant tests_, it helps ensure _you design good software_ by refactoring with the safety of tests.
+Не само да осигурава да имате _релевантне тестове_, већ и осигурава _израду доброг софтвера_ рефакторирањем са сигурношћу тестова.
 
-Seeing the test fail is an important check because it also lets you see what the error message looks like. As a developer it can be very hard to work with a codebase when failing tests do not give a clear idea as to what the problem is.
+Видети неуспех теста је важна провера јер вам такође омогућава да видите како изгледа порука о грешци. Као програмеру може бити веома тешко радити са кодном базом када неуспели тестови не дају јасну идеју у чему је проблем.
 
-By ensuring your tests are _fast_ and setting up your tools so that running tests is simple you can get in to a state of flow when writing your code.
+Ако осигурате да су тестови _брзи_ и подесите алате тако да је покретање тестова једноставно, можете да уђете у стање протока приликом писања кода.
 
-By not writing tests you are committing to manually checking your code by running your software which breaks your state of flow and you won't be saving yourself any time, especially in the long run.
+Не писањем тестова обавезујете се да ћете ручно проверавати код покретањем софтвера који прекида ваше стање протока и нећете штедети време, посебно дугорочно.
 
-## Keep going! More requirements
+## Настави! Више захтева
 
-Goodness me, we have more requirements. We now need to support a second parameter, specifying the language of the greeting. If a language is passed in that we do not recognise, just default to English.
+Боже мој, имамо више захтева. Сада морамо подржати други параметар, који наводи језик поздрава. Ако се преда језик који не препознајемо, само подразумевано поставите енглески.
 
-We should be confident that we can use TDD to flesh out this functionality easily!
+Требали бисмо бити сигурни да можемо да користимо ТДД за лако откривање ове функције!
 
-Write a test for a user passing in Spanish. Add it to the existing suite.
-
+Напишите тест за корисника који пролази шпански. Додајте га у постојећи пакет.
 ```go
 	t.Run("in Spanish", func(t *testing.T) {
 		got := Hello("Elodie", "Spanish")
@@ -365,7 +363,7 @@ Write a test for a user passing in Spanish. Add it to the existing suite.
 	})
 ```
 
-Remember not to cheat! _Test first_. When you try and run the test, the compiler _should_ complain because you are calling `Hello` with two arguments rather than one.
+Запамтите да не варате! _Прво тестирајте_. Када покушате да покренете тест, компајлер _би се требао_ жалити јер зовете `Hello` са два аргумента, а не једним.
 
 ```text
 ./hello_test.go:27:19: too many arguments in call to Hello
@@ -373,7 +371,7 @@ Remember not to cheat! _Test first_. When you try and run the test, the compiler
     want (string)
 ```
 
-Fix the compilation problems by adding another string argument to `Hello`
+Решите проблеме са компилацијом додавањем још једног аргумента низа у `Hello`
 
 ```go
 func Hello(name string, language string) string {
@@ -384,7 +382,7 @@ func Hello(name string, language string) string {
 }
 ```
 
-When you try and run the test again it will complain about not passing through enough arguments to `Hello` in your other tests and in `hello.go`
+Када поново покушате да покренете тест, он ће се жалити што није проследио довољно аргумената у `Hello` у осталим тестовима и у `hello.go`
 
 ```text
 ./hello.go:15:19: not enough arguments in call to Hello
@@ -392,13 +390,13 @@ When you try and run the test again it will complain about not passing through e
     want (string, string)
 ```
 
-Fix them by passing through empty strings. Now all your tests should compile _and_ pass, apart from our new scenario
+Поправите их пролазећи кроз празне низове. Сада би сви ваши тестови требало да компајлирају _и_ прођу, осим нашег новог сценарија
 
 ```text
 hello_test.go:29: got 'Hello, Elodie' want 'Hola, Elodie'
 ```
 
-We can use `if` here to check the language is equal to "Spanish" and if so change the message
+Овде можемо да употребимо `if` да бисмо проверили да ли је језик једнак "шпанском" и ако је тако променимо поруку
 
 ```go
 func Hello(name string, language string) string {
@@ -414,9 +412,9 @@ func Hello(name string, language string) string {
 }
 ```
 
-The tests should now pass.
+Тестови би сада требало да прођу.
 
-Now it is time to _refactor_. You should see some problems in the code, "magic" strings, some of which are repeated. Try and refactor it yourself, with every change make sure you re-run the tests to make sure your refactoring isn't breaking anything.
+Сада је време за _рефакторисање_. У коду бисте требали видети неке проблеме, „магичне“ низове, од којих се неки понављају. Покушајте сами и рефакторишите га, уз сваку промену обавезно поново покрените тестове како бисте били сигурни да ваше рефакторирање ништа не крши.
 
 ```go
 const spanish = "Spanish"
@@ -436,13 +434,13 @@ func Hello(name string, language string) string {
 }
 ```
 
-### French
+### Француски
 
-* Write a test asserting that if you pass in `"French"` you get `"Bonjour, "`
-* See it fail, check the error message is easy to read
-* Do the smallest reasonable change in the code
+* Напишите тест тврдећи да ако уђете у `„француски“`, добићете `"Bonjour, "`
+* Ако не успе, проверите да ли је порука о грешци лака за читање
+* Направите најмању разумну промену кода
 
-You may have written something that looks roughly like this
+Можда сте написали нешто што отприлике изгледа овако
 
 ```go
 func Hello(name string, language string) string {
@@ -464,7 +462,7 @@ func Hello(name string, language string) string {
 
 ## `switch`
 
-When you have lots of `if` statements checking a particular value it is common to use a `switch` statement instead. We can use `switch` to refactor the code to make it easier to read and more extensible if we wish to add more language support later
+Када имате пуно израза `if` који проверавају одређену вредност, уобичајено је да се уместо тога користи израз` switch`. Можемо користити `switch` за рефакторирање кода како бисмо га учинили лакшим за читање и проширивим ако касније желимо да додамо више језичке подршке
 
 ```go
 func Hello(name string, language string) string {
@@ -485,11 +483,11 @@ func Hello(name string, language string) string {
 }
 ```
 
-Write a test to now include a greeting in the language of your choice and you should see how simple it is to extend our _amazing_ function.
+Напишите тест да бисте сада укључили поздрав на језику по вашем избору и требали бисте видети како је једноставно проширити нашу функцију _амазинг_.
 
-### one...last...refactor?
+### један ... последњи ... рефактор?
 
-You could argue that maybe our function is getting a little big. The simplest refactor for this would be to extract out some functionality into another function.
+Можете тврдити да наша функција можда постаје мало већа. Најједноставнији рефактор за ово био би издвајање неке функционалности у другу функцију.
 
 ```go
 func Hello(name string, language string) string {
@@ -513,35 +511,35 @@ func greetingPrefix(language string) (prefix string) {
 }
 ```
 
-A few new concepts:
+Неколико нових концепата:
 
-* In our function signature we have made a _named return value_ `(prefix string)`.
-* This will create a variable called `prefix` in your function.
-  * It will be assigned the "zero" value. This depends on the type, for example `int`s are 0 and for `string`s it is `""`.
-    * You can return whatever it's set to by just calling `return` rather than `return prefix`.
-  * This will display in the Go Doc for your function so it can make the intent of your code clearer.
-* `default` in the switch case will be branched to if none of the other `case` statements match.
-* The function name starts with a lowercase letter. In Go public functions start with a capital letter and private ones start with a lowercase. We don't want the internals of our algorithm to be exposed to the world, so we made this function private.
+* У нашем потпису функције направили смо _названу повратну вредност_ `(prefix string)`.
+* Ово ће створити променљиву која се назива `prefix` у вашој функцији.
+    * Биће му додељена вредност "нула". Ово зависи од типа, на пример `int`с су 0, а за `string` је `""`.
+        * Можете вратити све на шта је постављено тако што ћете само позвати `return`, а не `return prefix`.
+    * Ово ће се приказати у документу Го за вашу функцију, тако да намера вашег кода може бити јаснија.
+* `default` у случају прекидача биће разгранато на ако се не подудара ниједан други израз` case`.
+* Назив функције почиње малим словом. У Го-у јавне функције почињу великим словом, а приватне малим словом. Не желимо да унутрашњост нашег алгоритма буде изложена свету, па смо ову функцију учинили приватном.
 
-## Wrapping up
+## Завршница
 
-Who knew you could get so much out of `Hello, world`?
+Ко је знао да можеш толико извући из `Hello, world`?
 
-By now you should have some understanding of:
+До сада бисте требали мало разумети:
 
-### Some of Go's syntax around
+### Неке Гоове синтаксе около
 
-* Writing tests
-* Declaring functions, with arguments and return types
-* `if`, `const` and `switch`
-* Declaring variables and constants
+* Писање тестова
+* Декларисање функција са аргументима и типовима повратка
+* `if`, `const` и `switch`
+* Декларисање променљивих и константи
 
-### The TDD process and _why_ the steps are important
+### Процес ТДД и _зашто_ кораци су важни
 
-* _Write a failing test and see it fail_ so we know we have written a _relevant_ test for our requirements and seen that it produces an _easy to understand description of the failure_
-* Writing the smallest amount of code to make it pass so we know we have working software
-* _Then_ refactor, backed with the safety of our tests to ensure we have well-crafted code that is easy to work with
+* _Напишите тест неуспеха и уверите се да није успео_, тако да знамо да смо написали _релевантни_ тест за наше захтеве и видели да он даје _ лако разумљив опис неуспеха_
+* Писање најмање количине кода да би прошло како бисмо знали да имамо радни софтвер
+* _Тада_ рефактор, потпомогнут сигурношћу наших тестова како би се осигурало да имамо добро израђен код са којим је лако радити
 
-In our case we've gone from `Hello()` to `Hello("name")`, to `Hello("name", "French")` in small, easy to understand steps.
+У нашем случају прешли смо из `Хелло ()` у `Хелло (" наме ")` у `Хелло (" наме "," Френцх ")` у малим, лако разумљивим корацима.
 
-This is of course trivial compared to "real world" software but the principles still stand. TDD is a skill that needs practice to develop, but by breaking problems down into smaller components that you can test, you will have a much easier time writing software.
+Ово је наравно тривијално у поређењу са софтвером из "стварног света", али принципи и даље стоје. ТДД је вештина којој је потребна пракса да би се развила, али рашчлањивањем проблема на мање компоненте које можете да тестирате, биће вам много лакше писати софтвер.
