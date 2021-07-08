@@ -1,14 +1,14 @@
-# Iteration
+# Понављање
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/for)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/for)**
 
-To do stuff repeatedly in Go, you'll need `for`. In Go there are no `while`, `do`, `until` keywords, you can only use `for`. Which is a good thing!
+Да бисте у Го радили више пута, требат ће вам `for`. У Го нема кључних речи `while`,` do`, `until`, можете користити само` for`. Што је добро!
 
-Let's write a test for a function that repeats a character 5 times.
+Напишимо тест за функцију која понавља знак 5 пута.
 
-There's nothing new so far, so try and write it yourself for practice.
+За сада нема ништа ново, па покушајте да то напишете сами за вежбање.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 package iteration
@@ -25,15 +25,15 @@ func TestRepeat(t *testing.T) {
 }
 ```
 
-## Try and run the test
+## Покушајте и покрените тест
 
 `./repeat_test.go:6:14: undefined: Repeat`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-_Keep the discipline!_ You don't need to know anything new right now to make the test fail properly.
+_Држите дисциплину!_ Тренутно не морате знати ништа ново да би тест правилно пропао.
 
-All you need to do right now is enough to make it compile so you can check your test is written well.
+Све што сада треба да урадите је довољно да се направи компајлиран да бисте могли да проверите да ли је ваш тест добро написан.
 
 ```go
 package iteration
@@ -43,13 +43,13 @@ func Repeat(character string) string {
 }
 ```
 
-Isn't it nice to know you already know enough Go to write tests for some basic problems? This means you can now play with the production code as much as you like and know it's behaving as you'd hope.
+Није ли лепо знати да већ знаш довољно Иди да напишеш тестове за неке основне проблеме? То значи да се сада можете играти са продукцијским кодом колико год желите и знати да се понаша онако како бисте се надали.
 
 `repeat_test.go:10: expected 'aaaaa' but got ''`
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
-The `for` syntax is very unremarkable and follows most C-like languages.
+Синтакса `for` је врло неугледна и прати већину језика сличних Ц-у.
 
 ```go
 func Repeat(character string) string {
@@ -61,21 +61,21 @@ func Repeat(character string) string {
 }
 ```
 
-Unlike other languages like C, Java, or JavaScript there are no parentheses surrounding the three components of the for statement and the braces `{ }` are always required. You might wonder what is happening in the row
+За разлику од других језика као што су Ц, Јава или ЈаваСцрипт, не постоје заграде које окружују три компоненте израза фор и заграде `{ }` су увек потребне. Можда се питате шта се дешава у низу
 
 ```go
 	var repeated string
 ```
 
-as we've been using `:=` so far to declare and initializing variables. However, `:=` is simply [short hand for both steps](https://gobyexample.com/variables). Here we are declaring a `string` variable only. Hence, the explicit version. We can also use `var` to declare functions, as we'll see later on.
+пошто смо до сада користили `:=` за декларисање и иницијализацију променљивих. Међутим, `:=` је једноставно [запис за оба корака](https://gobyexample.com/variables). Овде декларишемо само променљиву `string`. Отуда експлицитна верзија. Такође можемо користити `var` за декларисање функција, као што ћемо видети касније.
 
-Run the test and it should pass.
+Покрените тест и требало би да прође.
 
-Additional variants of the for loop are described [here](https://gobyexample.com/for).
+Додатне варијанте фор петље су описане [овде](https://gobyexample.com/for).
 
-## Refactor
+## Рефактор
 
-Now it's time to refactor and introduce another construct `+=` assignment operator.
+Сада је време да се рефакторише и уведе још један конструкт `+=` оператор додељивања.
 
 ```go
 const repeatCount = 5
@@ -89,11 +89,11 @@ func Repeat(character string) string {
 }
 ```
 
-`+=` called _"the Add AND assignment operator"_, adds the right operand to the left operand and assigns the result to left operand. It works with other types like integers.
+`+=` назван _"Add AND оператер доделе"_, додаје десни операнд левом операнду и додељује резултат левом операнду. Ради са другим врстама попут целих бројева.
 
-### Benchmarking
+### Бенчмаркинг
 
-Writing [benchmarks](https://golang.org/pkg/testing/#hdr-Benchmarks) in Go is another first-class feature of the language and it is very similar to writing tests.
+Писање [бенчмарка](https://golang.org/pkg/testing/#hdr-Benchmarks) у Го је још једна првокласна карактеристика језика и врло је слична писању тестова.
 
 ```go
 func BenchmarkRepeat(b *testing.B) {
@@ -103,15 +103,15 @@ func BenchmarkRepeat(b *testing.B) {
 }
 ```
 
-You'll see the code is very similar to a test.
+Видећете да је код врло сличан тесту.
 
-The `testing.B` gives you access to the cryptically named `b.N`.
+`testing.B` даје вам приступ криптичном имену `b.N`.
 
-When the benchmark code is executed, it runs `b.N` times and measures how long it takes.
+Када се изврши референтни код, он се покреће `b.N` пута и мери колико траје.
 
-The amount of times the code is run shouldn't matter to you, the framework will determine what is a "good" value for that to let you have some decent results.
+Количина покретања кода не би вам требала бити важна, оквир ће одредити која је „добра“ вредност за то како бисте имали добре резултате.
 
-To run the benchmarks do `go test -bench=.` (or if you're in Windows Powershell `go test -bench="."`)
+Да бисте покренули тестове, учините `go test -bench=.` (или ако сте у Windows Powershell `go test -bench="."`)
 
 ```text
 goos: darwin
@@ -121,18 +121,18 @@ pkg: github.com/marcetin/nauci-go-sa-testovima/for/v4
 PASS
 ```
 
-What `136 ns/op` means is our function takes on average 136 nanoseconds to run \(on my computer\). Which is pretty ok! To test this it ran it 10000000 times.
+Шта значи `136 ns/op` је да нашој функцији треба у просеку 136 наносекунди \ (на мом рачунару \). Што је прилично ок! Да би то тестирао, покренуо је 10000000 пута.
 
-_NOTE_ by default Benchmarks are run sequentially.
+_НАПОМЕНА_ по дефаулту Референтни тестови се покрећу секвенцијално.
 
-## Practice exercises
+## Вежбајте вежбе
 
-* Change the test so a caller can specify how many times the character is repeated and then fix the code
-* Write `ExampleRepeat` to document your function
-* Have a look through the [strings](https://golang.org/pkg/strings) package. Find functions you think could be useful and experiment with them by writing tests like we have here. Investing time learning the standard library will really pay off over time.
+* Промените тест тако да позивалац може одредити колико пута се знак понавља, а затим поправити код
+* Напишите `ExampleRepeat` да бисте документовали своју функцију
+* Погледајте пакет [стрингс](https://golang.org/pkg/strings). Пронађите функције за које мислите да би могле бити корисне и експериментишите с њима писањем тестова какве имамо овде. Улагање времена у учење стандардне библиотеке временом ће се заиста исплатити.
 
-## Wrapping up
+## Завршница
 
-* More TDD practice
-* Learned `for`
-* Learned how to write benchmarks
+* Више ТДД праксе
+* Научено `for`
+* Научио како да пише референтне вредности
