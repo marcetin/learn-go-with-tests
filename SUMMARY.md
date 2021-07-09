@@ -43,7 +43,7 @@
 ## Мета
 
 * [Зашто јединствени тестови и како их натерати да раде за вас](why.md)
-* [Анти-шаре](anti-patterns.md)
+* [Анти-шаблони](anti-patterns.md)
 * [Увод у генерике](intro-to-generics.md)
 * [Допринос](contributing.md)
 * [Предложак поглавља](template.md)
