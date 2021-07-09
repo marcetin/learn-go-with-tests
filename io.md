@@ -1,6 +1,6 @@
 # IO and sorting
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/io)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/io)**
 
 [In the previous chapter](json.md) we continued iterating on our application by adding a new endpoint `/league`. Along the way we learned about how to deal with JSON, embedding types and routing.
 
@@ -143,7 +143,7 @@ It won't scale especially well but given this is a prototype it'll be fine for n
 
 We will keep the `InMemoryPlayerStore` for now so that the integration tests keep passing as we develop our new store. Once we are confident our new implementation is sufficient to make the integration test pass we will swap it in and then delete `InMemoryPlayerStore`.
 
-## Write the test first
+## Прво напишите тест
 
 By now you should be familiar with the interfaces around the standard library for reading data (`io.Reader`), writing data (`io.Writer`) and how we can use the standard library to test these functions without having to use real files.
 
@@ -174,14 +174,14 @@ func TestFileSystemStore(t *testing.T) {
 
 We're using `strings.NewReader` which will return us a `Reader`, which is what our `FileSystemPlayerStore` will use to read data. In `main` we will open a file, which is also a `Reader`.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 # github.com/marcetin/nauci-go-sa-testovima/io/v1
 ./file_system_store_test.go:15:12: undefined: FileSystemPlayerStore
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Let's define `FileSystemPlayerStore` in a new file
 
@@ -219,7 +219,7 @@ One more try...
         file_system_store_test.go:24: got [] want [{Cleo 10} {Chris 33}]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We've read JSON from a reader before
 
@@ -234,7 +234,7 @@ func (f *FileSystemPlayerStore) GetLeague() []Player {
 
 The test should pass.
 
-## Refactor
+## Рефактор
 
 We _have_ done this before! Our test code for the server had to decode the JSON from the response.
 
@@ -329,7 +329,7 @@ Try running the test, it now passes! Happily for us `string.NewReader` that we u
 
 Next we'll implement `GetPlayerScore`.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 //file_system_store_test.go
@@ -350,13 +350,13 @@ t.Run("get player score", func(t *testing.T) {
 })
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./file_system_store_test.go:38:15: store.GetPlayerScore undefined (type FileSystemPlayerStore has no field or method GetPlayerScore)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We need to add the method to our new type to get the test to compile.
 
@@ -375,7 +375,7 @@ Now it compiles and the test fails
         file_system_store_test.go:43: got 0 want 33
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We can iterate over the league to find the player and return their score
 
@@ -396,7 +396,7 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 }
 ```
 
-## Refactor
+## Рефактор
 
 You will have seen dozens of test helper refactorings so I'll leave this to you to make it work
 
@@ -417,7 +417,7 @@ t.Run("get player score", func(t *testing.T) {
 
 Finally, we need to start recording scores with `RecordWin`.
 
-## Write the test first
+## Прво напишите тест
 
 Our approach is fairly short-sighted for writes. We can't (easily) just update one "row" of JSON in a file. We'll need to store the _whole_ new representation of our database on every write.
 
@@ -543,11 +543,11 @@ t.Run("store wins for existing players", func(t *testing.T) {
 })
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./file_system_store_test.go:67:8: store.RecordWin undefined (type FileSystemPlayerStore has no field or method RecordWin)`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Add the new method
 
@@ -566,7 +566,7 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 
 Our implementation is empty so the old score is getting returned.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 //file_system_store.go
@@ -590,7 +590,7 @@ When you `range` over a slice you are returned the current index of the loop (in
 
 If you run the tests, they should now be passing.
 
-## Refactor
+## Рефактор
 
 In `GetPlayerScore` and `RecordWin`, we are iterating over `[]Player` to find a player by name.
 
@@ -648,7 +648,7 @@ This is looking much better and we can see how we might be able to find other us
 
 We now need to handle the scenario of recording wins of new players.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 //file_system_store.go
@@ -668,7 +668,7 @@ t.Run("store wins for new players", func(t *testing.T) {
 })
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestFileSystemStore/store_wins_for_new_players#01
@@ -676,7 +676,7 @@ t.Run("store wins for new players", func(t *testing.T) {
         file_system_store_test.go:86: got 0 want 1
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We just need to handle the scenario where `Find` returns `nil` because it couldn't find the player.
 
@@ -859,7 +859,7 @@ Finally, we can get the amazing payoff we wanted by removing the `Seek` call fro
 
 Let's write the test where we want to update the entire contents of a file with something that is smaller than the original contents.
 
-## Write the test first
+## Прво напишите тест
 
 Our test will create a file with some content, try to write to it using the `tape`, and read it all again to see what's in the file. In `tape_test.go`:
 
@@ -885,7 +885,7 @@ func TestTape_Write(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestTape_Write
@@ -895,7 +895,7 @@ func TestTape_Write(t *testing.T) {
 
 As we thought! It writes the data we want, but leaves the rest of the original data remaining.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 `os.File` has a truncate function that will let us effectively empty the file. We should be able to just call this to get what we want.
 
@@ -1083,7 +1083,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 
 Now that all the tests are passing, we need to handle the scenario where the file is empty.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 //file_system_store_test.go
@@ -1097,7 +1097,7 @@ t.Run("works with an empty file", func(t *testing.T) {
 })
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestFileSystemStore/works_with_an_empty_file
@@ -1105,7 +1105,7 @@ t.Run("works with an empty file", func(t *testing.T) {
         file_system_store_test.go:108: didn't expect an error but got one, problem loading player store from file /var/folders/nj/r_ccbj5d7flds0sf63yy4vb80000gn/T/db019548018, problem parsing league, EOF
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Change our constructor to the following
 
@@ -1141,7 +1141,7 @@ func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
 
 `file.Stat` returns stats on our file, which lets us check the size of the file. If it's empty, we `Write` an empty JSON array and `Seek` back to the start, ready for the rest of the code.
 
-## Refactor
+## Рефактор
 
 Our constructor is a bit messy now, so let's extract the initialise code into a function:
 
@@ -1194,7 +1194,7 @@ Our product owner wants `/league` to return the players sorted by their scores, 
 
 The main decision to make here is where in the software should this happen. If we were using a "real" database we would use things like `ORDER BY` so the sorting is super fast. For that reason, it feels like implementations of `PlayerStore` should be responsible.
 
-## Write the test first
+## Прво напишите тест
 
 We can update the assertion on our first test in `TestFileSystemStore`:
 
@@ -1227,7 +1227,7 @@ t.Run("league sorted", func(t *testing.T) {
 
 The order of the JSON coming in is in the wrong order and our `want` will check that it is returned to the caller in the correct order.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestFileSystemStore/league_from_a_reader,_sorted
@@ -1236,7 +1236,7 @@ The order of the JSON coming in is in the wrong order and our `want` will check 
         file_system_store_test.go:51: got [{Cleo 10} {Chris 33}] want [{Chris 33} {Cleo 10}]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (f *FileSystemPlayerStore) GetLeague() League {
@@ -1253,7 +1253,7 @@ func (f *FileSystemPlayerStore) GetLeague() League {
 
 Easy!
 
-## Wrapping up
+## Окончање
 
 ### What we've covered
 

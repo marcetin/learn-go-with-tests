@@ -1,6 +1,6 @@
 # Command line and project structure
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/command-line)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/command-line)**
 
 Our product owner now wants to _pivot_ by introducing a second application - a command line application.
 
@@ -128,7 +128,7 @@ func main() {
 
 The first requirement we'll tackle is recording a win when the user types `{PlayerName} wins`.
 
-## Write the test first
+## Прво напишите тест
 
 We know we need to make something called `CLI` which will allow us to `Play` poker. It'll need to read user input and then record wins to a `PlayerStore`.
 
@@ -158,14 +158,14 @@ func TestCLI(t *testing.T) {
 - Trigger the game by an unwritten `PlayPoker` method
 - Check that a win is recorded
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 # github.com/marcetin/nauci-go-sa-testovima/command-line/v2
 ./cli_test.go:25:10: undefined: CLI
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 At this point, you should be comfortable enough to create our new `CLI` struct with the respective field for our dependency and add a method.
 
@@ -190,7 +190,7 @@ Remember we're just trying to get the test running so we can check the test fail
 FAIL
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 //CLI.go
@@ -205,7 +205,7 @@ Next, we need to simulate reading from `Stdin` (the input from the user) so that
 
 Let's extend our test to exercise this.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 //CLI_test.go
@@ -233,11 +233,11 @@ func TestCLI(t *testing.T) {
 
 We create an `io.Reader` in our test using the handy `strings.NewReader`, filling it with what we expect the user to type.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./CLI_test.go:12:32: too many values in struct initializer`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We need to add our new dependency into `CLI`.
 
@@ -249,7 +249,7 @@ type CLI struct {
 }
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```
 --- FAIL: TestCLI (0.00s)
@@ -267,7 +267,7 @@ func (cli *CLI) PlayPoker() {
 
 The test passes. We'll add another test to force us to write some real code next, but first, let's refactor.
 
-## Refactor
+## Рефактор
 
 In `server_test` we earlier did checks to see if wins are recorded as we have here. Let's DRY that assertion up into a helper
 
@@ -305,7 +305,7 @@ func TestCLI(t *testing.T) {
 
 Now let's write _another_ test with different user input to force us into actually reading it.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 //CLI_test.go
@@ -334,7 +334,7 @@ func TestCLI(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestCLI
@@ -347,7 +347,7 @@ func TestCLI(t *testing.T) {
 FAIL
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We'll use a [`bufio.Scanner`](https://golang.org/pkg/bufio/) to read the input from the `io.Reader`.
 
@@ -590,7 +590,7 @@ game := poker.NewCLI(store, os.Stdin)
 
 Try and run it, type "Bob wins".
 
-### Refactor
+### Рефактор
 
 We have some repetition in our respective applications where we are opening a file and creating a `file_system_store` from its contents. This feels like a slight weakness in our package's design so we should make a function in it to encapsulate opening a file from a path and returning you the `PlayerStore`.
 
@@ -681,7 +681,7 @@ func main() {
 Notice the symmetry: despite being different user interfaces the setup is almost identical. This feels like good validation of our design so far.
 And notice also that `FileSystemPlayerStoreFromFile` returns a closing function, so we can close the underlying file once we are done using the Store.
 
-## Wrapping up
+## Окончање
 
 ### Package structure
 

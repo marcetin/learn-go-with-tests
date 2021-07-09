@@ -1,6 +1,6 @@
 # Select
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/select)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/select)**
 
 You have been asked to make a function called `WebsiteRacer` which takes two URLs and "races" them by hitting them with an HTTP GET and returning the URL which returned first. If none of them return within 10 seconds then it should return an `error`.
 
@@ -11,7 +11,7 @@ For this, we will be using
 - goroutines.
 - `select` to synchronise processes.
 
-## Write the test first
+## Прво напишите тест
 
 Let's start with something naive to get us going.
 
@@ -31,11 +31,11 @@ func TestRacer(t *testing.T) {
 
 We know this isn't perfect and has problems but it will get us going. It's important not to get too hung-up on getting things perfect first time.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./racer_test.go:14:9: undefined: Racer`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 ```go
 func Racer(a, b string) (winner string) {
@@ -45,7 +45,7 @@ func Racer(a, b string) (winner string) {
 
 `racer_test.go:25: got '', want 'http://www.quii.co.uk'`
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Racer(a, b string) (winner string) {
@@ -130,7 +130,7 @@ Inside our two servers, we make the slow one have a short `time.Sleep` when we g
 
 If you re-run the test it will definitely pass now and should be faster. Play with these sleeps to deliberately break the test.
 
-## Refactor
+## Рефактор
 
 We have some duplication in both our production code and test code.
 
@@ -254,7 +254,7 @@ After these changes, the intent behind our code is very clear and the implementa
 
 Our final requirement was to return an error if `Racer` takes longer than 10 seconds.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 t.Run("returns an error if a server doesn't respond within 10s", func(t *testing.T) {
@@ -274,11 +274,11 @@ t.Run("returns an error if a server doesn't respond within 10s", func(t *testing
 
 We've made our test servers take longer than 10s to return to exercise this scenario and we are expecting `Racer` to return two values now, the winning URL (which we ignore in this test with `_`) and an `error`.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./racer_test.go:37:10: assignment mismatch: 2 variables but 1 values`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 ```go
 func Racer(a, b string) (winner string, error error) {
@@ -303,7 +303,7 @@ If you run it now after 11 seconds it will fail.
         racer_test.go:40: expected an error but didn't get one
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Racer(a, b string) (winner string, error error) {
@@ -412,7 +412,7 @@ func TestRacer(t *testing.T) {
 
 I added one final check on the first test to verify we don't get an `error`.
 
-## Wrapping up
+## Окончање
 
 ### `select`
 

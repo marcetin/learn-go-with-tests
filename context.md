@@ -1,6 +1,6 @@
 # Context
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/context)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/context)**
 
 Software often kicks off long-running, resource-intensive processes (often in goroutines). If the action that caused this gets cancelled or fails for some reason you need to stop these processes in a consistent way through your application.
 
@@ -60,7 +60,7 @@ func TestServer(t *testing.T) {
 
 Now that we have a happy path, we want to make a more realistic scenario where the `Store` can't finish a`Fetch` before the user cancels the request.
 
-## Write the test first
+## Прво напишите тест
 
 Our handler will need a way of telling the `Store` to cancel the work so update the interface.
 
@@ -121,7 +121,7 @@ It's important that you derive your contexts so that cancellations are propagate
 
 What we do is derive a new `cancellingCtx` from our `request` which returns us a `cancel` function. We then schedule that function to be called in 5 milliseconds by using `time.AfterFunc`. Finally we use this new context in our request by calling `request.WithContext`.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 The test fails as we'd expect.
 
@@ -131,7 +131,7 @@ The test fails as we'd expect.
     	context_test.go:62: store was not told to cancel
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Remember to be disciplined with TDD. Write the _minimal_ amount of code to make our test pass.
 
@@ -200,7 +200,7 @@ What have we done here?
 
 To manage this we run `Fetch` in a goroutine and it will write the result into a new channel `data`. We then use `select` to effectively race to the two asynchronous processes and then we either write a response or `Cancel`.
 
-## Refactor
+## Рефактор
 
 We can refactor our test code a bit by making assertion methods on our spy
 
@@ -285,7 +285,7 @@ From the [Go Blog: Context](https://blog.golang.org/context) again:
 
 Feeling a bit uneasy? Good. Let's try and follow that approach though and instead pass through the `context` to our `Store` and let it be responsible. That way it can also pass the `context` through to its dependants and they too can be responsible for stopping themselves.
 
-## Write the test first
+## Прво напишите тест
 
 We'll have to change our existing tests as their responsibilities are changing. The only thing our handler is responsible for now is making sure it sends a context through to the downstream `Store` and that it handles the error that will come from the `Store` when it is cancelled.
 
@@ -370,7 +370,7 @@ t.Run("returns data from store", func(t *testing.T) {
 })
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestServer/returns_data_from_store
@@ -379,7 +379,7 @@ t.Run("returns data from store", func(t *testing.T) {
     	context_test.go:22: got "", want "hello, world"
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Server(store Store) http.HandlerFunc {
@@ -392,7 +392,7 @@ func Server(store Store) http.HandlerFunc {
 
 Our happy path should be... happy. Now we can fix the other test.
 
-## Write the test first
+## Прво напишите тест
 
 We need to test that we do not write any kind of response on the error case. Sadly `httptest.ResponseRecorder` doesn't have a way of figuring this out so we'll have to roll our own spy to test for this.
 
@@ -439,7 +439,7 @@ t.Run("tells store to cancel work if request is cancelled", func(t *testing.T) {
 })
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestServer
@@ -449,7 +449,7 @@ t.Run("tells store to cancel work if request is cancelled", func(t *testing.T) {
     	context_test.go:47: a response should not have been written
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Server(store Store) http.HandlerFunc {
@@ -467,7 +467,7 @@ func Server(store Store) http.HandlerFunc {
 
 We can see after this that the server code has become simplified as it's no longer explicitly responsible for cancellation, it simply passes through `context` and relies on the downstream functions to respect any cancellations that may occur.
 
-## Wrapping up
+## Окончање
 
 ### What we've covered
 

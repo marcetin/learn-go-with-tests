@@ -1,6 +1,6 @@
 # Reading files
 
-- **[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/reading-files)**
+- **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/reading-files)**
 - [Here is a video of me working through the problem and taking questions from the Twitch stream](https://www.youtube.com/watch?v=nXts4dEJnkU)
 
 In this chapter we're going to learn how to read some files, get some data out of them, and do something useful.
@@ -93,7 +93,7 @@ posts = blogposts.NewPostsFromFS(someFS)
 ```
 
 
-## Write the test first
+## Прво напишите тест
 
 We should keep scope as small and useful as possible. If we prove that we can read all the files in a directory, that will be a good start.  This will give us confidence in the software we're writing.  We can check that the count of `[]Post` returned is the same as the number of files in our fake file system.
 
@@ -137,7 +137,7 @@ This feels simpler than maintaining a folder of test files, and it will execute 
 
 Finally, we codified the usage of our API from a consumer's point of view, then checked if it creates the correct number of posts.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./blogpost_test.go:15:12: undefined: blogposts
@@ -184,7 +184,7 @@ The test should now correctly fail
     blogposts_test.go:48: got 0 posts, wanted 2 posts
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We _could_ ["slime"](https://deniseyu.github.io/leveling-up-tdd/) this to make it pass:
 
@@ -219,7 +219,7 @@ Already our idealised view of the world has been foiled because errors can happe
 
 The rest of the code is straightforward: iterate over the entries, create a `Post` for each one and, return the slice.
 
-## Refactor
+## Рефактор
 
 Even though our tests are passing, we can't use our new package outside of this context, because it is coupled to a concrete implementation `fstest.MapFS`. But, it doesn't have to be. Change the argument to our `NewPostsFromFS` function to accept the interface from the standard library.
 
@@ -295,7 +295,7 @@ In some cases, testing error handling is the pragmatic thing to do but, in our c
 
 Logically, our next iterations will be around expanding our `Post` type so that it has some useful data.
 
-## Write the test first
+## Прво напишите тест
 
 We'll start with the first line in the proposed blog post schema, the title field.
 
@@ -317,12 +317,12 @@ func TestNewBlogPosts(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 ```
 ./blogpost_test.go:58:26: unknown field 'Title' in struct literal of type blogposts.Post
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Add the new field to our `Post` type so that the test will run
 
@@ -340,7 +340,7 @@ Re-run the test, and you should get a clear, failing test
     blogpost_test.go:61: got {Title:}, want {Title:Post 1}
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We'll need to open each file and then extract the title
 
@@ -386,7 +386,7 @@ The iterative approach has given us fast feedback that our understanding of the 
 
 `fs.FS` gives us a way of opening a file within it by name with its `Open` method. From there we read the data from the file and, for now, we do not need any sophisticated parsing, just cutting out the `Title: ` text by slicing the string.
 
-## Refactor
+## Рефактор
 
 Separating the 'opening file code' from the 'parsing file contents code' will make the code simpler to understand and work with.
 
@@ -487,7 +487,7 @@ func assertPost(t *testing.T, got blogposts.Post, want blogposts.Post) {
 assertPost(t, posts[0], blogposts.Post{Title: "Post 1"})
 ```
 
-## Write the test first
+## Прво напишите тест
 
 Let's extend our test further to extract the next line from the file, the description. Up until making it pass should now feel comfortable and familiar.
 
@@ -514,13 +514,13 @@ Description: Description 2`
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./blogpost_test.go:47:58: unknown field 'Description' in struct literal of type blogposts.Post
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Add the new field to `Post`.
 
@@ -539,7 +539,7 @@ The tests should now compile, and fail.
         Description: Description 1 Description:}, want {Title:Post 1 Description:Description 1}
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 The standard library has a handy library for helping you scan through data, line by line; [`bufio.Scanner`](https://golang.org/pkg/bufio/#Scanner)
 
@@ -565,7 +565,7 @@ Call `Scan` to read a line, and then extract the data using `Text`.
 
 This function could never return an `error`. It would be tempting at this point to remove it from the return type, but we know we'll have to handle invalid file structures later so, we may as well leave it.
 
-## Refactor
+## Рефактор
 
 We have repetition around scanning a line and then reading the text. We know we're going to do this operation at least one more time, it's a simple refactor to DRY up so let's start with that.
 
@@ -697,7 +697,7 @@ The body of posts starts after the `---`
 
 We've read the first 3 lines already. We then need to read one more line, discard it and then the remainder of the file contains the post's body.
 
-## Write the test first
+## Прво напишите тест
 
 Change the test data to have the separator, and a body with a few newlines to check we grab all the content.
 
@@ -731,7 +731,7 @@ World`,
     })
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./blogpost_test.go:60:3: unknown field 'Body' in struct literal of type blogposts.Post
@@ -739,7 +739,7 @@ World`,
 
 As we'd expect.
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Add `Body` to `Post` and the test should fail.
 
@@ -749,7 +749,7 @@ Add `Body` to `Post` and the test should fail.
         World}
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 1. Scan the next line to ignore the `---` separator.
 2. Keep scanning until there's nothing left to scan.
@@ -788,7 +788,7 @@ func newPost(postBody io.Reader) (Post, error) {
 - After every `Scan()` we write the data into the buffer using `fmt.Fprintln`. We use the version that adds a newline because the scanner removes the newlines from each line, but we need to maintain them.
 - Because of the above, we need to trim the final newline, so we don't have a trailing one.
 
-## Refactor
+## Рефактор
 
 Encapsulating the idea of getting the rest of the data into a function will help future readers quickly understand _what_ is happening in `newPost`, without having to concern themselves with implementation specifics.
 
@@ -833,7 +833,7 @@ Crucially though, we have working software, and we have defined our interface. T
 
 Keeping focused on the goal means we made the important decisions, and validated them against the desired behaviour, rather than getting bogged down on matters that won't affect the overall design.
 
-## Wrapping up
+## Окончање
 
 `fs.FS`, and the other changes in Go 1.16 give us some elegant ways of reading data from file systems and testing them simply.
 

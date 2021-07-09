@@ -1,6 +1,6 @@
 # Mocking
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/mocking)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/mocking)**
 
 You have been asked to write a program which counts down from 3, printing each number on a new line (with a 1 second pause) and when it reaches zero it will print "Go!" and exit.
 
@@ -33,7 +33,7 @@ Here's how we can divide our work up and iterate on it:
 - Print 3, 2, 1 and Go!
 - Wait a second between each line
 
-## Write the test first
+## Прво напишите тест
 
 Our software needs to print to stdout and we saw how we could use DI to facilitate testing this in the DI section.
 
@@ -59,11 +59,11 @@ We know we want our `Countdown` function to write data somewhere and `io.Writer`
 - In `main` we will send to `os.Stdout` so our users see the countdown printed to the terminal.
 - In test we will send to `bytes.Buffer` so our tests can capture what data is being generated.
 
-## Try and run the test
+## Покушајте да покренете тест
 
 `./countdown_test.go:11:2: undefined: Countdown`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Define `Countdown`
 
@@ -89,7 +89,7 @@ func Countdown(out *bytes.Buffer) {}
 
 Perfect!
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Countdown(out *bytes.Buffer) {
@@ -99,7 +99,7 @@ func Countdown(out *bytes.Buffer) {
 
 We're using `fmt.Fprint` which takes an `io.Writer` (like `*bytes.Buffer`) and sends a `string` to it. The test should pass.
 
-## Refactor
+## Рефактор
 
 We know that while `*bytes.Buffer` works, it would be better to use a general purpose interface instead.
 
@@ -137,7 +137,7 @@ Yes this seems trivial but this approach is what I would recommend for any proje
 
 Next we can make it print 2,1 and then "Go!".
 
-## Write the test first
+## Прво напишите тест
 
 By investing in getting the overall plumbing working right, we can iterate on our solution safely and easily. We will no longer need to stop and re-run the program to be confident of it working as all the logic is tested.
 
@@ -161,7 +161,7 @@ Go!`
 
 The backtick syntax is another way of creating a `string` but lets you put things like newlines which is perfect for our test.
 
-## Try and run the test
+## Покушајте да покренете тест
 
 ```
 countdown_test.go:21: got '3' want '3
@@ -169,7 +169,7 @@ countdown_test.go:21: got '3' want '3
         1
         Go!'
 ```
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Countdown(out io.Writer) {
@@ -182,7 +182,7 @@ func Countdown(out io.Writer) {
 
 Use a `for` loop counting backwards with `i--` and use `fmt.Fprintln` to print to `out` with our number followed by a newline character. Finally use `fmt.Fprint` to send "Go!" aftward.
 
-## Refactor
+## Рефактор
 
 There's not much to refactor other than refactoring some magic values into named constants.
 
@@ -229,7 +229,7 @@ We have a dependency on `Sleep`ing which we need to extract so we can then contr
 
 If we can _mock_ `time.Sleep` we can use _dependency injection_ to use it instead of a "real" `time.Sleep` and then we can **spy on the calls** to make assertions on them.
 
-## Write the test first
+## Прво напишите тест
 
 Let's define our dependency as an interface. This lets us then use a _real_ Sleeper in `main` and a _spy sleeper_ in our tests. By using an interface our `Countdown` function is oblivious to this and adds some flexibility for the caller.
 
@@ -280,7 +280,7 @@ Go!`
 }
 ```
 
-## Try and run the test
+## Покушајте да покренете тест
 
 ```
 too many arguments in call to Countdown
@@ -288,7 +288,7 @@ too many arguments in call to Countdown
     want (io.Writer)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We need to update `Countdown` to accept our `Sleeper`
 
@@ -331,7 +331,7 @@ func main() {
 }
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 The test is now compiling but not passing because we're still calling the `time.Sleep` rather than the injected in dependency. Let's fix that.
 
@@ -482,7 +482,7 @@ We now have our function and its 2 important properties properly tested.
 
 A nice feature would be for the `Sleeper` to be configurable. This means that we can adjust the sleep time in our main program.
 
-### Write the test first
+### Прво напишите тест
 
 Let's first create a new type for `ConfigurableSleeper` that accepts what we need for configuration and testing.
 
@@ -523,7 +523,7 @@ func TestConfigurableSleeper(t *testing.T) {
 
 There should be nothing new in this test and it is setup very similar to the previous mock tests.
 
-### Try and run the test
+### Покушајте да покренете тест
 ```
 sleeper.Sleep undefined (type ConfigurableSleeper has no field or method Sleep, but does have sleep)
 
@@ -543,7 +543,7 @@ With our new `Sleep` function implemented we have a failing test.
 countdown_test.go:56: should have slept for 5s but slept for 0s
 ```
 
-### Write enough code to make it pass
+### Напишите довољно кода да прође
 
 All we need to do now is implement the `Sleep` function for `ConfigurableSleeper`.
 
@@ -619,7 +619,7 @@ In collaborative projects there is value in auto-generating mocks. In a team, a 
 
 You should only use a mock generator that generates test doubles against an interface. Any tool that overly dictates how tests are written, or that use lots of 'magic', can get in the sea.
 
-## Wrapping up
+## Окончање
 
 ### More on TDD approach
 

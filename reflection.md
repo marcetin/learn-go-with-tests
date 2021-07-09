@@ -1,6 +1,6 @@
 # Reflection
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/reflection)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/reflection)**
 
 [From Twitter](https://twitter.com/peterbourgon/status/1011403901419937792?s=09)
 
@@ -35,7 +35,7 @@ If you want polymorphic functions, consider if you could design it around an int
 
 Our function will need to be able to work with lots of different things. As always we'll take an iterative approach, writing tests for each new thing we want to support and refactoring along the way until we're done.
 
-## Write the test first
+## Прво напишите тест
 
 We'll want to call our function with a struct that has a string field in it (`x`). Then we can spy on the function (`fn`) passed in to see if it is called.
 
@@ -63,13 +63,13 @@ func TestWalk(t *testing.T) {
 - We use an anonymous `struct` with a `Name` field of type string to go for the simplest "happy" path.
 - Finally, call `walk` with `x` and the spy and for now just check the length of `got`, we'll be more specific with our assertions once we've got something very basic working.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./reflection_test.go:21:2: undefined: walk
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We need to define `walk`
 
@@ -88,7 +88,7 @@ Try and run the test again
 FAIL
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We can call the spy with any string to make this pass.
 
@@ -100,7 +100,7 @@ func walk(x interface{}, fn func(input string)) {
 
 The test should now be passing. The next thing we'll need to do is make a more specific assertion on what our `fn` is being called with.
 
-## Write the test first
+## Прво напишите тест
 
 Add the following to the existing test to check the string passed to `fn` is correct
 
@@ -110,7 +110,7 @@ if got[0] != expected {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk
@@ -119,7 +119,7 @@ if got[0] != expected {
 FAIL
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func walk(x interface{}, fn func(input string)) {
@@ -140,7 +140,7 @@ We then make some very optimistic assumptions about the value passed in
 - We look at the first and only field, there may be no fields at all which would cause a panic
 - We then call `String()` which returns the underlying value as a string but we know it would be wrong if the field was something other than a string.
 
-## Refactor
+## Рефактор
 
 Our code is passing for the simple case but we know our code has a lot of shortcomings.
 
@@ -182,7 +182,7 @@ func TestWalk(t *testing.T) {
 
 Now we can easily add a scenario to see what happens if we have more than one string field.
 
-## Write the test first
+## Прво напишите тест
 
 Add the following scenario to the `cases`.
 
@@ -197,7 +197,7 @@ Add the following scenario to the `cases`.
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk/Struct_with_two_string_fields
@@ -205,7 +205,7 @@ Add the following scenario to the `cases`.
         reflection_test.go:40: got [Chris], want [Chris London]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func walk(x interface{}, fn func(input string)) {
@@ -220,13 +220,13 @@ func walk(x interface{}, fn func(input string)) {
 
 `val` has a method `NumField` which returns the number of fields in the value. This lets us iterate over the fields and call `fn` which passes our test.
 
-## Refactor
+## Рефактор
 
 It doesn't look like there's any obvious refactors here that would improve the code so let's press on.
 
 The next shortcoming in `walk` is that it assumes every field is a `string`. Let's write a test for this scenario.
 
-## Write the test first
+## Прво напишите тест
 
 Add the following case
 
@@ -241,7 +241,7 @@ Add the following case
 },
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk/Struct_with_non_string_field
@@ -249,7 +249,7 @@ Add the following case
         reflection_test.go:46: got [Chris <int Value>], want [Chris]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We need to check that the type of the field is a `string`.
 
@@ -269,13 +269,13 @@ func walk(x interface{}, fn func(input string)) {
 
 We can do that by checking its [`Kind`](https://godoc.org/reflect#Kind).
 
-## Refactor
+## Рефактор
 
 Again it looks like the code is reasonable enough for now.
 
 The next scenario is what if it isn't a "flat" `struct`? In other words, what happens if we have a `struct` with some nested fields?
 
-## Write the test first
+## Прво напишите тест
 
 We have been using the anonymous struct syntax to declare types ad-hocly for our tests so we could continue to do that like so
 
@@ -327,7 +327,7 @@ Now we can add this to our cases which reads a lot clearer than before
 },
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk/Nested_fields
@@ -337,7 +337,7 @@ Now we can add this to our cases which reads a lot clearer than before
 
 The problem is we're only iterating on the fields on the first level of the type's hierarchy.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func walk(x interface{}, fn func(input string)) {
@@ -359,7 +359,7 @@ func walk(x interface{}, fn func(input string)) {
 
 The solution is quite simple, we again inspect its `Kind` and if it happens to be a `struct` we just call `walk` again on that inner `struct`.
 
-## Refactor
+## Рефактор
 
 ```go
 func walk(x interface{}, fn func(input string)) {
@@ -382,7 +382,7 @@ When you're doing a comparison on the same value more than once _generally_ refa
 
 What if the value of the struct passed in is a pointer?
 
-## Write the test first
+## Прво напишите тест
 
 Add this case
 
@@ -397,7 +397,7 @@ Add this case
 },
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk/Pointers_to_things
@@ -405,7 +405,7 @@ panic: reflect: call of reflect.Value.NumField on ptr Value [recovered]
     panic: reflect: call of reflect.Value.NumField on ptr Value
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func walk(x interface{}, fn func(input string)) {
@@ -430,7 +430,7 @@ func walk(x interface{}, fn func(input string)) {
 
 You can't use `NumField` on a pointer `Value`, we need to extract the underlying value before we can do that by using `Elem()`.
 
-## Refactor
+## Рефактор
 
 Let's encapsulate the responsibility of extracting the `reflect.Value` from a given `interface{}` into a function.
 
@@ -468,7 +468,7 @@ This actually adds _more_ code but I feel the abstraction level is right.
 
 Next, we need to cover slices.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 {
@@ -481,7 +481,7 @@ Next, we need to cover slices.
 },
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk/Slices
@@ -489,11 +489,11 @@ panic: reflect: call of reflect.Value.NumField on slice Value [recovered]
     panic: reflect: call of reflect.Value.NumField on slice Value
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 This is similar to the pointer scenario before, we are trying to call `NumField` on our `reflect.Value` but it doesn't have one as it's not a struct.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func walk(x interface{}, fn func(input string)) {
@@ -519,7 +519,7 @@ func walk(x interface{}, fn func(input string)) {
 }
 ```
 
-## Refactor
+## Рефактор
 
 This works but it's yucky. No worries, we have working code backed by tests so we are free to tinker all we like.
 
@@ -590,7 +590,7 @@ Once we've determined those things we can iterate through `numberOfValues` calli
 
 Now we've done this, handling arrays should be trivial.
 
-## Write the test first
+## Прво напишите тест
 
 Add to the cases
 
@@ -605,7 +605,7 @@ Add to the cases
 },
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk/Arrays
@@ -613,7 +613,7 @@ Add to the cases
         reflection_test.go:78: got [], want [London Reykjavík]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Arrays can be handled the same way as slices, so just add it to the case with a comma
 
@@ -643,7 +643,7 @@ func walk(x interface{}, fn func(input string)) {
 
 The next type we want to handle is `map`.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 {
@@ -656,7 +656,7 @@ The next type we want to handle is `map`.
 },
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestWalk/Maps
@@ -664,7 +664,7 @@ The next type we want to handle is `map`.
         reflection_test.go:86: got [], want [Bar Boz]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Again if you think a little abstractly you can see that `map` is very similar to `struct`, it's just the keys are unknown at compile time.
 
@@ -698,7 +698,7 @@ func walk(x interface{}, fn func(input string)) {
 
 However, by design you cannot get values out of a map by index. It's only done by _key_, so that breaks our abstraction, darn.
 
-## Refactor
+## Рефактор
 
 How do you feel right now? It felt like maybe a nice abstraction at the time but now the code feels a little wonky.
 
@@ -777,7 +777,7 @@ func assertContains(t testing.TB, haystack []string, needle string)  {
 
 The next type we want to handle is `chan`.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 t.Run("with channels", func(t *testing.T) {
@@ -802,7 +802,7 @@ t.Run("with channels", func(t *testing.T) {
 	})
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 --- FAIL: TestWalk (0.00s)
@@ -810,7 +810,7 @@ t.Run("with channels", func(t *testing.T) {
         reflection_test.go:115: got [], want [Berlin Katowice]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We can iterate through all values sent through channel until it was closed with Recv()
 
@@ -846,7 +846,7 @@ func walk(x interface{}, fn func(input string)) {
 ```
 The next type we want to handle is `func`.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 t.Run("with function", func(t *testing.T) {
@@ -867,7 +867,7 @@ t.Run("with function", func(t *testing.T) {
 	})
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 --- FAIL: TestWalk (0.00s)
@@ -875,7 +875,7 @@ t.Run("with function", func(t *testing.T) {
         reflection_test.go:132: got [], want [Berlin Katowice]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Non zero-argument functions do not seem to make a lot of sense in this scenario. But we should allow for arbitrary return values.
 
@@ -915,7 +915,7 @@ func walk(x interface{}, fn func(input string)) {
 }
 ```
 
-## Wrapping up
+## Окончање
 
 - Introduced some of the concepts from the `reflect` package.
 - Used recursion to traverse arbitrary data structures.

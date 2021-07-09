@@ -1,6 +1,6 @@
 # Time
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/time)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/time)**
 
 The product owner wants us to expand the functionality of our command line application by helping a group of people play Texas-Holdem Poker.
 
@@ -74,7 +74,7 @@ When we call `PlayPoker` we'll schedule all of our blind alerts.
 
 Testing this may be a little tricky though. We'll want to verify that each time period is scheduled with the correct blind amount but if you look at the signature of `time.AfterFunc` its second argument is the function it will run. You cannot compare functions in Go so we'd be unable to test what function has been sent in. So we'll need to write some kind of wrapper around `time.AfterFunc` which will take the time to run and the amount to print so we can spy on that.
 
-## Write the test first
+## Прво напишите тест
 
 Add a new test to our suite
 
@@ -117,7 +117,7 @@ func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
 ```
 
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./CLI_test.go:32:27: too many arguments in call to poker.NewCLI
@@ -125,7 +125,7 @@ func (s *SpyBlindAlerter) ScheduleAlertAt(duration time.Duration, amount int) {
 	want (poker.PlayerStore, io.Reader)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We have added a new argument and the compiler is complaining. _Strictly speaking_ the minimal amount of code is to make `NewCLI` accept a `*SpyBlindAlerter` but let's cheat a little and just define the dependency as an interface.
 
@@ -163,7 +163,7 @@ The tests should now compile and our new test fails.
     	CLI_test.go:38: expected a blind alert to be scheduled
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We'll need to add the `BlindAlerter` as a field on our `CLI` so we can reference it in our `PlayPoker` method.
 
@@ -195,7 +195,7 @@ func (cli *CLI) PlayPoker() {
 
 Next we'll want to check it schedules all the alerts we'd hope for, for 5 players
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 	t.Run("it schedules printing of blind values", func(t *testing.T) {
@@ -248,7 +248,7 @@ Next we'll want to check it schedules all the alerts we'd hope for, for 5 player
 
 Table-based test works nicely here and clearly illustrate what our requirements are. We run through the table and check the `SpyBlindAlerter` to see if the alert has been scheduled with the correct values.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 You should have a lot of failures looking like this
 
@@ -265,7 +265,7 @@ You should have a lot of failures looking like this
         	CLI_test.go:59: alert 1 was not scheduled [{5000000000 100}]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (cli *CLI) PlayPoker() {
@@ -284,7 +284,7 @@ func (cli *CLI) PlayPoker() {
 
 It's not a lot more complicated than what we already had. We're just now iterating over an array of `blinds` and calling the scheduler on an increasing `blindTime`
 
-## Refactor
+## Рефактор
 
 We can encapsulate our scheduled alerts into a method just to make `PlayPoker` read a little clearer.
 
@@ -421,7 +421,7 @@ You should see it print the blind values as we'd expect every 10 seconds. Notice
 
 The game won't always be played with 5 people so we need to prompt the user to enter a number of players before the game starts.
 
-## Write the test first
+## Прво напишите тест
 
 To check we are prompting for the number of players we'll want to record what is written to StdOut. We've done this a few times now, we know that `os.Stdout` is an `io.Writer` so we can check what is written if we use dependency injection to pass in a `bytes.Buffer` in our test and see what our code will write.
 
@@ -455,7 +455,7 @@ t.Run("it prompts the user to enter the number of players", func(t *testing.T) {
 
 We pass in what will be `os.Stdout` in `main` and see what is written.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./CLI_test.go:38:27: too many arguments in call to poker.NewCLI
@@ -463,7 +463,7 @@ We pass in what will be `os.Stdout` in `main` and see what is written.
 	want (poker.PlayerStore, io.Reader, poker.BlindAlerter)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We have a new dependency so we'll have to update `NewCLI`
 
@@ -486,7 +486,7 @@ The new test should fail like so
 FAIL
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We need to add our new dependency to our `CLI` so we can reference it in `PlayPoker`
 
@@ -519,7 +519,7 @@ func (cli *CLI) PlayPoker() {
 }
 ```
 
-## Refactor
+## Рефактор
 
 We have a duplicate string for the prompt which we should extract into a constant
 
@@ -531,7 +531,7 @@ Use this in both the test code and `CLI`.
 
 Now we need to send in a number and extract it out. The only way we'll know if it has had the desired effect is by seeing what blind alerts were scheduled.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 t.Run("it prompts the user to enter the number of players", func(t *testing.T) {
@@ -576,7 +576,7 @@ Ouch! A lot of changes.
 - We also remove our dummy on the blind alerter so we can see that the number of players has had an effect on the scheduling
 - We test what alerts are scheduled
 
-## Try to run the test
+## Покушајте да покренете тест
 
 The test should still compile and fail reporting that the scheduled times are wrong because we've hard-coded for the game to be based on having 5 players
 
@@ -590,7 +590,7 @@ The test should still compile and fail reporting that the scheduled times are wr
 === RUN   TestCLI/it_prompts_the_user_to_enter_the_number_of_players/200_chips_at_12m0s
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Remember, we are free to commit whatever sins we need to make this work. Once we have working software we can then work on refactoring the mess we're about to make!
 
@@ -624,7 +624,7 @@ func (cli *CLI) scheduleBlindAlerts(numberOfPlayers int) {
 
 While our new test has been fixed, a lot of others have failed because now our system only works if the game starts with a user entering a number. You'll need to fix the tests by changing the user inputs so that a number followed by a newline is added (this is highlighting yet more flaws in our approach right now).
 
-## Refactor
+## Рефактор
 
 This all feels a bit horrible right? Let's **listen to our tests**.
 
@@ -905,7 +905,7 @@ We need to address the scenario where a user puts a non numeric value when promp
 
 Our code should not start the game and it should print a handy error to the user and then exit.
 
-## Write the test first
+## Прво напишите тест
 
 We'll start by making sure the game doesn't start
 
@@ -926,14 +926,14 @@ t.Run("it prints an error when a non numeric value is entered and does not start
 
 You'll need to add to our `GameSpy` a field `StartCalled` which only gets set if `Start` is called
 
-## Try to run the test
+## Покушајте да покренете тест
 ```
 === RUN   TestCLI/it_prints_an_error_when_a_non_numeric_value_is_entered_and_does_not_start_the_game
     --- FAIL: TestCLI/it_prints_an_error_when_a_non_numeric_value_is_entered_and_does_not_start_the_game (0.00s)
         CLI_test.go:62: game should not have started
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Around where we call `Atoi` we just need to check for the error
 
@@ -947,7 +947,7 @@ if err != nil {
 
 Next we need to inform the user of what they did wrong so we'll assert on what is printed to `stdout`.
 
-## Write the test first
+## Прво напишите тест
 
 We've asserted on what was printed to `stdout` before so we can copy that code for now
 
@@ -963,7 +963,7 @@ if gotPrompt != wantPrompt {
 
 We are storing _everything_ that gets written to stdout so we still expect the `poker.PlayerPrompt`. We then just check an additional thing gets printed. We're not too bothered about the exact wording for now, we'll address it when we refactor.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestCLI/it_prints_an_error_when_a_non_numeric_value_is_entered_and_does_not_start_the_game
@@ -971,7 +971,7 @@ We are storing _everything_ that gets written to stdout so we still expect the `
         CLI_test.go:70: got 'Please enter the number of players: ', want 'Please enter the number of players: you're so silly'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Change the error handling code
 
@@ -982,7 +982,7 @@ if err != nil {
 }
 ```
 
-## Refactor
+## Рефактор
 
 Now refactor the message into a constant like `PlayerPrompt`
 
@@ -1068,7 +1068,7 @@ What happens if instead of putting `Ruth wins` the user puts in `Lloyd is a kill
 
 Finish this chapter by writing a test for this scenario and making it pass.
 
-## Wrapping up
+## Окончање
 
 ### A quick project recap
 

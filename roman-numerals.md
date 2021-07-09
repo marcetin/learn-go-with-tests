@@ -1,6 +1,6 @@
 # Roman Numerals
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/roman-numerals)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/roman-numerals)**
 
 Some companies will ask you to do the [Roman Numeral Kata](http://codingdojo.org/kata/RomanNumerals/) as part of the interview process. This chapter will show how you can tackle it with TDD.
 
@@ -20,7 +20,7 @@ As this book stresses, a key skill for software developers is to try and identif
 
 So rather than 1984, let's start with 1.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestRomanNumerals(t *testing.T) {
@@ -35,13 +35,13 @@ func TestRomanNumerals(t *testing.T) {
 
 If you've got this far in the book this is hopefully feeling very boring and routine to you. That's a good thing.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./numeral_test.go:6:9: undefined: ConvertToRoman`
 
 Let the compiler guide the way
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Create our function but don't make the test pass yet, always make sure the tests fails how you expect
 
@@ -60,7 +60,7 @@ It should run now
 FAIL
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -68,7 +68,7 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-## Refactor
+## Рефактор
 
 Not much to refactor yet.
 
@@ -76,7 +76,7 @@ _I know_ it feels weird just to hard-code the result but with TDD we want to sta
 
 Now use that uneasy feeling to write a new test to force us to write slightly less dumb code.
 
-## Write the test first
+## Прво напишите тест
 
 We can use subtests to nicely group our tests
 
@@ -102,7 +102,7 @@ func TestRomanNumerals(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestRomanNumerals/2_gets_converted_to_II
@@ -112,7 +112,7 @@ func TestRomanNumerals(t *testing.T) {
 
 Not much surprise there
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -125,7 +125,7 @@ func ConvertToRoman(arabic int) string {
 
 Yup, it still feels like we're not actually tackling the problem. So we need to write more tests to drive us forward.
 
-## Refactor
+## Рефактор
 
 We have some repetition in our tests. When you're testing something which feels like it's a matter of "given input X, we expect Y" you should probably use table based tests.
 
@@ -155,7 +155,7 @@ We can now easily add more cases without having to write any more test boilerpla
 
 Let's push on and go for 3
 
-## Write the test first
+## Прво напишите тест
 
 Add the following to our cases
 
@@ -163,7 +163,7 @@ Add the following to our cases
 {"3 gets converted to III", 3, "III"},
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestRomanNumerals/3_gets_converted_to_III
@@ -171,7 +171,7 @@ Add the following to our cases
         numeral_test.go:20: got 'I', want 'III'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -185,7 +185,7 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-## Refactor
+## Рефактор
 
 OK so I'm starting to not enjoy these if statements and if you look at the code hard enough you can see that we're building a string of `I` based on the size of `arabic`.
 
@@ -224,13 +224,13 @@ Instead you take the next highest symbol and then "subtract" by putting a symbol
 
 For example `5` in Roman Numerals is `V`. To create 4 you do not do `IIII`, instead you do `IV`.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 {"4 gets converted to IV (can't repeat more than 3 times)", 4, "IV"},
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestRomanNumerals/4_gets_converted_to_IV_(cant_repeat_more_than_3_times)
@@ -238,7 +238,7 @@ For example `5` in Roman Numerals is `V`. To create 4 you do not do `IIII`, inst
         numeral_test.go:24: got 'IIII', want 'IV'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -257,7 +257,7 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-## Refactor
+## Рефактор
 
 I don't "like" that we have broken our string building pattern and I want to carry on with it.
 
@@ -282,13 +282,13 @@ In order for 4 to "fit" with my current thinking I now count down from the Arabi
 
 Let's make 5 work
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 {"5 gets converted to V", 5, "V"},
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestRomanNumerals/5_gets_converted_to_V
@@ -296,7 +296,7 @@ Let's make 5 work
         numeral_test.go:25: got 'IIV', want 'V'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Just copy the approach we did for 4
 
@@ -321,7 +321,7 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-## Refactor
+## Рефактор
 
 Repetition in loops like this are usually a sign of an abstraction waiting to be called out. Short-circuiting loops can be an effective tool for readability but it could also be telling you something else.
 
@@ -358,12 +358,12 @@ I'm pretty sure this approach will be valid for 6 (VI), 7 (VII) and 8 (VIII) too
 
 9 follows the same rule as 4 in that we should subtract `I` from the representation of the following number. 10 is represented in Roman Numerals with `X`; so therefore 9 should be `IX`.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 {"9 gets converted to IX", 9, "IX"}
 ```
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestRomanNumerals/9_gets_converted_to_IX
@@ -371,7 +371,7 @@ I'm pretty sure this approach will be valid for 6 (VI), 7 (VII) and 8 (VIII) too
         numeral_test.go:29: got 'VIV', want 'IX'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We should be able to adopt the same approach as before
 
@@ -381,7 +381,7 @@ case arabic > 8:
     arabic -= 9
 ```
 
-## Refactor
+## Рефактор
 
 It _feels_ like the code is still telling us there's a refactor somewhere but it's not totally obvious to me, so let's keep going.
 
@@ -541,7 +541,7 @@ var allRomanNumerals = []RomanNumeral{
 We're not done yet. Next we're going to write a function that converts _from_ a Roman Numeral to an `int`
 
 
-## Write the test first
+## Прво напишите тест
 
 We can re-use our test cases here with a little refactoring
 
@@ -562,13 +562,13 @@ func TestConvertingToArabic(t *testing.T) {
 
 Notice I am using the slice functionality to just run one of the tests for now (`cases[:1]`) as trying to make all of those tests pass all at once is too big a leap
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./numeral_test.go:60:11: undefined: ConvertToArabic
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Add our new function definition
 
@@ -586,7 +586,7 @@ The test should now run and fail
         numeral_test.go:62: got 0, want 1
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 You know what to do
 
@@ -622,11 +622,11 @@ func ConvertToArabic(roman string) int {
 }
 ```
 
-## Write the test first
+## Прво напишите тест
 
 Next we move to `cases[:4]` (`IV`) which now fails because it gets 2 back as that's the length of the string.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 // earlier..
@@ -680,7 +680,7 @@ This is horrible but it does work. It's so bad I felt the need to add comments.
     - If it satisfies both of these conditions we need to lookup the value and add it to the total _if_ it is one of the special subtractors, otherwise ignore it
     - Then we need to further increment `i` so we don't count this symbol twice
 
-## Refactor
+## Рефактор
 
 I'm not entirely convinced this will be the long-term approach and there's potentially some interesting refactors we could do, but I'll resist that in case our approach is totally wrong. I'd rather make a few more tests pass first and see. For the meantime I made the first `if` statement slightly less horrible.
 
@@ -718,7 +718,7 @@ func couldBeSubtractive(index int, currentSymbol uint8, roman string) bool {
 }
 ```
 
-## Write the test first
+## Прво напишите тест
 
 Let's move on to `cases[:5]`
 
@@ -728,7 +728,7 @@ Let's move on to `cases[:5]`
         numeral_test.go:62: got 1, want 5
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Apart from when it is subtractive our code assumes that every character is a `I` which is why the value is 1. We should be able to re-use our `ValueOf` method to fix this.
 
@@ -760,7 +760,7 @@ func ConvertToArabic(roman string) int {
 }
 ```
 
-## Refactor
+## Рефактор
 
 When you index strings in Go, you get a `byte`. This is why when we build up the string again we have to do stuff like `string([]byte{symbol})`. It's repeated a couple of times, let's just move that functionality so that `ValueOf` takes some bytes instead.
 
@@ -840,7 +840,7 @@ total += allRomanNumerals.ValueOf(symbol)
 
 And all the tests pass! Now that we have fully working software we can indulge ourselves in some refactoring, with confidence.
 
-## Refactor
+## Рефактор
 
 Here is all the code I finished up with. I had a few failed attempts but as I keep emphasising, that's fine and the tests help me play around with the code freely.
 
@@ -1067,7 +1067,7 @@ if err := quick.Check(assertion, &quick.Config{
     - Or create a new type that cannot represent > 3999
         - What do you think is best?
 
-## Wrapping up
+## Окончање
 
 ### More TDD practice with iterative development
 

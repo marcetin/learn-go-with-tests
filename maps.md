@@ -1,6 +1,6 @@
-# Maps
+# Мапе
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/maps)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/maps)**
 
 In [arrays & slices](arrays-and-slices.md), you saw how to store values in order. Now, we will look at a way to store items by a `key` and look them up quickly.
 
@@ -8,7 +8,7 @@ Maps allow you to store items in a manner similar to a dictionary. You can think
 
 First, assuming we already have some words with their definitions in the dictionary, if we search for a word, it should return the definition of it.
 
-## Write the test first
+## Прво напишите тест
 
 In `dictionary_test.go`
 
@@ -37,11 +37,11 @@ The value type, on the other hand, can be any type you want. It can even be anot
 
 Everything else in this test should be familiar.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 By running `go test` the compiler will fail with `./dictionary_test.go:8:9: undefined: Search`.
 
-## Write the minimal amount of code for the test to run and check the output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 In `dictionary.go`
 
@@ -57,7 +57,7 @@ Your test should now fail with a *clear error message*
 
 `dictionary_test.go:12: got '' want 'this is just a test' given, 'test'`.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Search(dictionary map[string]string, word string) string {
@@ -67,7 +67,7 @@ func Search(dictionary map[string]string, word string) string {
 
 Getting a value out of a Map is the same as getting a value out of Array `map[key]`.
 
-## Refactor
+## Рефактор
 
 ```go
 func TestSearch(t *testing.T) {
@@ -123,7 +123,7 @@ func (d Dictionary) Search(word string) string {
 
 Here we created a `Dictionary` type which acts as a thin wrapper around `map`. With the custom type defined, we can create the `Search` method.
 
-## Write the test first
+## Прво напишите тест
 
 The basic search was very easy to implement, but what will happen if we supply a word that's not in our dictionary?
 
@@ -157,7 +157,7 @@ The way to handle this scenario in Go is to return a second argument which is an
 
 `Error`s can be converted to a string with the `.Error()` method, which we do when passing it to the assertion. We are also protecting `assertStrings` with `if` to ensure we don't call `.Error()` on `nil`.
 
-## Try and run the test
+## Покушајте да покренете тест
 
 This does not compile
 
@@ -165,7 +165,7 @@ This does not compile
 ./dictionary_test.go:18:10: assignment mismatch: 2 variables but 1 values
 ```
 
-## Write the minimal amount of code for the test to run and check the output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 ```go
 func (d Dictionary) Search(word string) (string, error) {
@@ -177,7 +177,7 @@ Your test should now fail with a much clearer error message.
 
 `dictionary_test.go:22: expected to get an error.`
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (d Dictionary) Search(word string) (string, error) {
@@ -194,7 +194,7 @@ In order to make this pass, we are using an interesting property of the map look
 
 This property allows us to differentiate between a word that doesn't exist and a word that just doesn't have a definition.
 
-## Refactor
+## Рефактор
 
 ```go
 var ErrNotFound = errors.New("could not find the word you were looking for")
@@ -229,7 +229,7 @@ func assertError(t testing.TB, got, want error) {
 
 By creating a new helper we were able to simplify our test, and start using our `ErrNotFound` variable so our test doesn't fail if we change the error text in the future.
 
-## Write the test first
+## Прво напишите тест
 
 We have a great way to search the dictionary. However, we have no way to add new words to our dictionary.
 
@@ -252,7 +252,7 @@ func TestAdd(t *testing.T) {
 
 In this test, we are utilizing our `Search` function to make the validation of the dictionary a little easier.
 
-## Write the minimal amount of code for the test to run and check output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 In `dictionary.go`
 
@@ -267,7 +267,7 @@ Your test should now fail
 dictionary_test.go:31: should find added word: could not find the word you were looking for
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (d Dictionary) Add(word, definition string) {
@@ -307,7 +307,7 @@ var dictionary = make(map[string]string)
 
 Both approaches create an empty `hash map` and point `dictionary` at it. Which ensures that you will never get a runtime panic.
 
-## Refactor
+## Рефактор
 
 There isn't much to refactor in our implementation but the test could use a little simplification.
 
@@ -342,7 +342,7 @@ Our `Add` is looking good. Except, we didn't consider what happens when the valu
 
 Map will not throw an error if the value already exists. Instead, they will go ahead and overwrite the value with the newly provided value. This can be convenient in practice, but makes our function name less than accurate. `Add` should not modify existing values. It should only add new words to our dictionary.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestAdd(t *testing.T) {
@@ -378,7 +378,7 @@ func assertError(t testing.TB, got, want error) {
 
 For this test, we modified `Add` to return an error, which we are validating against a new error variable, `ErrWordExists`. We also modified the previous test to check for a `nil` error, as well as the `assertError` function.
 
-## Try to run test
+## Покушајте да покренете тест
 
 The compiler will fail because we are not returning a value for `Add`.
 
@@ -387,7 +387,7 @@ The compiler will fail because we are not returning a value for `Add`.
 ./dictionary_test.go:41:13: dictionary.Add(word, "new test") used as value
 ```
 
-## Write the minimal amount of code for the test to run and check the output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 In `dictionary.go`
 
@@ -410,7 +410,7 @@ dictionary_test.go:43: got error '%!q(<nil>)' want 'cannot add word because it a
 dictionary_test.go:44: got 'new test' want 'this is just a test'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (d Dictionary) Add(word, definition string) error {
@@ -431,7 +431,7 @@ func (d Dictionary) Add(word, definition string) error {
 
 Here we are using a `switch` statement to match on the error. Having a `switch` like this provides an extra safety net, in case `Search` returns an error other than `ErrNotFound`.
 
-## Refactor
+## Рефактор
 
 We don't have too much to refactor, but as our error usage grows we can make a few modifications.
 
@@ -452,7 +452,7 @@ We made the errors constant; this required us to create our own `DictionaryErr` 
 
 Next, let's create a function to `Update` the definition of a word.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestUpdate(t *testing.T) {
@@ -469,13 +469,13 @@ func TestUpdate(t *testing.T) {
 
 `Update` is very closely related to `Add` and will be our next implementation.
 
-## Try and run the test
+## Покушајте да покренете тест
 
 ```
 ./dictionary_test.go:53:2: dictionary.Update undefined (type Dictionary has no field or method Update)
 ```
 
-## Write minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We already know how to deal with an error like this. We need to define our function.
 
@@ -489,7 +489,7 @@ With that in place, we are able to see that we need to change the definition of 
 dictionary_test.go:55: got 'this is just a test' want 'new definition'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We already saw how to do this when we fixed the issue with `Add`. So let's implement something really similar to `Add`.
 
@@ -501,7 +501,7 @@ func (d Dictionary) Update(word, definition string) {
 
 There is no refactoring we need to do on this since it was a simple change. However, we now have the same issue as with `Add`. If we pass in a new word, `Update` will add it to the dictionary.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 t.Run("existing word", func(t *testing.T) {
@@ -529,7 +529,7 @@ t.Run("new word", func(t *testing.T) {
 
 We added yet another error type for when the word does not exist. We also modified `Update` to return an `error` value.
 
-## Try and run the test
+## Покушајте да покренете тест
 
 ```
 ./dictionary_test.go:53:16: dictionary.Update(word, "new test") used as value
@@ -539,7 +539,7 @@ We added yet another error type for when the word does not exist. We also modifi
 
 We get 3 errors this time, but we know how to deal with these.
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 ```go
 const (
@@ -562,7 +562,7 @@ With these changes, we now get a very clear error:
 dictionary_test.go:66: got error '%!q(<nil>)' want 'cannot update word because it does not exist'
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (d Dictionary) Update(word, definition string) error {
@@ -593,7 +593,7 @@ Having specific errors gives you more information about what went wrong. Here is
 
 Next, let's create a function to `Delete` a word in the dictionary.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestDelete(t *testing.T) {
@@ -611,7 +611,7 @@ func TestDelete(t *testing.T) {
 
 Our test creates a `Dictionary` with a word and then checks if the word has been removed.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 By running `go test` we get:
 
@@ -619,7 +619,7 @@ By running `go test` we get:
 ./dictionary_test.go:74:6: dictionary.Delete undefined (type Dictionary has no field or method Delete)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 ```go
 func (d Dictionary) Delete(word string) {
@@ -633,7 +633,7 @@ After we add this, the test tells us we are not deleting the word.
 dictionary_test.go:78: Expected 'test' to be deleted
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (d Dictionary) Delete(word string) {
@@ -645,7 +645,7 @@ Go has a built-in function `delete` that works on maps. It takes two arguments. 
 
 The `delete` function returns nothing, and we based our `Delete` method on the same notion. Since deleting a value that's not there has no effect, unlike our `Update` and `Add` methods, we don't need to complicate the API with errors.
 
-## Wrapping up
+## Окончање
 
 In this section, we covered a lot. We made a full CRUD (Create, Read, Update and Delete) API for our dictionary. Throughout the process we learned how to:
 

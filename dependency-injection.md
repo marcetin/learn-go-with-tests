@@ -1,6 +1,6 @@
 # Dependency Injection
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/di)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/di)**
 
 It is assumed that you have read the structs section before as some understanding of interfaces will be needed for this.
 
@@ -66,7 +66,7 @@ As you write more Go code you will find this interface popping up a lot because 
 
 So we know under the covers we're ultimately using `Writer` to send our greeting somewhere. Let's use this existing abstraction to make our code testable and more reusable.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestGreet(t *testing.T) {
@@ -86,7 +86,7 @@ The `Buffer` type from the `bytes` package implements the `Writer` interface, be
 
 So we'll use it in our test to send in as our `Writer` and then we can check what was written to it after we invoke `Greet`
 
-## Try and run the test
+## Покушајте да покренете тест
 
 The test will not compile
 
@@ -96,7 +96,7 @@ The test will not compile
     want (string)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 _Listen to the compiler_ and fix the problem.
 
@@ -110,7 +110,7 @@ func Greet(writer *bytes.Buffer, name string) {
 
 The test fails. Notice that the name is getting printed out, but it's going to stdout.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Use the writer to send the greeting to the buffer in our test. Remember `fmt.Fprintf` is like `fmt.Printf` but instead takes a `Writer` to send the string to, whereas `fmt.Printf` defaults to stdout.
 
@@ -122,7 +122,7 @@ func Greet(writer *bytes.Buffer, name string) {
 
 The test now passes.
 
-## Refactor
+## Рефактор
 
 Earlier the compiler told us to pass in a pointer to a `bytes.Buffer`. This is technically correct but not very useful.
 
@@ -197,7 +197,7 @@ When you write an HTTP handler, you are given an `http.ResponseWriter` and the `
 
 You can probably guess that `http.ResponseWriter` also implements `io.Writer` so this is why we could re-use our `Greet` function inside our handler.
 
-## Wrapping up
+## Окончање
 
 Our first round of code was not easy to test because it wrote data to somewhere we couldn't control.
 

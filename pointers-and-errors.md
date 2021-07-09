@@ -1,6 +1,6 @@
 # Pointers & errors
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/pointers)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/pointers)**
 
 We learned about structs in the last section which let us capture a number of values related around a concept.
 
@@ -10,7 +10,7 @@ At some point you may wish to use structs to manage state, exposing methods to l
 
 Let's make a `Wallet` struct which lets us deposit `Bitcoin`.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestWallet(t *testing.T) {
@@ -30,11 +30,11 @@ func TestWallet(t *testing.T) {
 
 In the [previous example](./structs-methods-and-interfaces.md) we accessed fields directly with the field name, however in our _very secure wallet_ we don't want to expose our inner state to the rest of the world. We want to control access via methods.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./wallet_test.go:7:12: undefined: Wallet`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 The compiler doesn't know what a `Wallet` is so let's tell it.
 
@@ -69,7 +69,7 @@ The tests should now compile and run
 
 `wallet_test.go:15: got 0 want 10`
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We will need some kind of _balance_ variable in our struct to store the state
 
@@ -180,7 +180,7 @@ These pointers to structs even have their own name: _struct pointers_ and they a
 
 Technically you do not need to change `Balance` to use a pointer receiver as taking a copy of the balance is fine. However, by convention you should keep your method receiver types the same for consistency.
 
-## Refactor
+## Рефактор
 
 We said we were making a Bitcoin wallet but we have not mentioned them so far. We've been using `int` because they're a good type for counting things!
 
@@ -261,7 +261,7 @@ This makes it clearer what's going on in our test.
 
 The next requirement is for a `Withdraw` function.
 
-## Write the test first
+## Прво напишите тест
 
 Pretty much the opposite of `Deposit()`
 
@@ -298,11 +298,11 @@ func TestWallet(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./wallet_test.go:26:9: wallet.Withdraw undefined (type Wallet has no field or method Withdraw)`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 ```go
 func (w *Wallet) Withdraw(amount Bitcoin) {
@@ -312,7 +312,7 @@ func (w *Wallet) Withdraw(amount Bitcoin) {
 
 `wallet_test.go:33: got 20 BTC want 10 BTC`
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (w *Wallet) Withdraw(amount Bitcoin) {
@@ -320,7 +320,7 @@ func (w *Wallet) Withdraw(amount Bitcoin) {
 }
 ```
 
-## Refactor
+## Рефактор
 
 There's some duplication in our tests, lets refactor that out.
 
@@ -359,7 +359,7 @@ In Go, if you want to indicate an error it is idiomatic for your function to ret
 
 Let's try this out in a test.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 t.Run("Withdraw insufficient funds", func(t *testing.T) {
@@ -383,13 +383,13 @@ We then check an error has returned by failing the test if it is `nil`.
 
 Like `null` if you try to access a value that is `nil` it will throw a **runtime panic**. This is bad! You should make sure that you check for nils.
 
-## Try and run the test
+## Покушајте да покренете тест
 
 `./wallet_test.go:31:25: wallet.Withdraw(Bitcoin(100)) used as value`
 
 The wording is perhaps a little unclear, but our previous intent with `Withdraw` was just to call it, it will never return a value. To make this compile we will need to change it so it has a return type.
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 ```go
 func (w *Wallet) Withdraw(amount Bitcoin) error {
@@ -400,7 +400,7 @@ func (w *Wallet) Withdraw(amount Bitcoin) error {
 
 Again, it is very important to just write enough code to satisfy the compiler. We correct our `Withdraw` method to return `error` and for now we have to return _something_ so let's just return `nil`.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (w *Wallet) Withdraw(amount Bitcoin) error {
@@ -418,7 +418,7 @@ Remember to import `errors` into your code.
 
 `errors.New` creates a new `error` with a message of your choosing.
 
-## Refactor
+## Рефактор
 
 Let's make a quick test helper for our error check to improve the test's readability
 
@@ -448,7 +448,7 @@ Hopefully when returning an error of "oh no" you were thinking that we _might_ i
 
 Assuming that the error ultimately gets returned to the user, let's update our test to assert on some kind of error message rather than just the existence of an error.
 
-## Write the test first
+## Прво напишите тест
 
 Update our helper for a `string` to compare against.
 
@@ -480,11 +480,11 @@ t.Run("Withdraw insufficient funds", func(t *testing.T) {
 
 We've introduced `t.Fatal` which will stop the test if it is called. This is because we don't want to make any more assertions on the error returned if there isn't one around. Without this the test would carry on to the next step and panic because of a nil pointer.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `wallet_test.go:61: got err 'oh no' want 'cannot withdraw, insufficient funds'`
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (w *Wallet) Withdraw(amount Bitcoin) error {
@@ -498,7 +498,7 @@ func (w *Wallet) Withdraw(amount Bitcoin) error {
 }
 ```
 
-## Refactor
+## Рефактор
 
 We have duplication of the error message in both the test code and the `Withdraw` code.
 
@@ -650,7 +650,7 @@ func assertError(t testing.TB, got error, want error) {
 }
 ```
 
-## Wrapping up
+## Окончање
 
 ### Pointers
 

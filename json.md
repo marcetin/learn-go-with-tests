@@ -1,6 +1,6 @@
 # JSON, routing & embedding
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/json)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/json)**
 
 [In the previous chapter](http-server.md) we created a web server to store how many games players have won.
 
@@ -95,7 +95,7 @@ You can find the corresponding tests in the link at the top of the chapter.
 
 We'll start by making the league table endpoint.
 
-## Write the test first
+## Прво напишите тест
 
 We'll extend the existing suite as we have some useful test functions and a fake `PlayerStore` to use.
 
@@ -118,7 +118,7 @@ func TestLeague(t *testing.T) {
 
 Before worrying about actual scores and JSON we will try and keep the changes small with the plan to iterate toward our goal. The simplest start is to check we can hit `/league` and get an `OK` back.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
     --- FAIL: TestLeague/it_returns_200_on_/league (0.00s)
@@ -136,7 +136,7 @@ player := strings.TrimPrefix(r.URL.Path, "/players/")
 
 In the previous chapter, we mentioned this was a fairly naive way of doing our routing. Our test informs us correctly that we need a concept how to deal with different request paths.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Go has a built-in routing mechanism called [`ServeMux`](https://golang.org/pkg/net/http/#ServeMux) (request multiplexer) which lets you attach `http.Handler`s to particular request paths.
 
@@ -174,7 +174,7 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 The tests should now pass.
 
-## Refactor
+## Рефактор
 
 `ServeHTTP` is looking quite big, we can separate things out a bit by refactoring our handlers into separate methods.
 
@@ -316,7 +316,7 @@ We should return some JSON that looks something like this.
 ]
 ```
 
-## Write the test first
+## Прво напишите тест
 
 We'll start by trying to parse the response into something meaningful.
 
@@ -384,7 +384,7 @@ To parse JSON into our data model we create a `Decoder` from `encoding/json` pac
 
 Parsing JSON can fail so `Decode` can return an `error`. There's no point continuing the test if that fails so we check for the error and stop the test with `t.Fatalf` if it happens. Notice that we print the response body along with the error as it's important for someone running the test to see what string cannot be parsed.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestLeague/it_returns_200_on_/league
@@ -394,7 +394,7 @@ Parsing JSON can fail so `Decode` can return an `error`. There's no point contin
 
 Our endpoint currently does not return a body so it cannot be parsed into JSON.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 //server.go
@@ -420,7 +420,7 @@ Notice the lovely symmetry in the standard library.
 
 Throughout this book, we have used `io.Writer` and this is another demonstration of its prevalence in the standard library and how a lot of libraries easily work with it.
 
-## Refactor
+## Рефактор
 
 It would be nice to introduce a separation of concern between our handler and getting the `leagueTable` as we know we're going to not hard-code that very soon.
 
@@ -440,7 +440,7 @@ func (p *PlayerServer) getLeagueTable() []Player {
 
 Next, we'll want to extend our test so that we can control exactly what data we want back.
 
-## Write the test first
+## Прво напишите тест
 
 We can update the test to assert that the league table contains some players that we will stub in our store.
 
@@ -493,14 +493,14 @@ func TestLeague(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./server_test.go:33:3: too few values in struct initializer
 ./server_test.go:70:3: too few values in struct initializer
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 You'll need to update the other tests as we have a new field in `StubPlayerStore`; set it to nil for the other tests.
 
@@ -512,7 +512,7 @@ Try running the tests again and you should get
         server_test.go:124: got [{Chris 20}] want [{Cleo 32} {Chris 20} {Tiest 14}]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We know the data is in our `StubPlayerStore` and we've abstracted that away into an interface `PlayerStore`. We need to update this so anyone passing us in a `PlayerStore` can provide us with the data for leagues.
 
@@ -586,7 +586,7 @@ What this is really telling us is that _later_ we're going to want to test this 
 
 Try and run the tests, the compiler should pass and the tests should be passing!
 
-## Refactor
+## Рефактор
 
 The test code does not convey our intent very well and has a lot of boilerplate we can refactor away.
 
@@ -643,7 +643,7 @@ func newLeagueRequest() *http.Request {
 
 One final thing we need to do for our server to work is make sure we return a `content-type` header in the response so machines can recognise we are returning `JSON`.
 
-## Write the test first
+## Прво напишите тест
 
 Add this assertion to the existing test
 
@@ -654,7 +654,7 @@ if response.Result().Header.Get("content-type") != "application/json" {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestLeague/it_returns_the_league_table_as_JSON
@@ -662,7 +662,7 @@ if response.Result().Header.Get("content-type") != "application/json" {
         server_test.go:124: response did not have content-type of application/json, got map[Content-Type:[text/plain; charset=utf-8]]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Update `leagueHandler`
 
@@ -676,7 +676,7 @@ func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
 
 The test should pass.
 
-## Refactor
+## Рефактор
 
 Create a constant for "application/json" and use it in `leagueHandler`
 
@@ -713,7 +713,7 @@ Now that we have sorted out `PlayerServer` for now we can turn our attention to 
 
 The quickest way for us to get some confidence is to add to our integration test, we can hit the new endpoint and check we get back the correct response from `/league`.
 
-## Write the test first
+## Прво напишите тест
 
 We can use `t.Run` to break up this test a bit and we can reuse the helpers from our server tests - again showing the importance of refactoring tests.
 
@@ -750,7 +750,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestRecordingWinsAndRetrievingThem/get_league
@@ -758,7 +758,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
         server_integration_test.go:35: got [] want [{Pepper 3}]
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 `InMemoryPlayerStore` is returning `nil` when you call `GetLeague()` so we'll need to fix that.
 
@@ -777,7 +777,7 @@ All we need to do is iterate over the map and convert each key/value to a `Playe
 
 The test should now pass.
 
-## Wrapping up
+## Окончање
 
 We've continued to safely iterate on our program using TDD, making it support new endpoints in a maintainable way with a router and it can now return JSON for our consumers. In the next chapter, we will cover persisting the data and sorting our league.
 

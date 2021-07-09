@@ -1,6 +1,6 @@
 # WebSockets
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/websockets)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/websockets)**
 
 In this chapter we'll learn how to use WebSockets to improve our application.
 
@@ -37,7 +37,7 @@ It is of course possible but for the sake of brevity I won't be including any ex
 
 Sorry folks. Lobby O'Reilly to pay me to make a "Learn JavaScript with tests".
 
-## Write the test first
+## Прво напишите тест
 
 First thing we need to do is serve up some HTML to users when they hit `/game`.
 
@@ -83,7 +83,7 @@ func TestGame(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 ```
 --- FAIL: TestGame (0.00s)
 === RUN   TestGame/GET_/game_returns_200
@@ -91,7 +91,7 @@ func TestGame(t *testing.T) {
     	server_test.go:109: did not get correct status, got 404, want 200
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Our server has a router setup so it's relatively easy to fix.
 
@@ -109,7 +109,7 @@ func (p *PlayerServer) game(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-## Refactor
+## Рефактор
 
 The server code is already fine due to us slotting in more code into the existing well-factored code very easily.
 
@@ -212,7 +212,7 @@ If you make this change and run again you should see our UI.
 
 Now we need to test that when we get a string over a WebSocket connection to our server that we declare it as a winner of a game.
 
-## Write the test first
+## Прво напишите тест
 
 For the first time we are going to use an external library so that we can work with WebSockets.
 
@@ -253,7 +253,7 @@ Using `websocket.DefaultDialer.Dial` we try to dial in to our server and then we
 
 Finally we assert on the player store to check the winner was recorded.
 
-## Try to run the test
+## Покушајте да покренете тест
 ```
 === RUN   TestGame/when_we_get_a_message_over_a_websocket_it_is_a_winner_of_a_game
     --- FAIL: TestGame/when_we_get_a_message_over_a_websocket_it_is_a_winner_of_a_game (0.00s)
@@ -262,7 +262,7 @@ Finally we assert on the player store to check the winner was recorded.
 
 We have not changed our server to accept WebSocket connections on `/ws` so we're not shaking hands yet.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Add another listing to our router
 
@@ -319,7 +319,7 @@ time.Sleep(10 * time.Millisecond)
 AssertPlayerWin(t, store, winner)
 ```
 
-## Refactor
+## Рефактор
 
 We committed many sins to make this test work both in the server code and the test code but remember this is the easiest way for us to work.
 
@@ -596,7 +596,7 @@ Let the compiler tell you what you need to fix. The change isn't so bad:
 
 If you've got everything right, everything should be green! Now we can try and use `Game` within `Server`.
 
-## Write the test first
+## Прво напишите тест
 
 The requirements of `CLI` and `Server` are the same! It's just the delivery mechanism is different.
 
@@ -644,7 +644,7 @@ t.Run("start a game with 3 players and declare Ruth the winner", func(t *testing
 - We then send the web socket messages for a game.
 - Finally we assert that the game is started and finished with what we expect.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 You'll have a number of compilation errors around `mustMakePlayerServer` in other tests. Introduce an unexported variable `dummyGame` and use it through all the tests that aren't compiling
 
@@ -662,7 +662,7 @@ The final error is where we are trying to pass in `Game` to `NewPlayerServer` bu
 	want ("github.com/marcetin/nauci-go-sa-testovima/WebSockets/v2".PlayerStore)
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Just add it as an argument for now just to get the test running
 
@@ -681,7 +681,7 @@ Finally!
 FAIL
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 We need to add `Game` as a field to `PlayerServer` so that it can use it when it gets requests.
 
@@ -764,7 +764,7 @@ Discounting the fact we're not getting blind alerts yet, the app does work! We'v
 
 Before that though, let's tidy up some code.
 
-## Refactor
+## Рефактор
 
 The way we're using WebSockets is fairly basic and the error handling is fairly naive, so I wanted to encapsulate that in a type just to remove that messiness from the server code. We may wish to revisit it later but for now this'll tidy things up a bit
 
@@ -872,7 +872,7 @@ Spying is great and helps us check implementation details but we should always t
 
 Our test currently opens a websocket connection to our running server and sends messages to make it do things. Equally we should be able to test the messages our server sends back over the websocket connection.
 
-## Write the test first
+## Прво напишите тест
 
 We'll edit our existing test.
 
@@ -935,12 +935,12 @@ t.Run("start a game with 3 players, send some blind alerts down WS and declare R
 - We've added a `wantedBlindAlert` and configured our `GameSpy` to send it to `out` if `Start` is called.
 - We hope it gets sent in the websocket connection so we've added a call to `ws.ReadMessage()` to wait for a message to be sent and then check it's the one we expected.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 You should find the test hangs forever. This is because `ws.ReadMessage()` will block until it gets a message, which it never will.
 
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 We should never have tests that hang so let's introduce a way of handling code that we want to timeout.
 
@@ -1014,7 +1014,7 @@ Now if you run the test...
     	server_test.go:150: got "", want "Blind is 100"
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 Finally we can now change our server code so it sends our WebSocket connection to the game when it starts
 
@@ -1031,7 +1031,7 @@ func (p *PlayerServer) webSocket(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-## Refactor
+## Рефактор
 
 The server code was a very small change so there's not a lot to change here but the test code still has a `time.Sleep` call because we have to wait for our server to do its work asynchronously.
 
@@ -1067,7 +1067,7 @@ func retryUntil(d time.Duration, f func() bool) bool {
 }
 ```
 
-## Wrapping up
+## Окончање
 
 Our application is now complete. A game of poker can be started via a web browser and the users are informed of the blind bet value as time goes by via WebSockets. When the game finishes they can record the winner which is persisted using code we wrote a few chapters ago. The players can find out who is the best (or luckiest) poker player using the website's `/league` endpoint.
 

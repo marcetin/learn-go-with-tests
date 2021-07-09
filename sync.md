@@ -1,6 +1,6 @@
 # Sync
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/sync)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/sync)**
 
 We want to make a counter which is safe to use concurrently.
 
@@ -8,7 +8,7 @@ We'll start with an unsafe counter and verify its behaviour works in a single-th
 
 Then we'll exercise it's unsafeness with multiple goroutines trying to use it via a test and fix it.
 
-## Write the test first
+## Прво напишите тест
 
 We want our API to give us a method to increment the counter and then retrieve its value.
 
@@ -27,13 +27,13 @@ func TestCounter(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 ./sync_test.go:9:14: undefined: Counter
 ```
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
 Let's define `Counter`.
 
@@ -72,7 +72,7 @@ It should now run and fail
     	sync_test.go:27: got 0, want 3
 ```
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 This should be trivial for Go experts like us. We need to keep some state for the counter in our datatype and then increment it on every `Inc` call
 
@@ -90,7 +90,7 @@ func (c *Counter) Value() int {
 }
 ```
 
-## Refactor
+## Рефактор
 
 There's not a lot to refactor but given we're going to write more tests around `Counter` we'll write a small assertion function `assertCount` so the test reads a bit clearer.
 
@@ -116,7 +116,7 @@ func assertCounter(t testing.TB, got Counter, want int)  {
 
 That was easy enough but now we have a requirement that it must be safe to use in a concurrent environment. We will need to write a failing test to exercise this.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 t.Run("it runs safely concurrently", func(t *testing.T) {
@@ -146,7 +146,7 @@ We are using [`sync.WaitGroup`](https://golang.org/pkg/sync/#WaitGroup) which is
 
 By waiting for `wg.Wait()` to finish before making our assertions we can be sure all of our goroutines have attempted to `Inc` the `Counter`.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 ```
 === RUN   TestCounter/it_runs_safely_in_a_concurrent_envionment
@@ -158,7 +158,7 @@ FAIL
 
 The test will _probably_ fail with a different number, but nonetheless it demonstrates it does not work when multiple goroutines are trying to mutate the value of the counter at the same time.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 A simple solution is to add a lock to our `Counter`, a [`Mutex`](https://golang.org/pkg/sync/#Mutex)
 
@@ -245,7 +245,7 @@ func NewCounter() *Counter {
 
 Use this function in your tests when initialising `Counter`.
 
-## Wrapping up
+## Окончање
 
 We've covered a few things from the [sync package](https://golang.org/pkg/sync/)
 
