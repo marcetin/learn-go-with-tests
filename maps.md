@@ -2,15 +2,15 @@
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/maps)**
 
-In [arrays & slices](arrays-and-slices.md), you saw how to store values in order. Now, we will look at a way to store items by a `key` and look them up quickly.
+У [низови и резови](arrays-and-slices.md), видели сте како сместити вредности у ред. Сада ћемо размотрити начин складиштења предмета помоћу `key` и брзо их потражити.
 
-Maps allow you to store items in a manner similar to a dictionary. You can think of the `key` as the word and the `value` as the definition. And what better way is there to learn about Maps than to build our own dictionary?
+Мапе вам омогућавају да предмете складиштите на начин сличан речнику. `key` можете сматрати речју, а вредност „дефиницијом“. А који бољи начин постоји за учење о Мапама од стварања сопственог речника?
 
-First, assuming we already have some words with their definitions in the dictionary, if we search for a word, it should return the definition of it.
+Прво, под претпоставком да већ имамо неке речи са њиховим дефиницијама у речнику, ако тражимо реч, она би требало да је врати у дефиницију.
 
 ## Прво напишите тест
 
-In `dictionary_test.go`
+У `dictionary_test.go`
 
 ```go
 package main
@@ -29,21 +29,22 @@ func TestSearch(t *testing.T) {
 }
 ```
 
-Declaring a Map is somewhat similar to an array. Except, it starts with the `map` keyword and requires two types. The first is the key type, which is written inside the `[]`. The second is the value type, which goes right after the `[]`.
+Декларирање мапе је донекле слично низу. Осим што започиње са кључном речи `map` и захтева два типа. Први је тип кључа који је написан унутар `[]`. Други је тип вредности, који иде одмах иза `[]`.
 
-The key type is special. It can only be a comparable type because without the ability to tell if 2 keys are equal, we have no way to ensure that we are getting the correct value. Comparable types are explained in depth in the [language spec](https://golang.org/ref/spec#Comparison_operators).
+Тип кључа је посебан. То може бити упоредив тип, јер без могућности да се утврди да ли су 2 кључа једнака, не можемо да осигурамо да добијемо тачну вредност. Упоредиви типови детаљно су објашњени у [спецификацији језика](https://golang.org/ref/spec#Comparison_operators).
 
-The value type, on the other hand, can be any type you want. It can even be another map.
+Тип вредности, с друге стране, може бити било који тип који желите. То може бити и друга карта.
 
-Everything else in this test should be familiar.
+Све остало у овом тесту би требало да буде познато.
+
 
 ## Покушајте да покренете тест
 
-By running `go test` the compiler will fail with `./dictionary_test.go:8:9: undefined: Search`.
+Покретањем `go test` компајлер неће успети са `./dictionary_test.go:8:9: undefined: Search`.
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-In `dictionary.go`
+У `dictionary.go`
 
 ```go
 package main
@@ -53,7 +54,7 @@ func Search(dictionary map[string]string, word string) string {
 }
 ```
 
-Your test should now fail with a *clear error message*
+Ваш тест би сада требало да пропадне са *јасном поруком о грешци*
 
 `dictionary_test.go:12: got '' want 'this is just a test' given, 'test'`.
 
@@ -65,7 +66,7 @@ func Search(dictionary map[string]string, word string) string {
 }
 ```
 
-Getting a value out of a Map is the same as getting a value out of Array `map[key]`.
+Извлачење вредности из мапе исто је што и извлачење вредности из низа `map[key]`.
 
 ## Рефактор
 
@@ -88,13 +89,13 @@ func assertStrings(t testing.TB, got, want string) {
 }
 ```
 
-I decided to create an `assertStrings` helper to make the implementation more general.
+Одлучио сам да створим помоћника `assertStrings` како бих имплементацију учинио општијом.
 
-### Using a custom type
+### Коришћење прилагођеног типа
 
-We can improve our dictionary's usage by creating a new type around map and making `Search` a method.
+Употребу нашег речника можемо побољшати стварањем новог типа око мапе и начином `Search`.
 
-In `dictionary_test.go`:
+У `dictionary_test.go`:
 
 ```go
 func TestSearch(t *testing.T) {
@@ -107,11 +108,11 @@ func TestSearch(t *testing.T) {
 }
 ```
 
-We started using the `Dictionary` type, which we have not defined yet. Then called `Search` on the `Dictionary` instance.
+Почели смо да користимо тип `Dictionary`, који још увек нисмо дефинисали. Позовимо `Search` на `Dictionary` инстанци.
 
-We did not need to change `assertStrings`.
+Нисмо морали да мењамо `assertStrings`.
 
-In `dictionary.go`:
+У `dictionary.go`:
 
 ```go
 type Dictionary map[string]string
@@ -121,13 +122,13 @@ func (d Dictionary) Search(word string) string {
 }
 ```
 
-Here we created a `Dictionary` type which acts as a thin wrapper around `map`. With the custom type defined, we can create the `Search` method.
+Овде смо створили тип `Dictionary` који делује као танак омотач око мапе `map`. Са дефинисаним прилагођеним типом, можемо створити методу `Search`.
 
 ## Прво напишите тест
 
-The basic search was very easy to implement, but what will happen if we supply a word that's not in our dictionary?
+Основну претрагу било је врло лако спровести, али шта ће се догодити ако унесемо реч која није у нашем речнику?
 
-We actually get nothing back. This is good because the program can continue to run, but there is a better approach. The function can report that the word is not in the dictionary. This way, the user isn't left wondering if the word doesn't exist or if there is just no definition (this might not seem very useful for a dictionary. However, it's a scenario that could be key in other usecases).
+Ми заправо ништа не враћамо. То је добро јер програм може да се изводи и даље, али постоји бољи приступ. Функција може извести да речи нема у речнику. На овај начин, корисник се не пита да ли та реч не постоји или једноставно нема дефиниције (ово се можда не чини врло корисним за речник. Међутим, то је сценарио који би могао бити кључан у другим случајевима коришћења).
 
 ```go
 func TestSearch(t *testing.T) {
@@ -153,13 +154,13 @@ func TestSearch(t *testing.T) {
 }
 ```
 
-The way to handle this scenario in Go is to return a second argument which is an `Error` type.
+Начин за руковање овим сценаријем у Го-у је враћање другог аргумента типа `Error`.
 
-`Error`s can be converted to a string with the `.Error()` method, which we do when passing it to the assertion. We are also protecting `assertStrings` with `if` to ensure we don't call `.Error()` on `nil`.
+Грешке се могу претворити у низ методом `.Error()`, што радимо када их проследимо тврдњи. Такође штитимо `assertStrings` са` if` да бисмо осигурали да не позивамо `.Error()` на `nil`.
 
 ## Покушајте да покренете тест
 
-This does not compile
+Ово не може да се компајлира
 
 ```
 ./dictionary_test.go:18:10: assignment mismatch: 2 variables but 1 values
@@ -173,7 +174,7 @@ func (d Dictionary) Search(word string) (string, error) {
 }
 ```
 
-Your test should now fail with a much clearer error message.
+Ваш тест би сада требало да пропадне са много јаснијом поруком о грешци.
 
 `dictionary_test.go:22: expected to get an error.`
 
@@ -190,9 +191,9 @@ func (d Dictionary) Search(word string) (string, error) {
 }
 ```
 
-In order to make this pass, we are using an interesting property of the map lookup. It can return 2 values. The second value is a boolean which indicates if the key was found successfully.
+Да бисмо ово прошли, користимо занимљиво својство претраживања мапе. Може да врати 2 вредности. Друга вредност је логичка вредност која показује да ли је кључ пронађен успешно.
 
-This property allows us to differentiate between a word that doesn't exist and a word that just doesn't have a definition.
+Ово својство нам омогућава да разликујемо реч која не постоји и реч која једноставно нема дефиницију.
 
 ## Рефактор
 
@@ -209,7 +210,7 @@ func (d Dictionary) Search(word string) (string, error) {
 }
 ```
 
-We can get rid of the magic error in our `Search` function by extracting it into a variable. This will also allow us to have a better test.
+Чаробне грешке у нашој функцији `Search` можемо се ослободити издвајањем у променљиву. Ово ће нам такође омогућити бољи тест.
 
 ```go
 t.Run("unknown word", func(t *testing.T) {
@@ -227,11 +228,11 @@ func assertError(t testing.TB, got, want error) {
 }
 ```
 
-By creating a new helper we were able to simplify our test, and start using our `ErrNotFound` variable so our test doesn't fail if we change the error text in the future.
+Стварањем новог помагача успели смо да поједноставимо тест и почнемо да користимо променљиву `ErrNotFound` како наш тест не би пропао ако у будућности променимо текст грешке.
 
 ## Прво напишите тест
 
-We have a great way to search the dictionary. However, we have no way to add new words to our dictionary.
+Имамо одличан начин претраживања речника. Међутим, ми не можемо да додамо нове речи у наш речник.
 
 ```go
 func TestAdd(t *testing.T) {
@@ -250,18 +251,18 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-In this test, we are utilizing our `Search` function to make the validation of the dictionary a little easier.
+У овом тесту користимо нашу функцију `Search` да бисмо мало олакшали валидацију речника.
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-In `dictionary.go`
+У `dictionary.go`
 
 ```go
 func (d Dictionary) Add(word, definition string) {
 }
 ```
 
-Your test should now fail
+Ваш тест би сада требало да пропадне
 
 ```
 dictionary_test.go:31: should find added word: could not find the word you were looking for
@@ -275,27 +276,27 @@ func (d Dictionary) Add(word, definition string) {
 }
 ```
 
-Adding to a map is also similar to an array. You just need to specify a key and set it equal to a value.
+Додавање на мапу је такође слично низу. Потребно је само да наведете кључ и поставите га једнаким вредности.
 
-### Pointers, copies, et al
+### Показивачи, копије и др
 
-An interesting property of maps is that you can modify them without passing as an address to it (e.g `&myMap`)
+Занимљиво својство мапа је да их можете модификовати без прослеђивања као адресе на њих (нпр. `&myMap`)
 
-This may make them _feel_ like a "reference type", [but as Dave Cheney describes](https://dave.cheney.net/2017/04/30/if-a-map-isnt-a-reference-variable-what-is-it) they are not.
+Ово их може учинити да се понашају као "референтни тип", [али како описује Даве Цхенеи](https://dave.cheney.net/2017/04/30/if-a-map-isnt-a-reference-variable-what-is-it) нису.
 
-> A map value is a pointer to a runtime.hmap structure.
+> Вредност мапе је показивач на структуру runtime.hmap.
 
-So when you pass a map to a function/method, you are indeed copying it, but just the pointer part, not the underlying data structure that contains the data.
+Дакле, када проследите мапу функцији / методи, заиста је копирате, али само део показивача, а не основну структуру података која садржи податке.
 
-A gotcha with maps is that they can be a `nil` value. A `nil` map behaves like an empty map when reading, but attempts to write to a `nil` map will cause a runtime panic. You can read more about maps [here](https://blog.golang.org/go-maps-in-action).
+Каза са мапама је да оне могу имати вредност `nil`. Мапа `nil` понаша се као празна мапа током читања, али покушаји писања на мапу `nil` изазваће панику у току извршавања. Више о мапама можете прочитати [овде](https://blog.golang.org/go-maps-in-action).
 
-Therefore, you should never initialize an empty map variable:
+Због тога никада не треба иницијализовати празну променљиву мапе:
 
 ```go
 var m map[string]string
 ```
 
-Instead, you can initialize an empty map like we were doing above, or use the `make` keyword to create a map for you:
+Уместо тога, можете иницијализовати празну мапу као што смо радили горе, или помоћу кључне речи `make` створити мапу за вас:
 
 ```go
 var dictionary = map[string]string{}
@@ -305,11 +306,11 @@ var dictionary = map[string]string{}
 var dictionary = make(map[string]string)
 ```
 
-Both approaches create an empty `hash map` and point `dictionary` at it. Which ensures that you will never get a runtime panic.
+Оба приступа стварају празну `hash map` и усмеравају `dictionary` на њу. Што осигурава да никада нећете добити панику током рада.
 
 ## Рефактор
 
-There isn't much to refactor in our implementation but the test could use a little simplification.
+У нашој имплементацији нема много тога за рефакторирање, али тест би могао да искористи мало поједностављења.
 
 ```go
 func TestAdd(t *testing.T) {
@@ -336,11 +337,11 @@ func assertDefinition(t testing.TB, dictionary Dictionary, word, definition stri
 }
 ```
 
-We made variables for word and definition, and moved the definition assertion into its own helper function.
+Направили смо променљиве за реч и дефиницију и преместили тврдњу дефиниције у сопствену помоћну функцију.
 
-Our `Add` is looking good. Except, we didn't consider what happens when the value we are trying to add already exists!
+Наш `Add` изгледа добро. Осим тога, нисмо разматрали шта се дешава када вредност коју покушавамо да додамо већ постоји!
 
-Map will not throw an error if the value already exists. Instead, they will go ahead and overwrite the value with the newly provided value. This can be convenient in practice, but makes our function name less than accurate. `Add` should not modify existing values. It should only add new words to our dictionary.
+Мапа неће појавити грешку ако вредност већ постоји. Уместо тога, они ће наставити и преписати вредност са ново пруженом вредношћу. Ово може бити згодно у пракси, али име наше функције чини мање него тачним. `Add` не би требало да мења постојеће вредности. Требало би само да дода нове речи у наш речник.
 
 ## Прво напишите тест
 
@@ -376,11 +377,11 @@ func assertError(t testing.TB, got, want error) {
 }
 ```
 
-For this test, we modified `Add` to return an error, which we are validating against a new error variable, `ErrWordExists`. We also modified the previous test to check for a `nil` error, as well as the `assertError` function.
+За овај тест смо модификовали `Add` да бисмо вратили грешку коју проверавамо у односу на нову променљиву грешке, `ErrWordExists`. Такође смо модификовали претходни тест да бисмо проверили да ли постоји грешка `nil`, као и функција` assertError`.
 
 ## Покушајте да покренете тест
 
-The compiler will fail because we are not returning a value for `Add`.
+Преводник неће успети јер не враћамо вредност за `Add`.
 
 ```
 ./dictionary_test.go:30:13: dictionary.Add(word, definition) used as value
@@ -389,7 +390,7 @@ The compiler will fail because we are not returning a value for `Add`.
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-In `dictionary.go`
+У `dictionary.go`
 
 ```go
 var (
@@ -403,7 +404,7 @@ func (d Dictionary) Add(word, definition string) error {
 }
 ```
 
-Now we get two more errors. We are still modifying the value, and returning a `nil` error.
+Сада добијамо још две грешке. Још увек модификујемо вредност и враћамо грешку `nil`.
 
 ```
 dictionary_test.go:43: got error '%!q(<nil>)' want 'cannot add word because it already exists'
@@ -429,11 +430,11 @@ func (d Dictionary) Add(word, definition string) error {
 }
 ```
 
-Here we are using a `switch` statement to match on the error. Having a `switch` like this provides an extra safety net, in case `Search` returns an error other than `ErrNotFound`.
+Овде користимо израз `switch` да бисмо се подударали са грешком. Имати овакав `switch` пружа додатну сигурносну мрежу, у случају да` Search` врати грешку која није `ErrNotFound`.
 
 ## Рефактор
 
-We don't have too much to refactor, but as our error usage grows we can make a few modifications.
+Немамо превише за рефакторирање, али како наша употреба грешака расте можемо направити неколико модификација.
 
 ```go
 const (
@@ -581,17 +582,17 @@ func (d Dictionary) Update(word, definition string) error {
 }
 ```
 
-This function looks almost identical to `Add` except we switched when we update the `dictionary` and when we return an error.
+Ова функција изгледа готово идентично `Add`, осим што смо се пребацили када ажурирамо `dictionary` и када вратимо грешку.
 
-### Note on declaring a new error for Update
+### Напомена о пријављивању нове грешке за Ажурирање
 
-We could reuse `ErrNotFound` and not add a new error. However, it is often better to have a precise error for when an update fails.
+Могли бисмо поново да користимо `ErrNotFound` и да не додамо нову грешку. Међутим, често је боље имати прецизну грешку када ажурирање не успе.
 
-Having specific errors gives you more information about what went wrong. Here is an example in a web app:
+Ако имате одређене грешке, добићете више информација о томе шта је пошло по злу. Ево примера у веб апликацији:
 
-> You can redirect the user when `ErrNotFound` is encountered, but display an error message when `ErrWordDoesNotExist` is encountered.
+> Можете преусмерити корисника када се наиђе на `ErrNotFound`, али приказати поруку о грешци када се наиђе на` ErrWordDoesNotExist`.
 
-Next, let's create a function to `Delete` a word in the dictionary.
+Даље, креирајмо функцију за `Delete` речи из речника.
 
 ## Прво напишите тест
 
@@ -609,11 +610,11 @@ func TestDelete(t *testing.T) {
 }
 ```
 
-Our test creates a `Dictionary` with a word and then checks if the word has been removed.
+Наш тест креира `Dictionary` са речју, а затим проверава да ли је реч уклоњена.
 
 ## Покушајте да покренете тест
 
-By running `go test` we get:
+Покретањем `go test` добијамо:
 
 ```
 ./dictionary_test.go:74:6: dictionary.Delete undefined (type Dictionary has no field or method Delete)
@@ -627,7 +628,7 @@ func (d Dictionary) Delete(word string) {
 }
 ```
 
-After we add this, the test tells us we are not deleting the word.
+Након што ово додамо, тест нам говори да реч не бришемо.
 
 ```
 dictionary_test.go:78: Expected 'test' to be deleted
@@ -641,19 +642,19 @@ func (d Dictionary) Delete(word string) {
 }
 ```
 
-Go has a built-in function `delete` that works on maps. It takes two arguments. The first is the map and the second is the key to be removed.
+Го има уграђену функцију `delete` која ради на мапама. Потребна су два аргумента. Прва је мапа, а друга је кључ који треба уклонити.
 
-The `delete` function returns nothing, and we based our `Delete` method on the same notion. Since deleting a value that's not there has no effect, unlike our `Update` and `Add` methods, we don't need to complicate the API with errors.
+Функција `delete` не враћа ништа, а ми смо нашу методу` Delete` засновали на истом појму. Будући да брисање вредности која не постоји нема ефекта, за разлику од наших метода `Update` и `Add`, не треба да компликујемо АПИ грешкама.
 
 ## Окончање
 
-In this section, we covered a lot. We made a full CRUD (Create, Read, Update and Delete) API for our dictionary. Throughout the process we learned how to:
+У овом одељку смо доста обрадили. Направили смо пуни CRUD (Create, Read, Update and Delete) АПИ за наш речник. Током процеса научили смо како:
 
-* Create maps
-* Search for items in maps
-* Add new items to maps
-* Update items in maps
-* Delete items from a map
-* Learned more about errors
-  * How to create errors that are constants
-  * Writing error wrappers
+* Креирајте мапе
+* Потражите ставке на мапама
+* Додајте нове ставке на мапе
+* Ажурирајте ставке на мапама
+* Избришите ставке са мапе
+* Сазнајте више о грешкама
+    * Како створити грешке које су константе
+    * Писање омота са грешкама
