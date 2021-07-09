@@ -1,12 +1,12 @@
-# Structs, methods & interfaces
+# Структуре, методе и интерфејси
 
-**[You can find all the code for this chapter here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/structs)**
+**[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/structs)**
 
-Suppose that we need some geometry code to calculate the perimeter of a rectangle given a height and width. We can write a `Perimeter(width float64, height float64)` function, where `float64` is for floating-point numbers like `123.45`.
+Претпоставимо да нам је потребан геометријски код за израчунавање опсега правоугаоника са задатом висином и ширином. Можемо написати функцију `Perimeter (width float64, height float64)`, где је `float64` за бројеве са помичном зарезом попут` 123.45`.
 
-The TDD cycle should be pretty familiar to you by now.
+ТДД циклус би вам до сада требао бити прилично познат.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestPerimeter(t *testing.T) {
@@ -19,13 +19,13 @@ func TestPerimeter(t *testing.T) {
 }
 ```
 
-Notice the new format string? The `f` is for our `float64` and the `.2` means print 2 decimal places.
+Приметили сте нови формат формата? `f` је за наш `float64`, а `.2` значи испис 2 децимале.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./shapes_test.go:6:9: undefined: Perimeter`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напишите минималну количину кода за покретање теста и проверите неуспешне резултате теста
 
 ```go
 func Perimeter(width float64, height float64) float64 {
@@ -35,7 +35,7 @@ func Perimeter(width float64, height float64) float64 {
 
 Results in `shapes_test.go:10: got 0.00 want 40.00`.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func Perimeter(width float64, height float64) float64 {
@@ -43,11 +43,11 @@ func Perimeter(width float64, height float64) float64 {
 }
 ```
 
-So far, so easy. Now let's create a function called `Area(width, height float64)` which returns the area of a rectangle.
+За сада тако лако. Сада креирајмо функцију која се назива `Area(width, height float64)` која враћа површину правоугаоника.
 
-Try to do it yourself, following the TDD cycle.
+Покушајте то учинити сами, пратећи ТДД циклус.
 
-You should end up with tests like this
+Требали бисте завршити са оваквим тестовима
 
 ```go
 func TestPerimeter(t *testing.T) {
@@ -69,7 +69,7 @@ func TestArea(t *testing.T) {
 }
 ```
 
-And code like this
+И овакав код
 
 ```go
 func Perimeter(width float64, height float64) float64 {
@@ -81,15 +81,13 @@ func Area(width float64, height float64) float64 {
 }
 ```
 
-## Refactor
+## Рефактор
 
-Our code does the job, but it doesn't contain anything explicit about rectangles. An unwary developer might try to supply the width and height of a triangle to these functions without realising they will return the wrong answer.
+Функцијама бисмо могли дати конкретнија имена попут `RectangleArea`. Уређеније решење је дефинисање сопственог _типа_ под називом `Rectangle` који за нас садржи овај концепт.
 
-We could just give the functions more specific names like `RectangleArea`. A neater solution is to define our own _type_ called `Rectangle` which encapsulates this concept for us.
+Можемо створити једноставан тип користећи **структуру**. [Структура](https://golang.org/ref/spec#Struct_types) је само именована колекција поља у коју можете да сместите податке.
 
-We can create a simple type using a **struct**. [A struct](https://golang.org/ref/spec#Struct_types) is just a named collection of fields where you can store data.
-
-Declare a struct like this
+Прогласите структуру попут ове
 
 ```go
 type Rectangle struct {
@@ -98,7 +96,7 @@ type Rectangle struct {
 }
 ```
 
-Now let's refactor the tests to use `Rectangle` instead of plain `float64`s.
+Сада рефакторизирамо тестове да би користили `Rectangle` уместо обичних` float64`.
 
 ```go
 func TestPerimeter(t *testing.T) {
@@ -122,7 +120,7 @@ func TestArea(t *testing.T) {
 }
 ```
 
-Remember to run your tests before attempting to fix. The tests should show a helpful error like
+Не заборавите да покренете тестове пре него што покушате да их поправите. Тестови би требали показати корисну грешку попут
 
 ```text
 ./shapes_test.go:7:18: not enough arguments in call to Perimeter
@@ -130,9 +128,9 @@ Remember to run your tests before attempting to fix. The tests should show a hel
     want (float64, float64)
 ```
 
-You can access the fields of a struct with the syntax of `myStruct.field`.
+Пољима структуре можете приступити синтаксом `myStruct.field`.
 
-Change the two functions to fix the test.
+Промените две функције да бисте поправили тест.
 
 ```go
 func Perimeter(rectangle Rectangle) float64 {
@@ -144,11 +142,11 @@ func Area(rectangle Rectangle) float64 {
 }
 ```
 
-I hope you'll agree that passing a `Rectangle` to a function conveys our intent more clearly, but there are more benefits of using structs that we will cover later.
+Надам се да ћете се сложити да прослеђивање `Rectangle` функцији јасније преноси нашу намеру, али има више користи од коришћења структура које ћемо касније обрадити.
 
-Our next requirement is to write an `Area` function for circles.
+Наш следећи захтев је да напишемо функцију `Area` за кругове.
 
-## Write the test first
+## Прво напишите тест
 
 ```go
 func TestArea(t *testing.T) {
@@ -176,17 +174,17 @@ func TestArea(t *testing.T) {
 }
 ```
 
-As you can see, the `f` has been replaced by `g`, with good reason.
-Use of `g` will print a more precise decimal number in the error message \([fmt options](https://golang.org/pkg/fmt/)\).
-For example, using a radius of 1.5 in a circle area calculation, `f` would show `7.068583` whereas `g` would show `7.0685834705770345`.
+Као што видите, `f` је са добрим разлогом замењен `g`.
+Употребом `g` исписат ће се прецизнији децимални број у поруци о грешци \ ([фмт опције](https://golang.org/pkg/fmt/)\).
+На пример, користећи полупречник 1,5 у прорачуну површине круга, `f` би показао `7.068583`, док би `g` приказао `7.0685834705770345`.
 
-## Try to run the test
+## Покушајте да покренете тест
 
 `./shapes_test.go:28:13: undefined: Circle`
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напишите минималну количину кода за покретање теста и проверите неуспешне резултате теста
 
-We need to define our `Circle` type.
+Морамо да дефинишемо свој тип `Circle`.
 
 ```go
 type Circle struct {
@@ -194,36 +192,37 @@ type Circle struct {
 }
 ```
 
-Now try to run the tests again
+Покушајте поново да покренете тестове
 
 `./shapes_test.go:29:14: cannot use circle (type Circle) as type Rectangle in argument to Area`
 
-Some programming languages allow you to do something like this:
+Неки програмски језици омогућавају вам да урадите нешто слично:
 
 ```go
 func Area(circle Circle) float64 { ... }
 func Area(rectangle Rectangle) float64 { ... }
 ```
 
-But you cannot in Go
+Али не можете у Го
 
 `./shapes.go:20:32: Area redeclared in this block`
 
-We have two choices:
+Имамо два избора:
 
-* You can have functions with the same name declared in different _packages_. So we could create our `Area(Circle)` in a new package, but that feels overkill here.
-* We can define [_methods_](https://golang.org/ref/spec#Method_declarations) on our newly defined types instead.
+* Можете имати функције са истим именом декларисане у различитим _пакетима_. Тако бисмо могли да направимо нашу `Area(Circle)` у новом пакету, али то овде делује претјерано.
+* Уместо тога можемо да дефинишемо [_методе_](https://golang.org/ref/spec#Method_declarations) на нашим ново дефинисаним типовима.
 
-### What are methods?
+### Шта су методе?
 
-So far we have only been writing _functions_ but we have been using some methods. When we call `t.Errorf` we are calling the method `Errorf` on the instance of our `t` \(`testing.T`\).
+До сада смо писали само _функције_, али користили смо неке методе. Када зовемо `t.Errorf`, позивамо методу` Errorf` на инстанци нашег `t` \(`testing.T`\).
 
-A method is a function with a receiver.
-A method declaration binds an identifier, the method name, to a method, and associates the method with the receiver's base type.
+Метода је функција са пријемником.
+Декларација методе веже идентификатор, име методе, за методу и повезује методу са основним типом примаоца.
 
-Methods are very similar to functions but they are called by invoking them on an instance of a particular type. Where you can just call functions wherever you like, such as `Area(rectangle)` you can only call methods on "things".
+Методе су врло сличне функцијама, али се позивају позивајући их на инстанци одређеног типа. Тамо где можете само позвати функције где год желите, као што је `Area(rectangle)`, методе можете позивати само на "стварима".
 
-An example will help so let's change our tests first to call methods instead and then fix the code.
+Пример ће вам помоћи, па хајде да прво променимо тестове да бисмо уместо њих позвали методе, а затим поправили код.
+
 
 ```go
 func TestArea(t *testing.T) {
@@ -251,20 +250,20 @@ func TestArea(t *testing.T) {
 }
 ```
 
-If we try to run the tests, we get
+Ако покушамо да покренемо тестове, добићемо
 
 ```text
 ./shapes_test.go:19:19: rectangle.Area undefined (type Rectangle has no field or method Area)
 ./shapes_test.go:29:16: circle.Area undefined (type Circle has no field or method Area)
 ```
 
-> type Circle has no field or method Area
+> тип Circle нема поље или методу Area
 
-I would like to reiterate how great the compiler is here. It is so important to take the time to slowly read the error messages you get, it will help you in the long run.
+Желео бих да поновим како је сјајан преводилац овде. Толико је важно да одвојите време да полако прочитате поруке о грешкама које добијате, дугорочно ће вам помоћи.
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напишите минималну количину кода за покретање теста и проверите неуспешне резултате теста
 
-Let's add some methods to our types
+Хајде да додамо неке методе нашим типовима
 
 ```go
 type Rectangle struct {
@@ -285,21 +284,21 @@ func (c Circle) Area() float64  {
 }
 ```
 
-The syntax for declaring methods is almost the same as functions and that's because they're so similar. The only difference is the syntax of the method receiver `func (receiverName ReceiverType) MethodName(args)`.
+Синтакса за декларисање метода је скоро иста као и функције и то зато што су толико сличне. Једина разлика је синтакса методе пријемник `func (receiverName ReceiverType) MethodName(args)`.
 
-When your method is called on a variable of that type, you get your reference to its data via the `receiverName` variable. In many other programming languages this is done implicitly and you access the receiver via `this`.
+Када се ваш метод позове за променљиву тог типа, добићете референцу на његове податке путем променљиве `receiverName`. У многим другим програмским језицима то се ради имплицитно и пријемнику приступате путем `this`.
 
-It is a convention in Go to have the receiver variable be the first letter of the type.
+У Го је конвенција да променљива пријемника буде прво слово типа.
 
 ```go
 r Rectangle
 ```
 
-If you try to re-run the tests they should now compile and give you some failing output.
+Ако покушате да поново покренете тестове, они би сада требали да их компајлирају и да вам дају неке неуспешне резултате.
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
-Now let's make our rectangle tests pass by fixing our new method
+Сада учинимо да наши тестови правоугаоника прођу поправљајући нашу нову методу
 
 ```go
 func (r Rectangle) Area() float64  {
@@ -307,9 +306,10 @@ func (r Rectangle) Area() float64  {
 }
 ```
 
-If you re-run the tests the rectangle tests should be passing but circle should still be failing.
+Ако поново покренете тестове, тестови правоугаоника би требало да прођу, али круг и даље не би успео.
 
-To make circle's `Area` function pass we will borrow the `Pi` constant from the `math` package \(remember to import it\).
+Да би функција `Area` круга прошла, посудићемо константу `Pi` из пакета `math` (не заборавите да је увезете \).
+
 
 ```go
 func (c Circle) Area() float64  {
@@ -317,19 +317,19 @@ func (c Circle) Area() float64  {
 }
 ```
 
-## Refactor
+## Рефактор
 
-There is some duplication in our tests.
+Наши тестови се дуплицирају.
 
-All we want to do is take a collection of _shapes_, call the `Area()` method on them and then check the result.
+Све што желимо је да узмемо колекцију _схапес_, на њима позовемо методу `Area()`, а затим проверимо резултат.
 
-We want to be able to write some kind of `checkArea` function that we can pass both `Rectangle`s and `Circle`s to, but fail to compile if we try to pass in something that isn't a shape.
+Желимо да имамо могућност да напишемо неку врсту функције `checkArea` којој можемо проследити и `Rectangle` и `Circle`, али не успевамо да компајлирамо ако покушамо да унесемо нешто што није облик.
 
-With Go, we can codify this intent with **interfaces**.
+Уз Го, ову намеру можемо кодификовати са **интерфејсима**.
 
-[Interfaces](https://golang.org/ref/spec#Interface_types) are a very powerful concept in statically typed languages like Go because they allow you to make functions that can be used with different types and create highly-decoupled code whilst still maintaining type-safety.
+[Интерфејси](https://golang.org/ref/spec#Interface_types) су врло моћан концепт у статички откуцаним језицима као што је Го, јер вам омогућавају да направите функције које се могу користити са различитим типовима и да истовремено створите високо одвојени код и даље одржавајући сигурност типа.
 
-Let's introduce this by refactoring our tests.
+Уведимо ово рефакторисањем наших тестова.
 
 ```go
 func TestArea(t *testing.T) {
@@ -355,9 +355,9 @@ func TestArea(t *testing.T) {
 }
 ```
 
-We are creating a helper function like we have in other exercises but this time we are asking for a `Shape` to be passed in. If we try to call this with something that isn't a shape, then it will not compile.
+Стварамо помоћну функцију као у другим вежбама, али овог пута тражимо да се унесе `Shape`. Ако ово покушамо назвати нечим што није облик, неће се компајлирати.
 
-How does something become a shape? We just tell Go what a `Shape` is using an interface declaration
+Како нешто постаје облик? Го кажемо Го шта `Shape` користи декларацију интерфејса
 
 ```go
 type Shape interface {
@@ -365,34 +365,34 @@ type Shape interface {
 }
 ```
 
-We're creating a new `type` just like we did with `Rectangle` and `Circle` but this time it is an `interface` rather than a `struct`.
+Стварамо нови `type` баш као што смо то радили са `Rectangle` и `Circle`, али овај пут то је `interface`, а не `struct`.
 
-Once you add this to the code, the tests will pass.
+Када ово додате у код, тестови ће проћи.
 
-### Wait, what?
+### Чекај шта?
 
-This is quite different to interfaces in most other programming languages. Normally you have to write code to say `My type Foo implements interface Bar`.
+Ово се прилично разликује од интерфејса у већини других програмских језика. Обично морате написати код да бисте рекли `My type Foo implements interface Bar`.
 
-But in our case
+Али у нашем случају
 
-* `Rectangle` has a method called `Area` that returns a `float64` so it satisfies the `Shape` interface
-* `Circle` has a method called `Area` that returns a `float64` so it satisfies the `Shape` interface
-* `string` does not have such a method, so it doesn't satisfy the interface
-* etc.
+* `Rectangle` има методу која се назива `Area` која враћа `float64` тако да задовољава интерфејс `Shape`
+* `Circle` има методу која се назива `Ареа` која враћа `float64` тако да задовољава интерфејс `Shape`
+* `string` нема такав метод, тако да не задовољава интерфејс
+* итд.
 
-In Go **interface resolution is implicit**. If the type you pass in matches what the interface is asking for, it will compile.
+У Го **резолуција интерфејса је имплицитна**. Ако се тип који проследите подудара са оним што тражи интерфејс, компајлираће се.
 
-### Decoupling
+### Одвајање
 
-Notice how our helper does not need to concern itself with whether the shape is a `Rectangle` or a `Circle` or a `Triangle`. By declaring an interface, the helper is _decoupled_ from the concrete types and only has the method it needs to do its job.
+Приметите како наш помагач не треба да се бави тиме да ли је облик `Rectangle` или `Circle` или `Triangle`. Декларирањем интерфејса помагач се одваја од конкретних типова и има само ону методу која му је потребна за обављање посла.
 
-This kind of approach of using interfaces to declare **only what you need** is very important in software design and will be covered in more detail in later sections.
+Овакав приступ коришћења интерфејса за декларисање **само онога што вам треба** веома је важан у дизајну софтвера и биће детаљније обрађен у наредним одељцима.
 
-## Further refactoring
+## Даља рефакторизација
 
-Now that you have some understanding of structs we can introduce "table driven tests".
+Сад кад сте мало разумели структуре, можемо да уведемо „тестове вођене табелом“.
 
-[Table driven tests](https://github.com/golang/go/wiki/TableDrivenTests) are useful when you want to build a list of test cases that can be tested in the same manner.
+[Тестови вођени табелом](https://github.com/golang/go/wiki/TableDrivenTests) корисни су када желите да направите листу тест случајева који се могу тестирати на исти начин.
 
 ```go
 func TestArea(t *testing.T) {
@@ -415,20 +415,20 @@ func TestArea(t *testing.T) {
 }
 ```
 
-The only new syntax here is creating an "anonymous struct", `areaTests`. We are declaring a slice of structs by using `[]struct` with two fields, the `shape` and the `want`. Then we fill the slice with cases.
+Једина нова синтакса овде је стварање "анонимне структуре", `areaTests`. Декларишемо комад структуре користећи `[]struct` са два поља, `shape` и `want`. Затим пунимо резање коферима.
 
-We then iterate over them just like we do any other slice, using the struct fields to run our tests.
+Затим их пређемо, баш као и било који други пресек, користећи поља струцт за покретање тестова.
 
-You can see how it would be very easy for a developer to introduce a new shape, implement `Area` and then add it to the test cases. In addition, if a bug is found with `Area` it is very easy to add a new test case to exercise it before fixing it.
+Можете видети како би програмеру било врло лако да уведе нови облик, примени `Area` и дода га у тест случајеве. Поред тога, ако се пронађе грешка у `Area`, врло је лако додати нови тест случај да бисте је вежбали пре него што је поправите.
 
-Table driven tests can be a great item in your toolbox, but be sure that you have a need for the extra noise in the tests.
-They are a great fit when you wish to test various implementations of an interface, or if the data being passed in to a function has lots of different requirements that need testing.
+Тестови вођени табелом могу бити сјајна ставка у вашем алату, али будите сигурни да вам је потребна додатна бука у тестовима.
+Они се изврсно уклапају када желите да тестирате разне примене интерфејса или ако подаци који се преносе у функцију имају пуно различитих захтева које треба тестирати.
 
-Let's demonstrate all this by adding another shape and testing it; a triangle.
+Покажимо све ово додавањем другог облика и тестирањем; троугао.
 
-## Write the test first
+## Прво напишите тест
 
-Adding a new test for our new shape is very easy. Just add `{Triangle{12, 6}, 36.0},` to our list.
+Додавање новог теста за наш нови облик је врло једноставно. Само додајте `{Triangle{12, 6}, 36.0},` на нашу листу.
 
 ```go
 func TestArea(t *testing.T) {
@@ -452,15 +452,15 @@ func TestArea(t *testing.T) {
 }
 ```
 
-## Try to run the test
+## Покушајте да покренете тест
 
-Remember, keep trying to run the test and let the compiler guide you toward a solution.
+Запамтите, и даље покушавајте да покренете тест и допустите да га преводилац води ка решењу.
 
-## Write the minimal amount of code for the test to run and check the failing test output
+## Напишите минималну количину кода за покретање теста и проверите неуспешне резултате теста
 
 `./shapes_test.go:25:4: undefined: Triangle`
 
-We have not defined `Triangle` yet
+Још нисмо дефинисали `Triangle`
 
 ```go
 type Triangle struct {
@@ -469,14 +469,14 @@ type Triangle struct {
 }
 ```
 
-Try again
+Покушајте поново
 
 ```text
 ./shapes_test.go:25:8: cannot use Triangle literal (type Triangle) as type Shape in field value:
     Triangle does not implement Shape (missing Area method)
 ```
 
-It's telling us we cannot use a `Triangle` as a shape because it does not have an `Area()` method, so add an empty implementation to get the test working
+Говори нам да не можемо да користимо `Triangle` као облик, јер он нема методу `Area() `, па додајте празну имплементацију да би тест успео
 
 ```go
 func (t Triangle) Area() float64 {
@@ -484,11 +484,11 @@ func (t Triangle) Area() float64 {
 }
 ```
 
-Finally the code compiles and we get our error
+Коначно се код компајлира и добијамо грешку
 
 `shapes_test.go:31: got 0.00 want 36.00`
 
-## Write enough code to make it pass
+## Напишите довољно кода да прође
 
 ```go
 func (t Triangle) Area() float64 {
@@ -496,13 +496,13 @@ func (t Triangle) Area() float64 {
 }
 ```
 
-And our tests pass!
+И наши тестови пролазе!
 
-## Refactor
+## Рефактор
 
-Again, the implementation is fine but our tests could do with some improvement.
+Опет, примена је у реду, али наши тестови би могли да донесу одређено побољшање.
 
-When you scan this
+Када ово скенирате
 
 ```go
 {Rectangle{12, 6}, 72.0},
@@ -510,11 +510,11 @@ When you scan this
 {Triangle{12, 6}, 36.0},
 ```
 
-It's not immediately clear what all the numbers represent and you should be aiming for your tests to be easily understood.
+Није одмах јасно шта представљају сви бројеви и требало би да циљате на то да ваши тестови буду лако разумљиви.
 
-So far you've only been shown syntax for creating instances of structs `MyStruct{val1, val2}` but you can optionally name the fields.
+До сада вам је приказана синтакса само за креирање инстанци структура `MyStruct{val1, val2}`, али по жељи можете да именујете поља.
 
-Let's see what it looks like
+Да видимо како то изгледа
 
 ```go
         {shape: Rectangle{Width: 12, Height: 6}, want: 72.0},
@@ -522,30 +522,30 @@ Let's see what it looks like
         {shape: Triangle{Base: 12, Height: 6}, want: 36.0},
 ```
 
-In [Test-Driven Development by Example](https://g.co/kgs/yCzDLF) Kent Beck refactors some tests to a point and asserts:
+У [Развој вођен тестом на примеру](https://g.co/kgs/yCzDLF) Кент Бек рефакторише неке тестове до тачке и тврди:
 
-> The test speaks to us more clearly, as if it were an assertion of truth, **not a sequence of operations**
+> Тест нам говори јасније, као да је реч о тврдњи истине, **а не о редоследу операција**
 
-\(emphasis in the quote is mine\)
+\(нагласак у цитату је мој\)
 
-Now our tests - rather, the list of test cases - make assertions of truth about shapes and their areas.
+Сада наши тестови - тачније, листа тест случајева - дају тврдње о истини о облицима и њиховим областима.
 
-## Make sure your test output is helpful
+## Уверите се да је тест резултат користан
 
-Remember earlier when we were implementing `Triangle` and we had the failing test? It printed `shapes_test.go:31: got 0.00 want 36.00`.
+Сећате ли се раније када смо имплементирали `Triangle` и имали смо неуспели тест? Приказано је `shapes_test.go:31: got 0.00 want 36.00`.
 
-We knew this was in relation to `Triangle` because we were just working with it.
-But what if a bug slipped in to the system in one of 20 cases in the table?
-How would a developer know which case failed?
-This is not a great experience for the developer, they will have to manually look through the cases to find out which case actually failed.
+Знали смо да је то у вези са `Triangle` јер смо само радили с њим.
+Али шта ако се грешка увукла у систем у једном од 20 случајева у табели?
+Како би програмер могао знати који је случај пропао?
+Ово није велико искуство за програмера, мораће ручно да прегледају случајеве како би сазнали који случај заправо није успео.
 
-We can change our error message into `%#v got %g want %g`. The `%#v` format string will print out our struct with the values in its field, so the developer can see at a glance the properties that are being tested.
+Своју поруку о грешци можемо променити у `%#v got %g want %g`. Низ формата `%#v` ће исписати нашу структуру са вредностима у свом пољу, тако да програмер може на први поглед да види својства која се тестирају.
 
-To increase the readability of our test cases further, we can rename the `want` field into something more descriptive like `hasArea`.
+Да бисмо додатно повећали читљивост наших тест случајева, можемо преименовати поље `want` у нешто описније попут` hasArea`.
 
-One final tip with table driven tests is to use `t.Run` and to name the test cases.
+Последњи савет за тестове вођене табелом је коришћење `t.Run` и именовање случајева примера.
 
-By wrapping each case in a `t.Run` you will have clearer test output on failures as it will print the name of the case
+Умотавањем сваког случаја у `t.Run` имат ћете јасније резултате теста о кваровима јер ће исписати име случаја
 
 ```text
 --- FAIL: TestArea (0.00s)
@@ -553,9 +553,9 @@ By wrapping each case in a `t.Run` you will have clearer test output on failures
         shapes_test.go:33: main.Rectangle{Width:12, Height:6} got 72.00 want 72.10
 ```
 
-And you can run specific tests within your table with `go test -run TestArea/Rectangle`.
+А можете да покренете одређене тестове у оквиру своје табеле помоћу `go test -run TestArea/Rectangle`.
 
-Here is our final test code which captures this
+Ево нашег последњег тест кода који ово бележи
 
 ```go
 func TestArea(t *testing.T) {
@@ -584,17 +584,17 @@ func TestArea(t *testing.T) {
 }
 ```
 
-## Wrapping up
+## Окончање
 
-This was more TDD practice, iterating over our solutions to basic mathematic problems and learning new language features motivated by our tests.
+Ово је била више ТДД пракса, понављање наших решења за основне математичке проблеме и учење нових језичких карактеристика мотивисаних нашим тестовима.
 
-* Declaring structs to create your own data types which lets you bundle related data together and make the intent of your code clearer
-* Declaring interfaces so you can define functions that can be used by different types \([parametric polymorphism](https://en.wikipedia.org/wiki/Parametric_polymorphism)\)
-* Adding methods so you can add functionality to your data types and so you can implement interfaces
-* Table driven tests to make your assertions clearer and your test suites easier to extend & maintain
+* Изјава о структурама за креирање сопствених типова података што вам омогућава спајање повезаних података и јаснију намеру кода
+* Декларисање интерфејса тако да можете дефинисати функције које могу користити различити типови \ ([параметарски полиморфизам](https://en.wikipedia.org/wiki/Parametric_polymorphism)\)
+* Додавање метода тако да можете додати функционалност својим врстама података и тако имплементирати интерфејсе
+* Тестови вођени табелом како би ваше тврдње биле јасније, а пакети тестова лакши за проширење и одржавање
 
-This was an important chapter because we are now starting to define our own types. In statically typed languages like Go, being able to design your own types is essential for building software that is easy to understand, to piece together and to test.
+Ово је било важно поглавље, јер сада почињемо да дефинишемо своје типове. У статички откуцаним језицима као што је Го, способност дизајнирања сопствених типова је од суштинске важности за изградњу софтвера који је лако разумљив, сложити и тестирати.
 
-Interfaces are a great tool for hiding complexity away from other parts of the system. In our case our test helper _code_ did not need to know the exact shape it was asserting on, only how to "ask" for its area.
+Интерфејси су одличан алат за скривање сложености од других делова система. У нашем случају наш тестни помагач _ВС КОД_ није морао да зна тачан облик на коме је полагао, већ само како да „пита“ за своје подручје.
 
-As you become more familiar with Go you will start to see the real strength of interfaces and the standard library. You'll learn about interfaces defined in the standard library that are used _everywhere_ and by implementing them against your own types, you can very quickly re-use a lot of great functionality.
+Како се будете боље упознавали са Гоом, видећете стварну снагу интерфејса и стандардне библиотеке. Научићете о интерфејсима дефинисаним у стандардној библиотеци који се користе _свуда_ и примењујући их у односу на ваше типове, можете врло брзо поново да користите пуно сјајних функционалности.
