@@ -1,19 +1,19 @@
-# Dependency Injection
+# Убацивање пакета од којих зависи апликација
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/di)**
 
-It is assumed that you have read the structs section before as some understanding of interfaces will be needed for this.
+Претпоставља се да сте претходно прочитали одељак о структурама, јер ће за то бити потребно неко разумевање интерфејса.
 
-There are _a lot_ of misunderstandings around dependency injection around the programming community. Hopefully, this guide will show you how
+Постоји _ много_ неспоразума око убризгавања зависности око програмске заједнице. Надам се да ће вам овај водич показати како
 
-* You don't need a framework
-* It does not overcomplicate your design
-* It facilitates testing
-* It allows you to write great, general-purpose functions.
+* Не треба вам оквир
+* Не компликује ваш дизајн
+* Олакшава тестирање
+* Омогућава вам писање сјајних функција опште намене.
 
-We want to write a function that greets someone, just like we did in the hello-world chapter but this time we are going to be testing the _actual printing_.
+Желимо да напишемо функцију која поздравља некога, баш као што смо то урадили у поглављу поздрав света, али овог пута ћемо тестирати _активно штампање_.
 
-Just to recap, here is what that function could look like
+Да резимирамо, ево како би та функција могла изгледати
 
 ```go
 func Greet(name string) {
@@ -21,26 +21,26 @@ func Greet(name string) {
 }
 ```
 
-But how can we test this? Calling `fmt.Printf` prints to stdout, which is pretty hard for us to capture using the testing framework.
+Али како то можемо тестирати? Позивање `fmt.Printf` штампа се у стдоут, што је прилично тешко за нас да снимимо помоћу оквира за тестирање.
 
-What we need to do is to be able to **inject** \(which is just a fancy word for pass in\) the dependency of printing.
+Оно што треба да урадимо је да можемо да **убризгамо**\(што је само измишљена реч за прелазак у\) зависност штампања.
 
-**Our function doesn't need to care **_**where**_** or **_**how**_** the printing happens, so we should accept an **_**interface**_** rather than a concrete type.**
+**Наша функција не мора да брине**_**где**_** или **_**како се**_** врши приказ, па би требало да прихватимо **_**интерфејс**_**пре него конкретни тип.**
 
-If we do that, we can then change the implementation to print to something we control so that we can test it. In "real life" you would inject in something that writes to stdout.
+Ако то учинимо, онда можемо да променимо имплементацију тако да штампа на нешто што контролишемо како бисмо то могли да тестирамо. У „стварном животу“ бисте убризгали нешто што пише у стдоут.
 
-If you look at the source code of `fmt.Printf` you can see a way for us to hook in
+Ако погледате изворни код `fmt.Printf``, можете видети начин на који се можемо прикључити
 
 ```go
-// It returns the number of bytes written and any write error encountered.
-func Printf(format string, a ...interface{}) (n int, err error) {
+// Враћа број написаних бајтова и било какву грешку приликом писања.
+//func Printf(format string, a ...interface{}) (n int, err error) {
 	return Fprintf(os.Stdout, format, a...)
 }
 ```
 
-Interesting! Under the hood `Printf` just calls `Fprintf` passing in `os.Stdout`.
+Занимљиво! Испод хаубе `Printf` само позива` Fprintf` како пролази у `os.Stdout`.
 
-What exactly _is_ an `os.Stdout`? What does `Fprintf` expect to get passed to it for the 1st argument?
+Шта је тачно `os.Stdout`? Шта очекује `Fprintf` да му се проследи за први аргумент?
 
 ```go
 func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
@@ -52,7 +52,7 @@ func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
 }
 ```
 
-An `io.Writer`
+Један `io.Writer`
 
 ```go
 type Writer interface {
@@ -60,11 +60,11 @@ type Writer interface {
 }
 ```
 
-From this we can infer that `os.Stdout` implements `io.Writer`; `Printf` passes `os.Stdout` to `Fprintf` which expects an `io.Writer`.
+Из овога можемо закључити да `os.Stdout` имплементира` io.Writer`; `Printf` прослеђује `os.Stdout` у `Fprintf` који очекује `io.Writer`.
 
-As you write more Go code you will find this interface popping up a lot because it's a great general purpose interface for "put this data somewhere".
+Како пишете више Го кода, овај интерфејс ће се често појављивати, јер је одличан интерфејс опште намене за „стављање ових података негде“.
 
-So we know under the covers we're ultimately using `Writer` to send our greeting somewhere. Let's use this existing abstraction to make our code testable and more reusable.
+Дакле, испод покривача знамо да на крају користимо `Writer` да негде пошаљемо свој поздрав. Искористимо ову постојећу апстракцију како бисмо учинили наш код тестираним и поновљивим.
 
 ## Прво напишите тест
 
@@ -82,13 +82,13 @@ func TestGreet(t *testing.T) {
 }
 ```
 
-The `Buffer` type from the `bytes` package implements the `Writer` interface, because it has the method `Write(p []byte) (n int, err error)`.
+Тип `Buffer` из пакета` bytes` имплементира интерфејс `Writer`, јер има метод `Write(p []byte) (n int, err error)`.
 
-So we'll use it in our test to send in as our `Writer` and then we can check what was written to it after we invoke `Greet`
+Тако ћемо га користити у нашем тесту за слање као нашег `Вритер-а`, а затим можемо проверити шта му је написано након што позовемо` Greet`
 
 ## Покушајте да покренете тест
 
-The test will not compile
+Тест се неће компајлирати
 
 ```text
 ./di_test.go:10:7: too many arguments in call to Greet
@@ -98,7 +98,7 @@ The test will not compile
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-_Listen to the compiler_ and fix the problem.
+_Пратите компајлер_ и решите проблем.
 
 ```go
 func Greet(writer *bytes.Buffer, name string) {
@@ -108,11 +108,11 @@ func Greet(writer *bytes.Buffer, name string) {
 
 `Hello, Chris di_test.go:16: got '' want 'Hello, Chris'`
 
-The test fails. Notice that the name is getting printed out, but it's going to stdout.
+Тест није успео. Приметите да се име штампа, али ће нестати.
 
 ## Напишите довољно кода да прође
 
-Use the writer to send the greeting to the buffer in our test. Remember `fmt.Fprintf` is like `fmt.Printf` but instead takes a `Writer` to send the string to, whereas `fmt.Printf` defaults to stdout.
+Помоћу писца пошаљите поздрав у бафер у нашем тесту. Запамтите да је `fmt.Fprintf` сличан` fmt.Printf`, али уместо тога узима `Writer` коме ће послати низ, док је` fmt.Printf` подразумевано стдоут.
 
 ```go
 func Greet(writer *bytes.Buffer, name string) {
@@ -120,13 +120,13 @@ func Greet(writer *bytes.Buffer, name string) {
 }
 ```
 
-The test now passes.
+Тест сада пролази успешно.
 
 ## Рефактор
 
-Earlier the compiler told us to pass in a pointer to a `bytes.Buffer`. This is technically correct but not very useful.
+Раније нам је компајлер рекао да пренесемо показивач на `bytes.Buffer`. Ово је технички исправно, али не баш корисно.
 
-To demonstrate this, try wiring up the `Greet` function into a Go application where we want it to print to stdout.
+Да бисте то демонстрирали, покушајте да повежете функцију `Greet` у апликацију Го где желимо да се штампа у стдоут.
 
 ```go
 func main() {
@@ -136,9 +136,9 @@ func main() {
 
 `./di.go:14:7: cannot use os.Stdout (type *os.File) as type *bytes.Buffer in argument to Greet`
 
-As discussed earlier `fmt.Fprintf` allows you to pass in an `io.Writer` which we know both `os.Stdout` and `bytes.Buffer` implement.
+Као што је раније речено, `fmt.Fprintf` вам омогућава да проследите датотеку `io.Writer` коју познајемо и као `os.Stdout` и `bytes.Buffer`.
 
-If we change our code to use the more general purpose interface we can now use it in both tests and in our application.
+Ако променимо наш код тако да користи интерфејс опште намене, сада га можемо користити и у тестовима и у нашој апликацији.
 
 ```go
 package main
@@ -158,13 +158,13 @@ func main() {
 }
 ```
 
-## More on io.Writer
+## Више о ио.Вритер
 
-What other places can we write data to using `io.Writer`? Just how general purpose is our `Greet` function?
+На која друга места можемо да упишемо податке помоћу `io.Writer`? Колико је општа сврха наша функција `Greet`?
 
-### The Internet
+### Интернет
 
-Run the following
+Покрените следеће
 
 ```go
 package main
@@ -189,32 +189,32 @@ func main() {
 }
 ```
 
-Run the program and go to [http://localhost:5000](http://localhost:5000). You'll see your greeting function being used.
+Покрените програм и идите на [http://localhost:5000](http://localhost:5000). Видећете да се користи функција поздрава.
 
-HTTP servers will be covered in a later chapter so don't worry too much about the details.
+ХТТП сервери ће бити обрађени у каснијем поглављу, зато не брините превише о детаљима.
 
-When you write an HTTP handler, you are given an `http.ResponseWriter` and the `http.Request` that was used to make the request. When you implement your server you _write_ your response using the writer.
+Када напишете ХТТП руковатељ, добићете `http.ResponseWriter` и `http.Request` који су коришћени за подношење захтева. Када имплементирате сервер, _записујете_ свој одговор помоћу програма за писање.
 
-You can probably guess that `http.ResponseWriter` also implements `io.Writer` so this is why we could re-use our `Greet` function inside our handler.
+Вероватно можете претпоставити да `http.ResponseWriter` такође имплементира `io.Writer` па смо зато могли поново да користимо нашу функцију `Greet` унутар нашег обрађивача.
 
 ## Окончање
 
-Our first round of code was not easy to test because it wrote data to somewhere we couldn't control.
+Наш први круг кода није било лако тестирати јер је записао податке негде где нисмо могли да контролишемо.
 
-_Motivated by our tests_ we refactored the code so we could control _where_ the data was written by **injecting a dependency** which allowed us to:
+_Мотивисани нашим тестовима_ извршили смо факторизацију кода како бисмо могли контролисати _где_ подаци су записани **убризгавањем пакета од којих зависи апликација** која нам је омогућила да:
 
-* **Test our code** If you can't test a function _easily_, it's usually because of dependencies hard-wired into a function _or_ global state. If you have a global database connection pool for instance that is used by some kind of service layer, it is likely going to be difficult to test and they will be slow to run. DI will motivate you to inject in a database dependency \(via an interface\) which you can then mock out with something you can control in your tests.
-* **Separate our concerns**, decoupling _where the data goes_ from _how to generate it_. If you ever feel like a method/function has too many responsibilities \(generating data _and_ writing to a db? handling HTTP requests _and_ doing domain level logic?\) DI is probably going to be the tool you need.
-* **Allow our code to be re-used in different contexts** The first "new" context our code can be used in is inside tests. But further on if someone wants to try something new with your function they can inject their own dependencies.
+* ** Тестирајте наш код** Ако не можете лако да тестирате функцију, то је обично због зависности које су чврсто повезане у функцију _ или_ глобално стање. Ако, на пример, имате глобално спремиште везе са базом података које користи нека врста сервисног слоја, вероватно ће бити тешко тестирати и они ће се споро покретати. ДИ ће вас мотивисати да убризгате у зависност базе података \ (путем интерфејса \), коју затим можете исмејати нечим што можете контролисати у својим тестовима.
+* ** Одвојите нашу забринутост**, раздвајањем _куда подаци иду_ од _како их генерирати_. Ако се икада осећате као да метода / функција има превише одговорности \ (генерисање података _ и_ уписивање у дб? Руковање ХТТП захтевима _ и_ извршавање логике на нивоу домена? \) ДИ ће вероватно бити алат који вам треба.
+* ** Омогућите поновну употребу нашег кода у различитим контекстима **Први „нови“ контекст у којем се наш код може користити је унутар тестова. Али даље, ако неко жели да испроба нешто ново са вашом функцијом, може убризгати сопствене зависности.
 
-### What about mocking? I hear you need that for DI and also it's evil
+### Шта је са мокингом? Чујем да вам то треба за ДИ, а такође је и зло
 
-Mocking will be covered in detail later \(and it's not evil\). You use mocking to replace real things you inject with a pretend version that you can control and inspect in your tests. In our case though, the standard library had something ready for us to use.
+Исмевање ће бити детаљно обрађено касније \(и није зло\). Подругљиво користите да бисте стварне ствари које убризгате заменили претвараном верзијом коју можете да контролишете и прегледате у тестовима. У нашем случају, стандардна библиотека је имала нешто спремно за употребу.
 
-### The Go standard library is really good, take time to study it
+### Го стандардна библиотека је заиста добра, треба времена да је проучите
 
-By having some familiarity with the `io.Writer` interface we are able to use `bytes.Buffer` in our test as our `Writer` and then we can use other `Writer`s from the standard library to use our function in a command line app or in web server.
+Упознавањем интерфејса `io.Writer` у могућности смо да користимо `bytes.Buffer` у нашем тесту као `Writer`, а затим можемо користити и друге` Writer`-ове из стандардне библиотеке да бисмо користили нашу функцију у апликација командне линије или на веб серверу.
 
-The more familiar you are with the standard library the more you'll see these general purpose interfaces which you can then re-use in your own code to make your software reusable in a number of contexts.
+Што сте више упознати са стандардном библиотеком, то ћете више видети ове интерфејсе опште намене, које затим можете поново користити у свом коду како бисте свој софтвер учинили поновним за употребу у одређеном контексту.
 
-This example is heavily influenced by a chapter in [The Go Programming language](https://www.amazon.co.uk/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440), so if you enjoyed this, go buy it!
+На овај пример снажно утиче поглавље у [Програмски језик Го](https://www.amazon.co.uk/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440), па ако сте уживали у овоме иди купи!
