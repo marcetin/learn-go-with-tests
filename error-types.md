@@ -1,14 +1,14 @@
-# Error types
+# Врсте грешака
 
-**[You can find all the code here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/q-and-a/error-types)**
+**[Сав код можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/q-and-a/error-types)**
 
-**Creating your own types for errors can be an elegant way of tidying up your code, making your code easier to use and test.**
+** Стварање сопствених типова за грешке може бити елегантан начин сређивања кода, што олакшава употребу и тестирање кода.**
 
-Pedro on the Gopher Slack asks
+Пита Педро на `Gopher Slack`-u
 
-> If I’m creating an error like `fmt.Errorf("%s must be foo, got %s", bar, baz)`, is there a way to test equality without comparing the string value?
+> Ако стварам грешку попут `fmt.Errorf("%s must be foo, got %s", bar, baz)`, постоји ли начин да се тестира једнакост без упоређивања вредности низа?
 
-Let's make up a function to help explore this idea.
+Направимо функцију која ће помоћи у истраживању ове идеје.
 
 ```go
 // DumbGetter will get the string body of url if it gets a 200
@@ -30,9 +30,9 @@ func DumbGetter(url string) (string, error) {
 }
 ```
 
-It's not uncommon to write a function that might fail for different reasons and we want to make sure we handle each scenario correctly.
+Неријетко је написати функцију која би могла пропасти из различитих разлога и желимо бити сигурни да правилно поступамо са сваким сценаријем.
 
-As Pedro says, we _could_ write a test for the status error like so.
+Као што Педро каже, `могли` бисмо написати тест за статусну грешку на тај начин.
 
 ```go
 t.Run("when you don't get a 200 you get a status error", func(t *testing.T) {
@@ -57,29 +57,29 @@ t.Run("when you don't get a 200 you get a status error", func(t *testing.T) {
 })
 ```
 
-This test creates a server which always returns `StatusTeapot` and then we use its URL as the argument to `DumbGetter` so we can see it handles non `200` responses correctly.
+Овим тестом се креира сервер који увек враћа `StatusTeapot`, а затим користимо његову УРЛ адресу као аргумент за` DumbGetter` како бисмо могли видети да правилно обрађује одговоре који нису `200`.
 
-## Problems with this way of testing
+## Проблеми са овим начином тестирања
 
-This book tries to emphasise _listen to your tests_ and this test doesn't _feel_ good:
+Ова књига покушава да нагласи да _слушате своје тестове_ а овај тест не делује добро:
 
-- We're constructing the same string as production code does to test it
-- It's annoying to read and write
-- Is the exact error message string what we're _actually concerned with_ ?
+- Конструишемо исти низ као и производни код да бисмо га тестирали
+- Досадно је читати и писати
+- Да ли је тачан низ порука о грешци оно што нас заправо занима?
 
-What does this tell us? The ergonomics of our test would be reflected on another bit of code trying to use our code.
+Шта нам ово говори? Ергономија нашег теста одразила би се на још један бит кода који покушава да користи наш код.
 
-How does a user of our code react to the specific kind of errors we return? The best they can do is look at the error string which is extremely error prone and horrible to write.
+Како корисник нашег кода реагује на одређену врсту грешака које враћамо? Најбоље што могу је погледати низ грешака који је изузетно склон грешкама и ужасан за писање.
 
-## What we should do
+## Шта треба да радимо
 
-With TDD we have the benefit of getting into the mindset of:
+Са ТДД-ом имамо предност уласка у начин размишљања:
 
-> How would _I_ want to use this code?
+> Како бих _ја_ желео да користим овај код?
 
-What we could do for `DumbGetter` is provide a way for users to use the type system to understand what kind of error has happened.
+Оно што бисмо могли учинити за `DumbGetter` је пружање начина да корисници користе систем типа да би разумели каква се грешка догодила.
 
-What if `DumbGetter` could return us something like
+Шта ако би нам `DumbGetter` могао вратити нешто слично
 
 ```go
 type BadStatusError struct {
@@ -88,9 +88,9 @@ type BadStatusError struct {
 }
 ```
 
-Rather than a magical string, we have actual _data_ to work with.
+Уместо магичне жице, имамо стварне _податке_ за рад.
 
-Let's change our existing test to reflect this need
+Променимо постојећи тест како би одражавао ову потребу
 
 ```go
 t.Run("when you don't get a 200 you get a status error", func(t *testing.T) {
@@ -120,7 +120,7 @@ t.Run("when you don't get a 200 you get a status error", func(t *testing.T) {
 })
 ```
 
-We'll have to make `BadStatusError` implement the error interface.
+Мораћемо да натерамо `BadStatusError` да примени интерфејс за грешке.
 
 ```go
 func (b BadStatusError) Error() string {
@@ -128,11 +128,11 @@ func (b BadStatusError) Error() string {
 }
 ```
 
-### What does the test do?
+### Шта ради тест?
 
-Instead of checking the exact string of the error, we are doing a [type assertion](https://tour.golang.org/methods/15) on the error to see if it is a `BadStatusError`. This reflects our desire for the _kind_ of error clearer. Assuming the assertion passes we can then check the properties of the error are correct.
+Уместо да проверимо тачан низ грешке, ми радимо [тврдњу типа](https://tour.golang.org/methods/15) на грешци како бисмо видели да ли је `BadStatusError`. Ово одражава нашу жељу да _ врста_ грешака буде јаснија. Под претпоставком да тврдња пролази, можемо тада проверити да ли су својства грешке тачна.
 
-When we run the test, it tells us we didn't return the right kind of error
+Када покренемо тест, говори нам да нисмо вратили праву врсту грешке
 
 ```
 --- FAIL: TestDumbGetter (0.00s)
@@ -140,7 +140,7 @@ When we run the test, it tells us we didn't return the right kind of error
     	error-types_test.go:56: was not a BadStatusError, got *errors.errorString
 ```
 
-Let's fix `DumbGetter` by updating our error handling code to use our type
+Поправимо `DumbGetter` ажурирањем кода за руковање грешкама како бисмо користили наш тип
 
 ```go
 if res.StatusCode != http.StatusOK {
@@ -148,23 +148,23 @@ if res.StatusCode != http.StatusOK {
 }
 ```
 
-This change has had some _real positive effects_
+Ова промена је имала неке _ стварне позитивне ефекте_
 
-- Our `DumbGetter` function has become simpler, it's no longer concerned with the intricacies of an error string, it just creates a `BadStatusError`.
-- Our tests now reflect (and document) what a user of our code _could_ do if they decided they wanted to do some more sophisticated error handling than just logging. Just do a type assertion and then you get easy access to the properties of the error.
-- It is still "just" an `error`, so if they choose to they can pass it up the call stack or log it like any other `error`.
+- Наша функција `DumbGetter` постала је једноставнија, више се не бави замршеношћу низа грешака, већ само ствара` BadStatusError`.
+- Наши тестови сада одражавају (и документују) шта би корисник нашег кода _ могао_ да уради ако одлучи да жели да уради софистицираније поступање са грешкама него само пријављивање. Само урадите тврдњу о типу и тада ћете добити лак приступ својствима грешке.
+- То је и даље „само“ `error`, па ако је одлуче могу је проследити низом позива или пријавити као било коју другу `error`.
 
 ## Окончање
 
-If you find yourself testing for multiple error conditions don't fall in to the trap of comparing the error messages.
+Ако се нађете на тестирању вишеструких услова грешке, немојте пасти у замку упоређивања порука о грешкама.
 
-This leads to flaky and difficult to read/write tests and it reflects the difficulties the users of your code will have if they also need to start doing things differently depending on the kind of errors that have occurred.
+То доводи до неуобичајених и тешких тестова за читање / писање и одражава потешкоће које ће имати корисници вашег кода ако и они треба да почну да раде ствари другачије у зависности од врсте грешака које су се догодиле.
 
-Always make sure your tests reflect how _you'd_ like to use your code, so in this respect consider creating error types to encapsulate your kinds of errors. This makes handling different kinds of errors easier for users of your code and also makes writing your error handling code simpler and easier to read.
+Увек се побрините да ваши тестови одражавају како _ бисте_ желели да користите свој код, па у том погледу размислите о стварању типова грешака који ће садржати ваше врсте грешака. Ово олакшава руковање различитим врстама грешака корисницима вашег кода, а такође олакшава и читање писања кода за руковање грешкама.
 
-## Addendum
+## Додатак
 
-As of Go 1.13 there are new ways to work with errors in the standard library which is covered in the [Go Blog](https://blog.golang.org/go1.13-errors)
+Од Го 1.13 постоје нови начини за рад са грешкама у стандардној библиотеци која је обрађена на [Го Блог](https://blog.golang.org/go1.13-errors)
 
 ```go
 t.Run("when you don't get a 200 you get a status error", func(t *testing.T) {
@@ -194,4 +194,4 @@ t.Run("when you don't get a 200 you get a status error", func(t *testing.T) {
 })
 ```
 
-In this case we are using [`errors.As`](https://golang.org/pkg/errors/#example_As) to try and extract our error into our custom type. It returns a `bool` to denote success and extracts it into `got` for us.
+У овом случају користимо [`errors.As`](https://golang.org/pkg/errors/#example_As) да бисмо покушали да издвојимо нашу грешку у наш прилагођени тип. Враћа `bool` да означава успех и издваја га у `got` за нас.

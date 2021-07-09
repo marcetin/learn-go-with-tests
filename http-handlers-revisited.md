@@ -1,6 +1,6 @@
 # HTTP Handlers Revisited
 
-**[You can find all the code here](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/q-and-a/http-handlers-revisited)**
+**[Сав код можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/q-and-a/http-handlers-revisited)**
 
 This book already has a chapter on [testing a HTTP handler](http-server.md) but this will feature a broader discussion on designing them, so they are simple to test.
 
