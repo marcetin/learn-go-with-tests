@@ -80,14 +80,13 @@ go help mod init
 brew install --cask visual-studio-code
 ```
 
-You can confirm VS Code installed correctly you can run the following in your shell.
 Можете потврдити да је `VS Code` исправно инсталиран, можете да покренете следеће у свом `shell`-у.
 
 ```sh
 code .
 ```
 
-VS Code is shipped with very little software enabled, you can enable new software by installing extensions. To add Go support you must install an extension, there are a variety available for VS Code, an exceptional one is [Luke Hoban's package](https://github.com/golang/vscode-go). This can be installed as follows:
+`VS Code` се испоручује са врло мало омогућених софтвера, нови софтвер можете омогућити инсталирањем екстензија. Да бисте додали Го подршку, морате да инсталирате проширење, за `VS Code` постоји неколико врста, изузетно је [пакет Луке Хобан-а](https://github.com/golang/vscode-go). Ово се може инсталирати на следећи начин:
 
 ```sh
 code --install-extension golang.go
