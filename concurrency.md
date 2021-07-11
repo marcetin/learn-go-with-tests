@@ -1,9 +1,8 @@
-# Concurrency
+# Конкуренција
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/concurrency)**
 
-Here's the setup: a colleague has written a function, `CheckWebsites`, that
-checks the status of a list of URLs.
+Ево подешавања: колега је написао функцију `CheckWebsites` проверава статус листе УРЛ адреса.
 
 ```go
 package concurrency
@@ -21,16 +20,13 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 }
 ```
 
-It returns a map of each URL checked to a boolean value - `true` for a good
-response, `false` for a bad response.
+Враћа мапу сваког провереног УРЛ-а у логичку вредност - `true` за добро одговор, `false` за лош одговор.
 
-You also have to pass in a `WebsiteChecker` which takes a single URL and returns
-a boolean. This is used by the function to check all the websites.
+Такође морате проследити `WebsiteChecker` који узима један УРЛ и враћа се боолеан. Ову функцију користи за проверу свих веб локација.
 
-Using [dependency injection][DI] has allowed them to test the function without
-making real HTTP calls, making it reliable and fast.
+Коришћење [убризгавања пакета од којих зависи апликација][ДИ] им је омогућило да тестирају функцију без упућивање стварних ХТТП позива, чинећи га поузданим и брзим.
 
-Here's the test they've written:
+Ево теста који су написали:
 
 ```go
 package concurrency
@@ -68,14 +64,11 @@ func TestCheckWebsites(t *testing.T) {
 }
 ```
 
-The function is in production and being used to check hundreds of websites. But
-your colleague has started to get complaints that it's slow, so they've asked
-you to help speed it up.
+Функција је у изради и користи се за проверу стотина веб локација. Али ваш колега је почео да добија притужбе да је спор, па су тражили ти да помогнеш да га убрзаш.
 
-## Write a test
+## Напишите тест
 
-Let's use a benchmark to test the speed of `CheckWebsites` so that we can see the
-effect of our changes.
+Користимо референтну вредност да тестирамо брзину `CheckWebsites` како бисмо могли да видимо ефекат наших промена.
 
 ```go
 package concurrency
@@ -102,12 +95,9 @@ func BenchmarkCheckWebsites(b *testing.B) {
 }
 ```
 
-The benchmark tests `CheckWebsites` using a slice of one hundred urls and uses
-a new fake implementation of `WebsiteChecker`. `slowStubWebsiteChecker` is
-deliberately slow. It uses `time.Sleep` to wait exactly twenty milliseconds and
-then it returns true.
+Референтни тестови тестирају `CheckWebsites` користећи одсек од стотину УРЛ адреса и употреба нова лажна примена `WebsiteChecker`. `slowStubWebsiteChecker` је намерно споро. Користи `time.Sleep` да сачека тачно двадесет милисекунди и онда се враћа истина.
 
-When we run the benchmark using `go test -bench=.` (or if you're in Windows Powershell `go test -bench="."`):
+Када покренемо референтну вредност помоћу `go test -bench=.` (или ако сте у Windows Powershell `go test -bench="."`):
 
 ```sh
 pkg: github.com/gypsydave5/learn-go-with-tests/concurrency/v0
@@ -116,41 +106,24 @@ PASS
 ok      github.com/gypsydave5/learn-go-with-tests/concurrency/v0        2.268s
 ```
 
-`CheckWebsites` has been benchmarked at 2249228637 nanoseconds - about two and
-a quarter seconds.
+`CheckWebsites` је постављен на 2249228637 наносекунди - око две и четврт секунде.
 
-Let's try and make this faster.
+Покушајмо и учинимо ово бржим.
 
 ### Напишите довољно кода да прође
 
-Now we can finally talk about concurrency which, for the purposes of the
-following, means 'having more than one thing in progress'. This is something
-that we do naturally everyday.
+Сада коначно можемо разговарати о паралелности која, за потребе следеће значи „имати више ствари у току“. Ово је нешто које природно радимо свакодневно.
 
-For instance, this morning I made a cup of tea. I put the kettle on and then,
-while I was waiting for it to boil, I got the milk out of the fridge, got the
-tea out of the cupboard, found my favourite mug, put the teabag into the cup and
-then, when the kettle had boiled, I put the water in the cup.
+На пример, јутрос сам скувао шољу чаја. Ставио сам чајник и онда, док сам чекао да прокључа, извадио сам млеко из фрижидера, добио чај из ормана, пронашао моју омиљену шољу, ставио врећицу чаја у шољу и затим, кад је чајник прокључао, ставио сам воду у шољу.
 
-What I _didn't_ do was put the kettle on and then stand there blankly staring at
-the kettle until it boiled, then do everything else once the kettle had boiled.
+Оно што нисам _ ставио је чајник и затим стајао ту и буљећи у њега чајник док није прокључао, а затим све остало урадите након што је котлић прокључао.
 
-If you can understand why it's faster to make tea the first way, then you can
-understand how we will make `CheckWebsites` faster. Instead of waiting for
-a website to respond before sending a request to the next website, we will tell
-our computer to make the next request while it is waiting.
+Ако разумете зашто је брже правити чај на први начин, онда то можете схватите како ћемо убрзати „проверу веб локација“. Уместо да чека веб локација да одговори пре него што пошаље захтев на следећу веб локацију, рећи ћемо наш рачунар да упути следећи захтев док чека.
 
-Normally in Go when we call a function `doSomething()` we wait for it to return
-(even if it has no value to return, we still wait for it to finish). We say that
-this operation is *blocking* - it makes us wait for it to finish. An operation
-that does not block in Go will run in a separate *process* called a *goroutine*.
-Think of a process as reading down the page of Go code from top to bottom, going
-'inside' each function when it gets called to read what it does. When a separate
-process starts it's like another reader begins reading inside the function,
-leaving the original reader to carry on going down the page.
+Обично у Го када функцију зовемо `doSomething()` чекамо да се врати (чак и ако нема вредност за враћање, и даље чекамо да се заврши). Ми то кажемо ова операција *блокира* - чини нас да чекамо да се заврши. Операција који се не блокира у програму Го, извршиће се у одвојеном *процесу* који се назива *гороутина*.
+Замислите процес као читање странице Го кода од врха до дна, даље 'унутар' сваке функције када је позову да прочита шта ради. Кад одвојена процес започиње као да други читач почиње читати унутар функције, остављајући оригиналном читачу да настави спуштање странице.
 
-To tell Go to start a new goroutine we turn a function call into a `go`
-statement by putting the keyword `go` in front of it: `go doSomething()`.
+Да бисмо рекли Го-у да започне нови програм, претварамо позив функције у `go` изјава стављањем кључне речи `go` испред ње: `go doSomething() `.
 
 ```go
 package concurrency
@@ -170,25 +143,13 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 }
 ```
 
-Because the only way to start a goroutine is to put `go` in front of a function
-call, we often use *anonymous functions* when we want to start a goroutine. An
-anonymous function literal looks just the same as a normal function declaration,
-but without a name (unsurprisingly). You can see one above in the body of the
-`for` loop.
+Јер једини начин за покретање гороутине је стављање `go` испред функције позива, често користимо *анонимне функције* када желимо да покренемо гороутину. Ан анонимни функцијски литерал изгледа исто као нормална декларација функције, али без имена (што није изненађујуће). Можете да видите један горе у телу петља `for`.
 
-Anonymous functions have a number of features which make them useful, two of
-which we're using above. Firstly, they can be executed at the same time that
-they're declared - this is what the `()` at the end of the anonymous function is
-doing. Secondly they maintain access to the lexical scope they are defined in -
-all the variables that are available at the point when you declare the anonymous
-function are also available in the body of the function.
+Анонимне функције имају бројне функције које их чине корисним, две од њих које користимо горе. Прво, они могу бити извршени истовремено они су декларисани - то је оно што је `()` на крају анонимне функције радиш. Друго, они задржавају приступ лексичком опсегу у којем су дефинисани - све променљиве које су доступне у тренутку када прогласите анонимним функције су такође доступне у телу функције.
 
-The body of the anonymous function above is just the same as the loop body was
-before. The only difference is that each iteration of the loop will start a new
-goroutine, concurrent with the current process (the `WebsiteChecker` function)
-each of which will add its result to the results map.
+Тело горње анонимне функције је потпуно исто као и тело петље пре него што. Једина разлика је у томе што ће свака итерација петље започети нову гороутина, истовремено са тренутним процесом (функција `WebsiteChecker`) од којих ће сваки додати свој резултат на мапу резултата.
 
-But when we run `go test`:
+Али када покренемо `go test`:
 
 ```sh
 --- FAIL: TestCheckWebsites (0.00s)
@@ -199,26 +160,18 @@ FAIL    github.com/gypsydave5/learn-go-with-tests/concurrency/v1        0.010s
 
 ```
 
-### A quick aside into a parallel(ism) universe...
+### Брза страна у паралелни (изм) универзум ...
 
-You might not get this result. You might get a panic message that
-we're going to talk about in a bit. Don't worry if you got that, just keep
-running the test until you _do_ get the result above. Or pretend that you did.
-Up to you. Welcome to concurrency: when it's not handled correctly it's hard to
-predict what's going to happen. Don't worry - that's why we're writing tests, to
-help us know when we're handling concurrency predictably.
+Можда нећете добити овај резултат. Можда ћете добити поруку панике мало ћемо разговарати о томе. Не брините ако то имате, само задржите трчање теста док _не_ добијете горњи резултат. Или се претварај да јеси. На вама. Добродошли у паралелност: када се не рукује исправно, тешко је предвидети шта ће се догодити. Не брините - зато пишемо тестове помозите нам да знамо када предвидљиво радимо са паралелношћу.
 
-### ... and we're back.
+### ... и вратили смо се.
 
-We are caught by the original tests `CheckWebsites` is now returning an
-empty map. What went wrong?
+Ухватили су нас оригинални тестови, `CheckWebsites` сада враћа
+празна карта. Шта је пошло наопако?
 
-None of the goroutines that our `for` loop started had enough time to add
-their result to the `results` map; the `WebsiteChecker` function is too fast for
-them, and it returns the still empty map.
+Ниједна гороутина коју је започела наша петља `for` није имала довољно времена за додавање њихов резултат на мапу `results`; функција `WebsiteChecker` је пребрза за њих, и враћа још увек празну мапу.
 
-To fix this we can just wait while all the goroutines do their work, and then
-return. Two seconds ought to do it, right?
+Да бисмо то поправили, можемо само сачекати док сви гороутини ураде свој посао, а затим повратак. Требало би две секунде, зар не?
 
 ```go
 package concurrency
@@ -242,7 +195,7 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 }
 ```
 
-Now when we run the tests you get (or don't get - see above):
+Сада када покренемо тестове које добијате (или не добијате - погледајте горе):
 
 ```sh
 --- FAIL: TestCheckWebsites (0.00s)
@@ -252,15 +205,9 @@ exit status 1
 FAIL    github.com/gypsydave5/learn-go-with-tests/concurrency/v1        0.010s
 ```
 
-This isn't great - why only one result? We might try and fix this by increasing
-the time we wait - try it if you like. It won't work. The problem here is that
-the variable `url` is reused for each iteration of the `for` loop - it takes
-a new value from `urls` each time. But each of our goroutines have a reference
-to the `url` variable - they don't have their own independent copy. So they're
-_all_ writing the value that `url` has at the end of the iteration - the last
-url. Which is why the one result we have is the last url.
+Ово није сјајно - зашто само један резултат? Можда бисмо покушали да поправимо ово повећањем време које чекамо - пробајте ако желите. Неће успети. Овде је проблем у томе променљива `url` се поново користи за сваку итерацију `for` петље - потребно је сваки пут нова вредност из `urls`. Али свака наша гороутина има референцу на променљиву `url` - немају своју независну копију. Па јесу _све_ писање вредности коју `for` има на крају итерације - последње урл. Због тога је једини резултат који имамо последњи урл.
 
-To fix this:
+Да бисте то поправили:
 
 ```go
 package concurrency
@@ -294,12 +241,21 @@ so can't be changed.
 
 Now if you're lucky you'll get:
 
+
+Давањем сваке анонимне функције параметар за урл - `u` - и затим
+позивајући анонимну функцију са `url` као аргументом, ми то осигуравамо
+вредност `u` је фиксирана као вредност `url` за итерацију петље
+да лансирамо гороутину у. `u` је копија вредности `url`, и
+па се не може променити.
+
+Ако будете имали среће, добићете:
+
 ```sh
 PASS
 ok      github.com/gypsydave5/learn-go-with-tests/concurrency/v1        2.012s
 ```
 
-But if you're unlucky (this is more likely if you run them with the benchmark as you'll get more tries)
+Али ако немате среће (ово је вероватније ако их покренете са референтном вредношћу јер ћете добити више покушаја)
 
 ```sh
 fatal error: concurrent map writes
@@ -319,21 +275,16 @@ created by github.com/gypsydave5/learn-go-with-tests/concurrency/v3.WebsiteCheck
         ... many more scary lines of text ...
 ```
 
-This is long and scary, but all we need to do is take a breath and read the
-stacktrace: `fatal error: concurrent map writes`. Sometimes, when we run our
-tests, two of the goroutines write to the results map at exactly the same time.
-Maps in Go don't like it when more than one thing tries to write to them at
-once, and so `fatal error`.
+Ово је дуго и застрашујуће, али све што требамо је удахнути и прочитати стактрејс: `fatal error: concurrent map writes`. Понекад, када покренемо свој тестова, две гороутине уписују на мапу резултата тачно у исто време.
+Мапе у Го-у не воле када им покушава да пише више ствари једном, и тако `fatal error`.
 
-This is a _race condition_, a bug that occurs when the output of our software is
-dependent on the timing and sequence of events that we have no control over.
-Because we cannot control exactly when each goroutine writes to the results map,
-we are vulnerable to two goroutines writing to it at the same time.
+Ово је _раце цондитион_, грешка која се јавља када је излаз нашег софтвера зависно од времена и редоследа догађаја над којима немамо контролу.
+Јер не можемо тачно контролисати када сваки гороутин уписује на мапу резултата, осетљиви смо на две гороутине које јој истовремено пишу.
 
-Go can help us to spot race conditions with its built in [_race detector_][godoc_race_detector].
-To enable this feature, run the tests with the `race` flag: `go test -race`.
+Го нам може помоћи да уочимо услове трке помоћу уграђеног [_детектор расе_][godoc_race_detector].
+Да бисте омогућили ову функцију, покрените тестове са заставицом `race` flag: `go test -race`.
 
-You should get some output that looks like this:
+Требали бисте добити излаз који изгледа овако:
 
 ```sh
 ==================
@@ -368,37 +319,29 @@ Goroutine 7 (finished) created at:
 ==================
 ```
 
-The details are, again, hard to read - but `WARNING: DATA RACE` is pretty
-unambiguous. Reading into the body of the error we can see two different
-goroutines performing writes on a map:
+Појединости је, опет, тешко прочитати - али `WARNING: DATA RACE` је прилично недвосмислено. Читајући у тело грешке можемо видети две различите гороутине које изводе записе на мапи:
 
 `Write at 0x00c420084d20 by goroutine 8:`
 
-is writing to the same block of memory as
+пише у исти блок меморије као и
 
 `Previous write at 0x00c420084d20 by goroutine 7:`
 
-On top of that we can see the line of code where the write is happening:
+Поврх тога, можемо видети линију кода у коју се уписује:
 
 `/Users/gypsydave5/go/src/github.com/gypsydave5/learn-go-with-tests/concurrency/v3/websiteChecker.go:12`
 
-and the line of code where goroutines 7 an 8 are started:
+и линија кода у којој су покренути програми 7 и 8:
 
 `/Users/gypsydave5/go/src/github.com/gypsydave5/learn-go-with-tests/concurrency/v3/websiteChecker.go:11`
 
-Everything you need to know is printed to your terminal - all you have to do is
-be patient enough to read it.
+Све што требате знати штампа се на вашем терминалу - све што морате учинити је будите довољно стрпљиви да то прочитате.
 
-### Channels
+### Канали
 
-We can solve this data race by coordinating our goroutines using _channels_.
-Channels are a Go data structure that can both receive and send values. These
-operations, along with their details, allow communication between different
-processes.
+Ову трку података можемо решити координацијом наших програма користећи _канале_. Канали су Го дата структура која може и примати и слати вредности. Ове операције, заједно са њиховим детаљима, омогућавају комуникацију између различитих процеси.
 
-In this case we want to think about the communication between the parent process
-and each of the goroutines that it makes to do the work of running the
-`WebsiteChecker` function with the url.
+У овом случају желимо да размислимо о комуникацији између родитељског процеса и сваки од програма који чини да изврши посао вођења Функција `WebsiteChecker` са УРЛ-ом.
 
 ```go
 package concurrency
@@ -428,49 +371,31 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 }
 ```
 
-Alongside the `results` map we now have a `resultChannel`, which we `make` in
-the same way. `chan result` is the type of the channel - a channel of `result`.
-The new type, `result` has been made to associate the return value of the
-`WebsiteChecker` with the url being checked - it's a struct of `string` and
-`bool`. As we don't need either value to be named, each of them is anonymous
-within the struct; this can be useful in when it's hard to know what to name
-a value.
+Поред мапе `results` сада имамо и `resultChannel` у који `make` на исти начин. `chan result` је врста канала - канал` result`.
+Нови тип, `резултат` је направљен да повеже повратну вредност `WebsiteChecker` са УРЛ-ом који се проверава - то је структура од` string` и `bool`. Како нам није потребна ниједна вредност за именовање, свака од њих је анонимна унутар структуре; ово може бити корисно када је тешко знати како именовати вредност.
 
-Now when we iterate over the urls, instead of writing to the `map` directly
-we're sending a `result` struct for each call to `wc` to the `resultChannel`
-with a _send statement_. This uses the `<-` operator, taking a channel on the
-left and a value on the right:
+Сада када прелазимо преко УРЛ-ова, уместо да директно пишемо на `map` шаљемо структуру `result` за сваки позив` wc` на `resultChannel` са _сенд изјавом_. Ово користи оператора `<-`, узимајући канал на лево и вредност десно:
 
 ```go
 // Send statement
 resultChannel <- result{u, wc(u)}
 ```
 
-The next `for` loop iterates once for each of the urls. Inside we're using
-a _receive expression_, which assigns a value received from a channel to
-a variable. This also uses the `<-` operator, but with the two operands now
-reversed: the channel is now on the right and the variable that
-we're assigning to is on the left:
+Следећа петља `for` понавља се једном за сваки УРЛ. Унутра користимо _примити израз_, који додељује вредност примљену од канала променљива. Ово такође користи оператор `<-`, али сада са два операнда обрнуто: канал је сада на десној страни и променљива која додељујемо на левој страни:
 
 ```go
 // Receive expression
 r := <-resultChannel
 ```
 
-We then use the `result` received to update the map.
+Затим користимо примљени `result` за ажурирање мапе.
 
-By sending the results into a channel, we can control the timing of each write
-into the results map, ensuring that it happens one at a time. Although each of
-the calls of `wc`, and each send to the result channel, is happening in parallel
-inside its own process, each of the results is being dealt with one at a time as
-we take values out of the result channel with the receive expression.
+Слањем резултата у канал можемо да контролишемо време сваког писања у мапу резултата, осигуравајући да се то дешава једно по једно. Иако је сваки од позиви `wc` и свако слање на канал резултата одвијају се паралелно у оквиру свог процеса, сваки од резултата се обрађује један по један као вадимо вредности из канала резултата са изразом за пријем.
 
-We have parallelized the part of the code that we wanted to make faster, while
-making sure that the part that cannot happen in parallel still happens linearly.
-And we have communicated across the multiple processes involved by using
-channels.
+Паралелно смо упоредили део кода који смо желели да направимо брже пазећи да се део који се не може паралелно дешавати и даље дешава линеарно.
+И комуницирали смо кроз вишеструке процесе који су укључени коришћењем канали.
 
-When we run the benchmark:
+Када покренемо референтну вредност:
 
 ```sh
 pkg: github.com/gypsydave5/learn-go-with-tests/concurrency/v2
@@ -478,46 +403,32 @@ BenchmarkCheckWebsites-8             100          23406615 ns/op
 PASS
 ok      github.com/gypsydave5/learn-go-with-tests/concurrency/v2        2.377s
 ```
-23406615 nanoseconds - 0.023 seconds, about one hundred times as fast as
-original function. A great success.
+23406615 наносекунде - 0,023 секунде, отприлике сто пута брже од оригинална функција. Велики успех.
 
 ## Окончање
 
-This exercise has been a little lighter on the TDD than usual. In a way we've
-been taking part in one long refactoring of the `CheckWebsites` function; the
-inputs and outputs never changed, it just got faster. But the tests we had in
-place, as well as the benchmark we wrote, allowed us to refactor `CheckWebsites`
-in a way that maintained confidence that the software was still working, while
-demonstrating that it had actually become faster.
+Ова вежба је била мало лакша на ТДД-у него обично. На неки начин јесмо учествовао у једном дугом рефакторирању функције `CheckWebsites`; улази и излази се никада нису мењали, већ су постали бржи. Али тестови које смо имали место, као и референтна тачка коју смо написали, омогућили су нам да рефакторизујемо `CheckWebsites` на начин који је задржао уверење да софтвер и даље ради, док демонстрирајући да је заправо постало брже.
 
-In making it faster we learned about
+Убрзавајући то, учили смо о томе
 
-- *goroutines*, the basic unit of concurrency in Go, which let us check more
-  than one website at the same time.
-- *anonymous functions*, which we used to start each of the concurrent processes
-  that check websites.
-- *channels*, to help organize and control the communication between the
-  different processes, allowing us to avoid a *race condition* bug.
-- *the race detector* which helped us debug problems with concurrent code
+- *гороутине*, основна јединица подударности у Го-у, која нам омогућава да проверимо више више од једне веб странице истовремено.
+- *анонимне функције*, које смо користили за покретање сваког од истовремених процеса који проверавају веб локације.
+- *канали*, који помажу у организацији и контроли комуникације између различити процеси, што нам омогућава да избегнемо *грешку расе*.
+- *детектор трке* који нам је помогао да решимо проблеме са истовременим кодом
 
-### Make it fast
+### Чине га брзо
 
-One formulation of an agile way of building software, often misattributed to Kent
-Beck, is:
+Једна формулација агилног начина израде софтвера, често погрешно приписана Кенту Беку, је:
 
-> [Make it work, make it right, make it fast][wrf]
+> [Нека то успе, поправи, учини брзо][врф]
 
-Where 'work' is making the tests pass, 'right' is refactoring the code, and
-'fast' is optimizing the code to make it, for example, run quickly. We can only
-'make it fast' once we've made it work and made it right. We were lucky that the
-code we were given was already demonstrated to be working, and didn't need to be
-refactored. We should never try to 'make it fast' before the other two steps
-have been performed because
+Тамо где „рад“ чини да тестови прођу, 'right' је рефакторисање кода и 'fast' је оптимизација кода како би се, на пример, брзо покренуо. Можемо само „убрзајте“ након што смо то успели и исправили. Имали смо среће да је
+код који смо добили већ је доказано да ради и није требало реконструисан. Никада не бисмо требали покушавати да „убрзамо“ пре друга два корака су изведени јер
 
-> [Premature optimization is the root of all evil][popt]
-> -- Donald Knuth
+> [Превремена оптимизација је корен свега зла] [попт]
+> - Доналд Кнутх
 
 [DI]: dependency-injection.md
-[wrf]: http://wiki.c2.com/?MakeItWorkMakeItRightMakeItFast
-[godoc_race_detector]: https://blog.golang.org/race-detector
-[popt]: http://wiki.c2.com/?PrematureOptimization
+[врф]: http://wiki.c2.com/?MakeItWorkMakeItRightMakeItFast
+[godoc_детектор_расе]: https://blog.golang.org/race-detector
+[попт]: http://wiki.c2.com/?PrematureOptimization
