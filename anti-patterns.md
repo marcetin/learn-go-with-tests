@@ -1,54 +1,54 @@
-# TDD Anti-patterns
+# ТДД Анти-шаблони
 
-From time to time it's necessary to review your TDD techniques and remind yourself of behaviours to avoid.
+Повремено је потребно прегледати своје ТДД технике и подсетити се понашања које треба избегавати.
 
-The TDD process is conceptually simple to follow, but as you do it you'll find it challenging your design skills. **Don't mistake this for TDD being hard, it's design that's hard!**
+ТДД поступак је концептуално једноставан за праћење, али док га будете чинили ћете му изазовом ваше дизајнерске вештине. **Немојте ово заменити јер је ТДД тежак, тежак је дизајн!**
 
-This chapter lists a number of TDD and testing anti-patterns, and how to remedy them.
+У овом поглављу је наведен низ ТДД-а и тестирање анти-образаца, као и начини њиховог отклањања.
 
-## Not doing TDD at all
+## Уопште не радим ТДД
 
-Of course, it is possible to write great software without TDD but, a lot of problems I've seen with the design of code and the quality of tests would be very difficult to arrive at if a disciplined approach to TDD had been used.
+Наравно, могуће је написати одличан софтвер без ТДД-а, али много проблема које сам видео са дизајном кода и квалитетом тестова било би врло тешко доћи да је коришћен дисциплинован приступ ТДД-у.
 
-One of the strengths of TDD is that it gives you a formal process to break down problems, understand what you're trying to achieve (red), get it done (green), then have a good think about how to make it right (blue/refactor).
+Једна од предности ТДД-а је у томе што вам даје формални поступак за разбијање проблема, разумевање онога што покушавате да постигнете (црвено), спровођење (зелено), а затим добро размислите како то исправити ( плава / рефактор).
 
-Without this, the process is often ad-hoc and loose, which _can_ make engineering more difficult than it _could_ be.
+Без тога је процес често ад-хоц и лабав, што _може_ отежати инжењеринг него што би могао бити.
 
-## Misunderstanding the constraints of the refactoring step
+## Неразумевање ограничења корака рефакторирања
 
-I have been in a number of workshops, mobbing or pairing sessions where someone has made a test pass and is in the refactoring stage. After some thought, they think it would be good to abstract away some code into a new struct; a budding pedant yells:
+Био сам на већем броју радионица, мобинга или упаривања где је неко положио пробу и налази се у фази рефакторирања. Након мало размишљања, мисле да би било добро апстраховати неки код у нову структуру; пупави педант виче:
 
-> You're not allowed to do this! You should write a test for this first, we're doing TDD!
+> То вам није дозвољено! Прво бисте требали написати тест за ово, ми радимо ТДД!
 
-This seems to be a common misunderstanding. **You can do whatever you like to the code when the tests are green**, the only thing you're not allowed to do is **add or change behaviour**.
+Чини се да је ово уобичајени неспоразум. **Коду можете да радите шта год желите када су тестови зелени**, једино што не смете је да **додате или промените понашањ**.
 
-The point of these tests are to give you the _freedom to refactor_, find the right abstractions and make the code easier to change and understand.
+Поента ових тестова је да вам пруже _слободу рефакторисања_, пронађу праве апстракције и олакшају промену и разумевање кода.
 
-## Having tests that won't fail (or, evergreen tests)
+## Имати тестове који неће успети (или зимзелене тестове)
 
-It's astonishing how often this comes up. You start debugging or changing some tests and realise: there are no scenarios where this test can fail. Or at least, it won't fail in the way the test is _supposed_ to be protecting against.
+Запањујуће је колико често се ово појављује. Почињете да отклањате грешке или мењате неке тестове и схватате: не постоје сценарији у којима овај тест може да пропадне. Или бар неће успети на начин на који је тест _предпостављен_ да би се заштитио.
 
-This is _next to impossible_ with TDD if you're following **the first step**,
+Ово је _неод немогућег_ са ТДД-ом ако следите **први корак**,
 
-> Write a test, see it fail
+> Напишите тест, пазите да не успе
 
-This is almost always done when developers write tests _after_ code is written, and/or chasing test coverage rather than creating a useful test suite.
+То се готово увек ради када програмери напишу тестове _након_ што је написан код и / или прогоне покривеност тестом, уместо да креирају користан пакет за тестирање.
 
-## Useless assertions
+## Бескорисне тврдње
 
-Ever worked on a system, and you've broken a test, then you see this?
+Да ли сте икад радили на систему и положили сте тест, видите ли ово?
 
 > `false was not equal to true`
 
-I know that false is not equal to true. This is not a helpful message; it doesn't tell me what I've broken. This is a symptom of not following the TDD process and not reading the failure error message.
+Знам да лажно није једнако тачном. Ово није корисна порука; не говори ми шта сам сломио. Ово је симптом непоштовања ТДД процеса и не читања поруке о грешци грешке.
 
-Going back to the drawing board,
+Враћајући се на таблу за цртање,
 
-> Write a test, see it fail (and don't be ashamed of the error message)
+> Напишите тест, уверите се да је пропао (и не стидите се поруке о грешци)
 
-## Asserting on irrelevant detail
+## Тврдња о небитним детаљима
 
-An example of this is making an assertion on a complex object, when in practice all you care about in the test is the value of one of the fields.
+Пример за то је изношење тврдњи о сложеном објекту, када је у пракси све што вас занима у тесту вредност једног од поља.
 
 ```go
 // not this, now your test is tightly coupled to the whole object
@@ -63,57 +63,57 @@ if got != want{
 }
 ```
 
-Additional assertions not only make your test more difficult to read by creating 'noise' in your documentation, but also needlessly couples the test with data it doesn't care about. This means if you happen to change the fields for your object, or the way they behave you may get unexpected compilation problems or failures with your tests.
+Додатне тврдње не само да отежавају читање теста стварањем `шума` у вашој документацији, већ и непотребно спајају тест са подацима до којих му није стало. То значи да ако случајно промените поља за свој објекат или начин њиховог понашања, можете добити неочекиване проблеме са компилацијом или неуспехе током тестова.
 
-This is an example of not following the red stage strictly enough.
+Ово је пример недовољног строгог праћења црвене фазе.
 
-- Letting an existing design influence how you write your test **rather than thinking of the desired behaviour**
-- Not giving enough consideration to the failing test's error message
+- Допуштање постојећем дизајну да утиче на то како пишете тест, **уместо да размишљате о жељеном понашању**
+- Недовољно разматрање поруке о грешци неуспелог теста
 
-## Lots of assertions within a single scenario for unit tests
+## Много тврдњи у оквиру једног сценарија за јединичне тестове
 
-Many assertions can make tests difficult to read and challenging to debug when they fail.
+Многе тврдње могу отежати читање тестова и изазов за њихово отклањање када не успеју.
 
-They often creep in gradually, especially if test setup is complicated because you're reluctant to replicate the same horrible setup to assert on something else. Instead of this you should fix the problems in your design which are making it difficult to assert on new things.
+Често се увлаче постепено, посебно ако је подешавање теста компликовано јер не желите да поновите исту грозну поставку да бисте тврдили на нечем другом. Уместо овога, требало би да решите проблеме у свом дизајну који отежавају тврдње о новим стварима.
 
-A helpful rule of thumb is to aim to make one assertion per test. In Go, take advantage of subtests to clearly delineate between assertions on the occasions where you need to. This is also a handy technique to separate assertions on behaviour vs implementation detail.
+Корисно правило је тежити да се по једној тврдњи изнесе једна тврдња. У програму Го искористите субтестове да бисте јасно разграничили тврдње у приликама у којима то требате. Ово је такође згодна техника за раздвајање тврдњи о понашању и детаљима примене.
 
-For other tests where setup or execution time may be a constraint (e.g an acceptance test driving a web browser), you need to weigh up the pros and cons of slightly trickier to debug tests against test execution time. 
+За остале тестове код којих време постављања или извршавања може представљати ограничење (нпр. Тест прихватања за управљање веб прегледачем), потребно је да измерите предности и недостатке мало незгоднијег како бисте тестове отклонили у односу на време извршавања теста.
 
-## Not listening to your tests
+## Не слушам своје тестове
 
-[Dave Farley in his video "When TDD goes wrong"](https://www.youtube.com/watch?v=UWtEVKVPBQ0&feature=youtu.be) points out,
+[Даве Фарлеи у свом видеу „Кад ТДД пође по злу“](https://www.youtube.com/watch?v=UWtEVKVPBQ0&feature=youtu.be) истиче,
 
-> TDD gives you the fastest feedback possible on your design
+> ТДД вам пружа најбрже могуће повратне информације о вашем дизајну
 
-From my own experience, a lot of developers are trying to practice TDD but frequently ignore the signals coming back to them from the TDD process. So they're still stuck with fragile, annoying systems, with a poor test suite.
+Из мог сопственог искуства, многи програмери покушавају да вежбају ТДД, али често игноришу сигнале који им се враћају из ТДД процеса. Тако да су и даље заглављени са крхким, досадним системима, са лошим тест пакетом.
 
-Simply put, if testing your code is difficult, then _using_ your code is difficult too. Treat your tests as the first user of your code and then you'll see if your code is pleasant to work with or not.
+Једноставно речено, ако је тестирање вашег кода тешко, онда је и _употреба_ вашег кода тешка. Третирајте своје тестове као првог корисника вашег кода и тада ћете видети да ли је са вашим кодом пријатно радити или не.
 
-I've emphasised this a lot in the book, and I'll say it again **listen to your tests**.
+Ово сам много нагласио у књизи и поновићу **слушајте своје тестове**.
 
-### Excessive setup, too many test doubles, etc.
+### Прекомерно подешавање, превише пробних дублова итд.
 
-Ever looked at a test with 20, 50, 100, 200 lines of setup code before anything interesting in the test happens? Do you then have to change the code and revisit the mess and wish you had a different career?
+Да ли сте икад погледали тест са 20, 50, 100, 200 редова поставног кода пре него што се деси било шта занимљиво у тесту? Да ли тада морате да промените код и поново посетите неред и желите ли да имате другачију каријеру?
 
-What are the signals here? _Listen_, complicated tests `==` complicated code. Why is your code complicated? Does it have to be?
+Који су овде сигнали? _Слушајте_, компликовани тестови `==` компликовани код. Зашто је ваш код компликован? Да ли мора бити?
 
-- When you have lots of test doubles in your tests, that means the code you're testing has lots of dependencies - which means your design needs work.
-- If your test is reliant on setting up various interactions with mocks, that means your code is making lots of interactions with its dependencies. Ask yourself whether these interactions could be simpler.
+- Када у тестовима имате пуно пробних двоструких резултата, то значи да код који тестирате има пуно зависности - што значи да ваш дизајн треба да ради.
+- Ако се ваш тест ослања на подешавање различитих интеракција са лажним порукама, то значи да ваш код остварује пуно интеракција са својим зависностима. Запитајте се да ли би ове интеракције могле бити једноставније.
 
-#### Leaky interfaces
+#### Пропусни интерфејси
 
-If you have declared an `interface` that has many methods, that points to a leaky abstraction. Think about how you could define that collaboration with a more consolidated set of methods, ideally one.
+Ако сте прогласили `interface` који има много метода, то указује на пропусну апстракцију. Размислите о томе како бисте могли да дефинишете ту сарадњу са обједињенијим низом метода, идеално једним.
 
-#### Think about the types of test doubles you use
+#### Размислите о врстама тестних дублова које користите
 
-- Mocks are sometimes helpful, but they're extremely powerful and therefore easy to misuse. Try giving yourself the constraint of using stubs instead.
-- Verifying implementation detail with spies is sometimes helpful, but try to avoid it. Remember your implementation detail is usually not important, and you don't want your tests coupled to them if possible. Look to couple your tests to **useful behaviour rather than incidental details**.
-- [Read my posts on naming test doubles](https://quii.dev/Start_naming_your_test_doubles_correctly) if the taxonomy of test doubles is a little unclear
+- "Mocks" су понекад корисна, али су изузетно моћна и стога их је лако злоупотребити. Покушајте себи да дате ограничење употребе уметака.
+- Провера детаља примене код шпијуна је понекад корисна, али покушајте то да избегнете. Имајте на уму да детаљ ваше имплементације обично није важан и не желите да ваши тестови буду повезани са њима ако је могуће. Покушајте да тестове упарите са **корисним понашањем, а не случајним детаљима**.
+- [Прочитајте моје постове о именовању тестних дублова](https://quii.dev/Start_naming_your_test_doubles_correctly) ако је таксономија тестних дублова мало нејасна
 
-#### Consolidate dependencies
+#### Објединити зависности
 
-Here is some code for a `http.HandlerFunc` to handle new user registrations for a website.
+Ево неколико кодова за `http.HandlerFunc` који обрађује регистрације нових корисника за веб локацију.
 
 ```go
 type User struct {
@@ -131,35 +131,35 @@ type Emailer interface {
 
 func NewRegistrationHandler(userStore UserStore, emailer Emailer) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		// extract out the user from the request body (handle error)
-		// check user exists (handle duplicates, errors)
-		// store user (handle errors)
-		// compose and send confirmation email (handle error)
-		// if we got this far, return 2xx response
+        // издвајање корисника из тела захтева (грешка при руковању)
+        // провера корисника да постоји (руковање дупликатима, грешке)
+        // складиштење корисника (руковање грешкама)
+        // састављање и слање е-поште са потврдом (грешка при обради)
+        // ако смо стигли тако далеко, вратите 2кк одговор
 	}
 }
 ```
 
-At first pass it's reasonable to say the design isn't so bad. It only has 2 dependencies!
+У први мах је разумно рећи да дизајн није тако лош. Има само 2 зависности!
 
-Re-evaluate the design by considering the handler's responsibilities:
+Поново процените дизајн узимајући у обзир одговорности руковаоца:
 
-- Parse the request body into a `User` ✅
-- Use `UserStore` to check if the user exists ❓
-- Use `UserStore` to store the user ❓
-- Compose an email ❓
-- Use `Emailer` to send the email ❓
-- Return an appropriate http response, depending on success, errors, etc ✅
+- Анализирајте тело захтева на `User` ✅
+- Користите `UserStore` да бисте проверили да ли корисник постоји ❓
+- Користите `UserStore` за складиштење корисника ❓
+- Саставите е-поруку ❓
+- Користите `Emailer` за слање е-поште ❓
+- Вратите одговарајући хттп одговор, у зависности од успеха, грешака итд. ✅
 
-To exercise this code, you're going to have to write many tests with varying degrees of test double setups, spies, etc
+Да бисте вежбали овај код, мораћете да напишете много тестова са различитим степенима двоструких поставки теста, шпијуна итд
 
-- What if the requirements expand? Translations for the emails? Sending an SMS confirmation too? Does it make sense to you that you have to change a HTTP handler to accommodate this change?
-- Does it feel right that the important rule of "we should send an email" resides within a HTTP handler?
-    - Why do you have to go through the ceremony of creating HTTP requests and reading responses to verify that rule?
+- Шта ако се захтеви прошире? Преводи за имејлове? Шаљете ли и СМС потврду? Да ли вам има смисла да морате да промените ХТТП руковач да бисте се прилагодили овој промени?
+- Да ли сматрате да је важно да правило „требали бисмо послати е-пошту“ налази се у ХТТП обрађивачу?
+    - Зашто морате проћи церемонију креирања ХТТП захтева и читања одговора да бисте верификовали то правило?
 
-**Listen to your tests**. Writing tests for this code in a TDD fashion should quickly make you feel uncomfortable (or at least, make the lazy developer in you be annoyed). If it feels painful, stop and think.
+**Слушајте своје тестове**. Писање тестова за овај код на ТДД начин брзо би требало да вам учини да се осећате нелагодно (или барем изнервирајте лењег програмера у себи). Ако се осећате болно, зауставите се и размислите.
 
-What if the design was like this instead?
+Шта ако је уместо тога дизајн овако?
 
 ```go
 type UserService interface {
@@ -175,24 +175,24 @@ func NewRegistrationHandler(userService UserService) http.HandlerFunc {
 }
 ```
 
-- Simple to test the handler ✅
-- Changes to the rules around registration are isolated away from HTTP, so they are also simpler to test ✅
+- Једноставно тестирање руковаоца ✅
+- Промене правила око регистрације изоловане су од ХТТП-а, па их је и једноставније тестирати ✅
 
-## Violating encapsulation
+## Кршење енкапсулације
 
-Encapsulation is very important. There's a reason we don't make everything in a package exported (or public). We want coherent APIs with a small surface area to avoid tight coupling.
+Капсулација је веома важна. Постоји разлог због којег све у пакету не извозимо (или јавно). Желимо кохерентне АПИ-је са малом површином како бисмо избегли чврсто повезивање.
 
-People will sometimes be tempted to make a function or method public in order to test something. By doing this you make your design worse and send confusing messages to maintainers and users of your code.
+Људи ће понекад доћи у искушење да неку функцију или метод учине јавним како би нешто тестирали. На овај начин погоршавате дизајн и шаљете збуњујуће поруке одржаваоцима и корисницима вашег кода.
 
-A result of this can be developers trying to debug a test and then eventually realising the function being tested is _only called from tests_. Which is obviously **a terrible outcome, and a waste of time**.
+Резултат овога могу бити програмери који покушавају да отклоне грешке у тесту, а затим на крају схвате да се функција која се тестира _позива само из тестова_. Што је очигледно **ужасан исход и губљење времена**.
 
-In Go, consider your default position for writing tests as _from the perspective of a consumer of your package_. You can make this a compile-time constraint by having your tests live in a test package e.g `package gocoin_test`. If you do this, you'll only have access to the exported members of the package so it won't be possible to couple yourself to implementation detail.
+У Го, сматрајте своју подразумевану позицију за писање тестова _из перспективе потрошача вашег пакета_. Ово можете учинити ограничењем времена компајлирања тако што ћете своје тестове објавити у тест пакету, нпр. `package gocoin_test`. Ако то учините, имат ћете приступ само извезеним члановима пакета, тако да неће бити могуће повезати се са детаљима имплементације.
 
-## Complicated table tests
+## Компликовани тестови табеле
 
-Table tests are a great way of exercising a number of different scenarios when the test setup is the same, and you only wish to vary the inputs.
+Табеларни тестови су одличан начин вежбања низа различитих сценарија када је подешавање теста исто, а ви само желите да мењате улазе.
 
-_But_ they can be messy to read and understand when you try to shoehorn other kinds of tests under the name of having one, glorious table.
+_Али_ они могу бити неуредни за читање и разумевање када покушате да обучете друге врсте тестова под називом један славни сто.
 
 ```go
 cases := []struct {
@@ -206,25 +206,25 @@ cases := []struct {
 }
 ```
 
-**Don't be afraid to break out of your table and write new tests** rather than adding new fields and booleans to the table `struct`.
+**Не плашите се да избијете из своје табеле и напишете нове тестове**, уместо да додајете нова поља и логичке вредности у `struct` табеле.
 
-A thing to bear in mind when writing software is,
+Треба имати на уму приликом писања софтвера,
 
-> [Simple is not easy](https://www.infoq.com/presentations/Simple-Made-Easy/)
+> [Једноставно није лако](https://www.infoq.com/presentations/Simple-Made-Easy/)
 
-"Just" adding a field to a table might be easy, but it can make things far from simple.
+„Само“ додавање поља у табелу може бити лако, али ствари може учинити далеко од једноставних.
 
-## Summary
+## Резиме
 
-Most problems with unit tests can normally be traced to:
+Већина проблема са јединичним тестовима се обично може пратити до:
 
-- Developers not following the TDD process
-- Poor design
+- Програмери који не прате ТДД поступак
+- Лош дизајн
 
-So, learn about good software design!
+Дакле, научите о добром дизајну софтвера!
 
-The good news is TDD can help you _improve your design skills_ because as stated in the beginning:
+Добра вест је да вам ТДД може помоћи да _побољшате своје дизајнерске вештине_ јер како је речено на почетку:
 
-**TDD's main purpose is to provide feedback on your design.** For the millionth time, listen to your tests, they are reflecting your design back at you.
+**Главна сврха ТДД-а је да пружи повратне информације о вашем дизајну.** Милионити пут слушајте своје тестове, они вам одражавају дизајн.
 
-Be honest about the quality of your tests by listening to the feedback they give you, and you'll become a better developer for it.
+Будите искрени у погледу квалитета својих тестова слушајући повратне информације које вам дају и постаћете бољи програмер за то.
