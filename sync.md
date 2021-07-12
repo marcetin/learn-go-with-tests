@@ -1,16 +1,16 @@
-# Sync
+# Синхронизација
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/sync)**
 
-We want to make a counter which is safe to use concurrently.
+Желимо да направимо бројач који је сигуран за истовремену употребу.
 
-We'll start with an unsafe counter and verify its behaviour works in a single-threaded environment.
+Почећемо са несигурним бројачем и верификовати његово понашање у окружењу са једним навојем.
 
-Then we'll exercise it's unsafeness with multiple goroutines trying to use it via a test and fix it.
+Затим ћемо вежбати да је то несигурност помоћу вишеструких програма покушавајући да је употребимо путем теста и поправимо.
 
-## Прво напишите тест
+## Прво напиши тест
 
-We want our API to give us a method to increment the counter and then retrieve its value.
+Желимо да нам АПИ пружи метод за повећање бројача, а затим и за преузимање његове вредности.
 
 ```go
 func TestCounter(t *testing.T) {
@@ -35,7 +35,7 @@ func TestCounter(t *testing.T) {
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-Let's define `Counter`.
+Хајде да дефинишемо `Counter`.
 
 ```go
 type Counter struct {
@@ -43,14 +43,14 @@ type Counter struct {
 }
 ```
 
-Try again and it fails with the following
+Покушајте поново и не успе са следећим
 
 ```
 ./sync_test.go:14:10: counter.Inc undefined (type Counter has no field or method Inc)
 ./sync_test.go:18:13: counter.Value undefined (type Counter has no field or method Value)
 ```
 
-So to finally make the test run we can define those methods
+Дакле, да бисмо коначно извршили пробу, можемо дефинисати те методе
 
 ```go
 func (c *Counter) Inc() {
@@ -62,7 +62,7 @@ func (c *Counter) Value() int {
 }
 ```
 
-It should now run and fail
+Сада би требало да се покрене и не успе
 
 ```
 === RUN   TestCounter
@@ -74,7 +74,7 @@ It should now run and fail
 
 ## Напишите довољно кода да прође
 
-This should be trivial for Go experts like us. We need to keep some state for the counter in our datatype and then increment it on every `Inc` call
+Ово би требало бити тривијално за стручњаке компаније Го попут нас. Морамо задржати неко стање бројача у нашем типу података, а затим га повећавати на сваком позиву `Inc`
 
 ```go
 type Counter struct {
@@ -92,7 +92,7 @@ func (c *Counter) Value() int {
 
 ## Рефактор
 
-There's not a lot to refactor but given we're going to write more tests around `Counter` we'll write a small assertion function `assertCount` so the test reads a bit clearer.
+Нема много тога за рефакторирање, али с обзиром на то да ћемо написати више тестова око `Counter`, написаћемо малу функцију тврдње` assertCount` тако да тест чита мало јасније.
 
 ```go
 t.Run("incrementing the counter 3 times leaves it at 3", func(t *testing.T) {
@@ -112,9 +112,9 @@ func assertCounter(t testing.TB, got Counter, want int)  {
 }
 ```
 
-## Next steps
+## Следећи кораци
 
-That was easy enough but now we have a requirement that it must be safe to use in a concurrent environment. We will need to write a failing test to exercise this.
+То је било довољно лако, али сада имамо захтев да мора бити безбедно за употребу у истовременом окружењу. Да бисмо то вежбали, мораћемо да напишемо неуспели тест.
 
 ## Прво напишите тест
 
@@ -138,13 +138,13 @@ t.Run("it runs safely concurrently", func(t *testing.T) {
 })
 ```
 
-This will loop through our `wantedCount` and fire a goroutine to call `counter.Inc()`.
+Ово ће се провући кроз нашу `wantedCount` и активирати програм за позивање `counter.Inc()`.
 
-We are using [`sync.WaitGroup`](https://golang.org/pkg/sync/#WaitGroup) which is a convenient way of synchronising concurrent processes.
+Користимо [`sync.WaitGroup`](https://golang.org/pkg/sync/#WaitGroup) који је погодан начин синхронизације истовремених процеса.
 
-> A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for. Then each of the goroutines runs and calls Done when finished. At the same time, Wait can be used to block until all goroutines have finished.
+> `WaitGroup` чека да се збирка гороутина заврши. Главни позивни програм позива додати да бисте поставили број програма који се чека. Тада се свака од програма покрене и по завршетку позове Готово. Истовремено, сачекајте да се користи за блокирање док се све гороутине не заврше.
 
-By waiting for `wg.Wait()` to finish before making our assertions we can be sure all of our goroutines have attempted to `Inc` the `Counter`.
+Чекајући да `wg.Wait()` заврши пре него што изнесемо своје тврдње, можемо бити сигурни да су све наше гороутине покушале да `Inc`` Counter`.
 
 ## Покушајте да покренете тест
 
@@ -156,13 +156,14 @@ By waiting for `wg.Wait()` to finish before making our assertions we can be sure
 FAIL
 ```
 
-The test will _probably_ fail with a different number, but nonetheless it demonstrates it does not work when multiple goroutines are trying to mutate the value of the counter at the same time.
+Тест ће _вероватно_ пасти са другим бројем, али без обзира на то показује да не функционише када вишеструки програмерски програми истовремено покушавају да мутирају вредност бројача.
 
-## Напишите довољно кода да прође
+## Напиши довољно код да се прође
 
-A simple solution is to add a lock to our `Counter`, a [`Mutex`](https://golang.org/pkg/sync/#Mutex)
+Једноставно решење је додавање браве у наш `Counter`, [`Mutex`](https://golang.org/pkg/sync/#Mutex)
 
->A Mutex is a mutual exclusion lock. The zero value for a Mutex is an unlocked mutex.
+>Мутек је брава за међусобно искључивање. Нулта вредност за Мутек је откључани мутек.
+
 
 ```go
 type Counter struct {
@@ -177,13 +178,13 @@ func (c *Counter) Inc() {
 }
 ```
 
-What this means is any goroutine calling `Inc` will acquire the lock on `Counter` if they are first. All the other goroutines will have to wait for it to be `Unlock`ed before getting access.
+То значи да ће сваки гороутин који зове `Inc` стећи браву на `Counter` ако је први. Сви остали програми ће морати да сачекају да се `Unlock` пре него што добију приступ.
 
-If you now re-run the test it should now pass because each goroutine has to wait its turn before making a change.
+Ако сада поново покренете тест, он би сада требало да прође, јер сваки гороутин мора да сачека свој ред пре него што изврши промену.
 
-## I've seen other examples where the `sync.Mutex` is embedded into the struct.
+## Видео сам друге примере где је `sync.Mutex` уграђен у структуру.
 
-You may see examples like this
+Можда ћете видети овакве примере
 
 ```go
 type Counter struct {
@@ -192,7 +193,7 @@ type Counter struct {
 }
 ```
 
-It can be argued that it can make the code a bit more elegant.
+Може се тврдити да код може учинити мало елегантнијим.
 
 ```go
 func (c *Counter) Inc() {
@@ -202,40 +203,40 @@ func (c *Counter) Inc() {
 }
 ```
 
-This _looks_ nice but while programming is a hugely subjective discipline, this is **bad and wrong**.
+Ово _изгледа_ лепо, али иако је програмирање изузетно субјективна дисциплина, ово је **лоше и погрешно**.
 
-Sometimes people forget that embedding types means the methods of that type becomes _part of the public interface_; and you often will not want that. Remember that we should be very careful with our public APIs, the moment we make something public is the moment other code can couple themselves to it. We always want to avoid unnecessary coupling.
+Понекад људи забораве да уграђивање типова значи да методе тог типа постају _део јавног интерфејса_; а то често нећете желети. Имајте на уму да бисмо требали бити врло опрезни са нашим јавним АПИ-има, тренутак када нешто објавимо је тренутак када се други код може повезати са тим. Увек желимо да избегнемо непотребно спајање.
 
-Exposing `Lock` and `Unlock` is at best confusing but at worst potentially very harmful to your software if callers of your type start calling these methods.
+Излагање „закључавања“ (`Lock`) и „откључавања“ (`Unlock`) у најбољем је случају збуњујуће, али у најгорем случају потенцијално веома штетно за ваш софтвер ако позиоци вашег типа почну да позивају ове методе.
 
-![Showing how a user of this API can wrongly change the state of the lock](https://i.imgur.com/SWYNpwm.png)
+![Показује како корисник овог АПИ-ја може погрешно променити стање браве](https://i.imgur.com/SWYNpwm.png)
 
-_This seems like a really bad idea_
+_Ово се чини као заиста лоша идеја_
 
-## Copying mutexes
+## Копирање мутекса
 
-Our test passes but our code is still a bit dangerous
+Наш тест пролази, али наш код је и даље помало опасан
 
-If you run `go vet` on your code you should get an error like the following
+Ако покренете `go vet` на свом коду, требало би да добијете грешку попут следеће
 
 ```
 sync/v2/sync_test.go:16: call of assertCounter copies lock value: v1.Counter contains sync.Mutex
 sync/v2/sync_test.go:39: assertCounter passes lock by value: v1.Counter contains sync.Mutex
 ```
 
-A look at the documentation of [`sync.Mutex`](https://golang.org/pkg/sync/#Mutex) tells us why
+Поглед у документацију [`sync.Mutex`](https://golang.org/pkg/sync/#Mutex) нам каже зашто
 
-> A Mutex must not be copied after first use.
+> Мутек се не сме копирати након прве употребе.
 
-When we pass our `Counter` (by value) to `assertCounter` it will try and create a copy of the mutex.
+Када проследимо свој `Counter` (по вредности) у `assertCounter`, он ће покушати да створи копију мутека.
 
-To solve this we should pass in a pointer to our `Counter` instead, so change the signature of `assertCounter`
+Да бисмо то решили, уместо тога треба да проследимо показивач на наш `Counter`, па променимо потпис `assertCounter`
 
 ```go
 func assertCounter(t testing.TB, got *Counter, want int)
 ```
 
-Our tests will no longer compile because we are trying to pass in a `Counter` rather than a `*Counter`. To solve this I prefer to create a constructor which shows readers of your API that it would be better to not initialise the type yourself.
+Наши тестови се више неће компајлирати, јер покушавамо да уђемо у `Counter` уместо у `*Counter`. Да бих то решио, више волим да креирам конструктор који читаоцима вашег АПИ-ја показује да би било боље да сами не иницијализујете тип.
 
 ```go
 func NewCounter() *Counter {
@@ -243,33 +244,33 @@ func NewCounter() *Counter {
 }
 ```
 
-Use this function in your tests when initialising `Counter`.
+Користите ову функцију у тестовима приликом иницијализације `Counter`.
 
 ## Окончање
 
-We've covered a few things from the [sync package](https://golang.org/pkg/sync/)
+Обрадили смо неколико ствари из [пакета за синхронизацију](https://golang.org/pkg/sync/)
 
-- `Mutex` allows us to add locks to our data
-- `Waitgroup` is a means of waiting for goroutines to finish jobs
+- `Mutex` нам омогућава додавање брава у наше податке
+- `Waitgroup` је средство чекања да гороутине заврше посао
 
-### When to use locks over channels and goroutines?
+### Када користити закључавање канала и програма?
 
-[We've previously covered goroutines in the first concurrency chapter](concurrency.md) which let us write safe concurrent code so why would you use locks?
-[The go wiki has a page dedicated to this topic; Mutex Or Channel](https://github.com/golang/go/wiki/MutexOrChannel)
+[Претходно смо обрађивали програме у првом поглављу о паралелности](concurrency.md) који нам омогућавају да напишемо сигуран истовремени код, па зашто бисте користили браве?
+[Го вики има страницу посвећену овој теми; Mutex или Channel](https://github.com/golang/go/wiki/MutexOrChannel)
 
-> A common Go newbie mistake is to over-use channels and goroutines just because it's possible, and/or because it's fun. Don't be afraid to use a sync.Mutex if that fits your problem best. Go is pragmatic in letting you use the tools that solve your problem best and not forcing you into one style of code.
+> Уобичајена грешка за почетнике Го је прекомерна употреба канала и програма само зато што је то могуће и / или зато што је забавно. Не плашите се да користите синц.Мутек ако то најбоље одговара вашем проблему. Го је прагматичан у томе што вам омогућава да користите алате који најбоље решавају ваш проблем, а не да вас приморавају на један стил кода.
 
-Paraphrasing:
+Парафразирајући:
 
-- **Use channels when passing ownership of data**
-- **Use mutexes for managing state**
+- **Користите канале приликом преношења власништва над подацима**
+- **Користите мутексеве за управљање стањем**
 
 ### go vet
 
-Remember to use go vet in your build scripts as it can alert you to some subtle bugs in your code before they hit your poor users.
+Не заборавите да користите го вет у својим скриптама за изградњу, јер вас може упозорити на неке суптилне грешке у вашем коду пре него што погодију ваше сиромашне кориснике.
 
-### Don't use embedding because it's convenient
+### Не користите уграђивање јер је то погодно
 
-- Think about the effect embedding has on your public API.
-- Do you _really_ want to expose these methods and have people coupling their own code to them?
-- With respect to mutexes, this could be potentially disastrous in very unpredictable and weird ways, imagine some nefarious code unlocking a mutex when it shouldn't be; this would cause some very strange bugs that will be hard to track down.
+- Размислите о ефекту који уграђивање има на ваш јавни АПИ.
+- Да ли заиста желите да изложите ове методе и да људи повежу свој код са њима?
+- Што се тиче мутекса, ово би могло бити потенцијално погубно на врло непредвидљиве и чудне начине, замислите да неки подли код откључа мутекс кад то не би требало да буде; ово би проузроковало неке врло чудне грешке којима ће бити тешко ући у траг.
