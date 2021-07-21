@@ -2,23 +2,23 @@
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/roman-numerals)**
 
-Some companies will ask you to do the [Roman Numeral Kata](http://codingdojo.org/kata/RomanNumerals/) as part of the interview process. This chapter will show how you can tackle it with TDD.
+Написаћемо функцију која претвара [Римску каталошку нумеру](http://codingdojo.org/kata/RomanNumerals/) као део процеса интервјуа. Ово поглавље ће показати како се с њим можете носити са ТДД-ом.
 
-We are going to write a function which converts an [Arabic number](https://en.wikipedia.org/wiki/Arabic_numerals) (numbers 0 to 9) to a Roman Numeral.
+We are going to write a function which converts an [Арапски број](https://en.wikipedia.org/wiki/Arabic_numerals) (бројеве од 0 до 9) у римски број.
 
-If you haven't heard of [Roman Numerals](https://en.wikipedia.org/wiki/Roman_numerals) they are how the Romans wrote down numbers.
+Ако нисте чули за [Римске бројеве](https://en.wikipedia.org/wiki/Roman_numerals), Римљани су записали бројеве.
 
-You build them by sticking symbols together and those symbols represent numbers
+Градите их лепљењем симбола и ти симболи представљају бројеве
 
-So `I` is "one". `III` is three.
+Дакле, `I` је" једно ". `III` је три.
 
-Seems easy but there's a few interesting rules. `V` means five, but `IV` is 4 (not `IIII`).
+Изгледа лако, али постоји неколико занимљивих правила. `V` значи пет, али `IV` је 4 (не `IIII`).
 
-`MCMLXXXIV` is 1984. That looks complicated and it's hard to imagine how we can write code to figure this out right from the start.
+`MCMLXXXIV` је 1984. То изгледа компликовано и тешко је замислити како можемо написати код да то схватимо од самог почетка.
 
-As this book stresses, a key skill for software developers is to try and identify "thin vertical slices" of _useful_ functionality and then **iterating**. The TDD workflow helps facilitate iterative development.
+Као што наглашава ова књига, кључна вештина програмера је да покушају да идентификују „танке вертикалне кришке“ _корисне_ функционалности, а затим ** понављају **. ТДД радни ток помаже у олакшавању итеративног развоја.
 
-So rather than 1984, let's start with 1.
+Дакле, радије него 1984, почнимо са 1.
 
 ## Прво напишите тест
 
@@ -33,17 +33,17 @@ func TestRomanNumerals(t *testing.T) {
 }
 ```
 
-If you've got this far in the book this is hopefully feeling very boring and routine to you. That's a good thing.
+Ако сте у књизи стигли толико далеко, надам се да вам се чини врло досадним и рутинским. То је добра ствар.
 
 ## Покушајте да покренете тест
 
 `./numeral_test.go:6:9: undefined: ConvertToRoman`
 
-Let the compiler guide the way
+Нека преводилац води пут
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-Create our function but don't make the test pass yet, always make sure the tests fails how you expect
+Креирајте нашу функцију, али још увек немојте да прођете тест, увек проверите да тестови не успеју онако како очекујете
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -51,7 +51,7 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-It should run now
+Требало би да ради сада
 
 ```go
 === RUN   TestRomanNumerals
@@ -70,15 +70,15 @@ func ConvertToRoman(arabic int) string {
 
 ## Рефактор
 
-Not much to refactor yet.
+Још увек није много за рефакторирање.
 
-_I know_ it feels weird just to hard-code the result but with TDD we want to stay out of "red" for as long as possible. It may _feel_ like we haven't accomplished much but we've defined our API and got a test capturing one of our rules; even if the "real" code is pretty dumb.
+_Знам_ чудно ми је само кодирање резултата, али са ТДД-ом желимо да будемо ван „црвеног“ што је дуже могуће. Можда се осећа _као да нисмо постигли много, али дефинисали смо наш АПИ и добили тест који обухвата једно од наших правила; чак и ако је „прави“ код прилично глуп.
 
-Now use that uneasy feeling to write a new test to force us to write slightly less dumb code.
+Сада искористите тај нелагодан осећај да напишете нови тест који ће нас присилити да напишемо мало мање глупи код.
 
 ## Прво напишите тест
 
-We can use subtests to nicely group our tests
+Можемо да користимо подтестове за лепо груписање тестова
 
 ```go
 func TestRomanNumerals(t *testing.T) {
@@ -110,7 +110,7 @@ func TestRomanNumerals(t *testing.T) {
         numeral_test.go:20: got 'I', want 'II'
 ```
 
-Not much surprise there
+Нема пуно изненађења тамо
 
 ## Напишите довољно кода да прође
 
@@ -123,11 +123,11 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-Yup, it still feels like we're not actually tackling the problem. So we need to write more tests to drive us forward.
+Да, и даље се чини да се заправо не бавимо проблемом. Зато морамо да напишемо још тестова који ће нас водити напред.
 
 ## Рефактор
 
-We have some repetition in our tests. When you're testing something which feels like it's a matter of "given input X, we expect Y" you should probably use table based tests.
+Имамо неколико понављања у нашим тестовима. Када тестирате нешто што се осећа као да је реч о „датом уносу X, очекујемо Y“, вероватно бисте требали да користите тестове засноване на табелама.
 
 ```go
 func TestRomanNumerals(t *testing.T) {
@@ -151,13 +151,13 @@ func TestRomanNumerals(t *testing.T) {
 }
 ```
 
-We can now easily add more cases without having to write any more test boilerplate.
+Сада можемо лако додати још случајева без потребе за писањем било ког пробног узорка.
 
-Let's push on and go for 3
+Идемо даље и идемо на 3
 
 ## Прво напишите тест
 
-Add the following to our cases
+Нашим случајевима додајте следеће
 
 ```go
 {"3 gets converted to III", 3, "III"},
@@ -187,11 +187,11 @@ func ConvertToRoman(arabic int) string {
 
 ## Рефактор
 
-OK so I'm starting to not enjoy these if statements and if you look at the code hard enough you can see that we're building a string of `I` based on the size of `arabic`.
+ОК, почињем да не уживам у овим иф изјавама и ако довољно добро погледате код, видећете да градимо низ `I` на основу величине „арапског“.
 
-We "know" that for more complicated numbers we will be doing some kind of arithmetic and string concatenation.
+„Знамо“ да ћемо за сложеније бројеве радити неку врсту аритметике и спајања низова.
 
-Let's try a refactor with these thoughts in mind, it _might not_ be suitable for the end solution but that's OK. We can always throw our code away and start afresh with the tests we have to guide us.
+Покушајмо са рефактором имајући на уму ове мисли, он _можда не би_ био погодан за крајње решење, али то је у реду. Увек можемо да бацимо свој код и започнемо изнова са тестовима којима се морамо водити.
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -206,23 +206,22 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-You may not have used [`strings.Builder`](https://golang.org/pkg/strings/#Builder) before
+Можда нисте користили [`strings.Builder`](https://golang.org/pkg/strings/#Builder) раније.
 
-> A Builder is used to efficiently build a string using Write methods. It minimizes memory copying.
+> "Builder" се користи за ефикасну изградњу низа помоћу метода Врите. Минимизира копирање меморије.
 
-Normally I wouldn't bother with such optimisations until I have an actual performance problem but the amount of code is not much larger than a "manual" appending on a string so we may as well use the faster approach.
+Обично се не бих замарао таквом оптимизацијом док не будем имао стварни проблем са перформансама, али количина кода није много већа од „ручног“ додавања на стринг, па бисмо могли користити и бржи приступ.
 
-The code looks better to me and describes the domain _as we know it right now_.
+Код ми изгледа боље и описује домен _као што га тренутно знамо_.
 
-### The Romans were into DRY too...
+### Римљани су такође били на СУВОМ ...
 
-Things start getting more complicated now. The Romans in their wisdom thought repeating characters would become hard to read and count. So a rule with Roman Numerals is you can't have the same character repeated more than 3 times in a row.
+Ствари сада почињу да се компликују. Римљани су у својој мудрости мислили да ће понављање ликова постати тешко читати и бројати. Дакле, правило римских бројева је да не можете да поновите исти лик више од 3 пута заредом.
 
-Instead you take the next highest symbol and then "subtract" by putting a symbol to the left of it. Not all symbols can be used as subtractors; only I (1), X (10) and C (100).
+Уместо тога, узимате следећи највиши симбол, а затим "одузимате" стављањем симбола лево од њега. Не могу се сви симболи користити као одузимачи; само I (1), X (10) and C (100).
 
 
-
-For example `5` in Roman Numerals is `V`. To create 4 you do not do `IIII`, instead you do `IV`.
+На пример, `5` у римским бројевима је `V`. Да бисте креирали 4, не радите `IIII`, већ `IV`.
 
 ## Прво напишите тест
 
@@ -259,7 +258,7 @@ func ConvertToRoman(arabic int) string {
 
 ## Рефактор
 
-I don't "like" that we have broken our string building pattern and I want to carry on with it.
+Не "свиђа ми се" што смо прекинули наш образац грађења низова и желим да наставим са тим.
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -278,9 +277,9 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-In order for 4 to "fit" with my current thinking I now count down from the Arabic number, adding symbols to our string as we progress. Not sure if this will work in the long run but let's see!
+Да би се 4 "уклопило" са мојим тренутним размишљањем, сада одбројавам од арапског броја, додајући симболе у наш низ како напредујемо. Нисам сигуран да ли ће ово дугорочно успети, али да видимо!
 
-Let's make 5 work
+Направимо 5 послова
 
 ## Прво напишите тест
 
@@ -298,7 +297,7 @@ Let's make 5 work
 
 ## Напишите довољно кода да прође
 
-Just copy the approach we did for 4
+Само копирајте приступ који смо урадили за 4
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -323,9 +322,9 @@ func ConvertToRoman(arabic int) string {
 
 ## Рефактор
 
-Repetition in loops like this are usually a sign of an abstraction waiting to be called out. Short-circuiting loops can be an effective tool for readability but it could also be telling you something else.
+Понављање у оваквим петљама обично је знак апстракције која чека на прозивање. Петље кратког споја могу бити ефикасан алат за читљивост, али такође вам могу рећи нешто друго.
 
-We are looping over our Arabic number and if we hit certain symbols we are calling `break` but what we are _really_ doing is subtracting over `i` in a ham-fisted manner.
+Ми петљамо преко свог арапског броја и ако притиснемо одређене симболе, називамо `break`, али оно што стварно _радимо_ је одузимање преко `i` на шункаст начин.
 
 ```go
 func ConvertToRoman(arabic int) string {
@@ -351,12 +350,12 @@ func ConvertToRoman(arabic int) string {
 
 ```
 
-- Given the signals I'm reading from our code, driven from our tests of some very basic scenarios I can see that to build a Roman Numeral I need to subtract from `arabic` as I apply symbols
-- The `for` loop no longer relies on an `i` and instead we will keep building our string until we have subtracted enough symbols away from `arabic`.
+- С обзиром на сигнале које читам из нашег кода, на основу тестова неких врло основних сценарија, видим да за израду римског броја морам да одузмем од `арапског` док примењујем симболе
+- Петља `for` се више не ослања на `i` и уместо тога наставићемо да градимо свој низ све док од арапског не одузмемо довољно симбола.
 
-I'm pretty sure this approach will be valid for 6 (VI), 7 (VII) and 8 (VIII) too. Nonetheless add the cases in to our test suite and check (I won't include the code for brevity, check the github for samples if you're unsure).
+Прилично сам сигуран да ће овај приступ важити и за 6 (VI), 7 (VII) и 8 (VIII). Без обзира на то додајте случајеве у наш тестни пакет и проверите (нећу укључити код за краткоћу, проверите гитхуб за узорке ако нисте сигурни).
 
-9 follows the same rule as 4 in that we should subtract `I` from the representation of the following number. 10 is represented in Roman Numerals with `X`; so therefore 9 should be `IX`.
+9 следи исто правило као и 4 у томе што би требало да одузмемо `I` од приказа следећег броја. 10 је у римским бројевима представљено с `X`; па би зато 9 требало да буде `IX`.
 
 ## Прво напишите тест
 
@@ -373,7 +372,7 @@ I'm pretty sure this approach will be valid for 6 (VI), 7 (VII) and 8 (VIII) too
 
 ## Напишите довољно кода да прође
 
-We should be able to adopt the same approach as before
+Требали бисмо бити у могућности да усвојимо исти приступ као и раније
 
 ```go
 case arabic > 8:
@@ -383,11 +382,11 @@ case arabic > 8:
 
 ## Рефактор
 
-It _feels_ like the code is still telling us there's a refactor somewhere but it's not totally obvious to me, so let's keep going.
+_Чини се_ као да нам код још увек говори да негде постоји рефактор, али то ми није потпуно очигледно, па наставимо даље.
 
-I'll skip the code for this too, but add to your test cases a test for `10` which should be `X` and make it pass before reading on.
+Прескочићу и код за ово, али у своје тест случајеве додајте тест за `10` који треба да буде `X` и учините да прође пре него што прочитате даље.
 
-Here are a few tests I added as I'm confident up to 39 our code should work
+Ево неколико тестова које сам додао јер сам уверен да би до 39 наш код требао радити
 
 ```go
 {"10 gets converted to X", 10, "X"},
@@ -397,13 +396,13 @@ Here are a few tests I added as I'm confident up to 39 our code should work
 {"39 gets converted to XXXIX", 39, "XXXIX"},
 ```
 
-If you've ever done OO programming, you'll know that you should view `switch` statements with a bit of suspicion. Usually you are capturing a concept or data inside some imperative code when in fact it could be captured in a class structure instead.
+Ако сте икада радили ОО програмирање, знаћете да изјаве `switch` требате гледати с мало сумње. Обично хватате концепт или податке унутар неког императивног кода када би у ствари уместо тога могли да буду ухваћени у структуру класе.
 
-Go isn't strictly OO but that doesn't mean we ignore the lessons OO offers entirely (as much as some would like to tell you).
+Го није стриктно ОО, али то не значи да игноришемо лекције које ОО нуди у потпуности (онолико колико би неки желели да вам кажу).
 
-Our switch statement is describing some truths about Roman Numerals along with behaviour.
+Наша изјава о пребацивању описује неке истине о римским бројевима заједно са понашањем.
 
-We can refactor this by decoupling the data from the behaviour.
+То можемо рефакторизирати раздвајањем података од понашања.
 
 ```go
 type RomanNumeral struct {
@@ -434,11 +433,11 @@ func ConvertToRoman(arabic int) string {
 }
 ```
 
-This feels much better. We've declared some rules around the numerals as data rather than hidden in an algorithm and we can see how we just work through the Arabic number, trying to add symbols to our result if they fit.
+Осећам се много боље. Нека правила око бројева прогласили смо подацима, а не скривеним у алгоритму и можемо видети како само радимо кроз арапски број, покушавајући да додамо симболе нашем резултату ако одговарају.
 
-Does this abstraction work for bigger numbers? Extend the test suite so it works for the Roman number for 50 which is `L`.
+Да ли ова апстракција делује за веће бројеве? Проширите тестни пакет тако да ради за римски број за 50 који је `L`.
 
-Here are some test cases, try and make them pass.
+Ево неколико тестова, покушајте и учините да прођу.
 
 ```go
 {"40 gets converted to XL", 40, "XL"},
@@ -447,24 +446,24 @@ Here are some test cases, try and make them pass.
 {"50 gets converted to L", 50, "L"},
 ```
 
-Need help? You can see what symbols to add in [this gist](https://gist.github.com/pamelafox/6c7b948213ba55332d86efd0f0b037de).
+Потребна помоћ? У овој суштини можете видети које симболе додати [овај гист](https://gist.github.com/pamelafox/6c7b948213ba55332d86efd0f0b037de).
 
 
 ## And the rest!
 
-Here are the remaining symbols
+Ево преосталих симбола
 
-| Arabic | Roman |
-| ------ | :---: |
-| 100    |   C   |
-| 500    |   D   |
-| 1000   |   M   |
+| Арапски | Римски |
+| ------- | :----: |
+| 100     |    C   |
+| 500     |    D   |
+| 1000    |    M   |
 
-Take the same approach for the remaining symbols, it should just be a matter of adding data to both the tests and our array of symbols.
+Заузети исти приступ за преостале симболе, требало би само да се додају подаци и тестовима и нашем низу симбола.
 
-Does your code work for `1984`: `MCMLXXXIV` ?
+Да ли ваш код ради за `1984`: `MCMLXXXIV`?
 
-Here is my final test suite
+Ево моје последње пробне верзије
 
 ```go
 func TestRomanNumerals(t *testing.T) {
@@ -513,10 +512,10 @@ func TestRomanNumerals(t *testing.T) {
 }
 ```
 
-- I removed `description` as I felt the _data_ described enough of the information.
-- I added a few other edge cases I found just to give me a little more confidence. With table based tests this is very cheap to do.
+- Уклонио сам `description` јер сам осетио да _подаци_ описују довољно информација.
+- Додао сам још неколико оштрих случајева које сам пронашао само да бих добио мало више самопоуздања. Са табеларним тестовима ово је врло јефтино урадити.
 
-I didn't change the algorithm, all I had to do was update the `allRomanNumerals` array.
+Нисам променио алгоритам, требало је само да ажурирам низ `allRomanNumerals`.
 
 ```go
 var allRomanNumerals = []RomanNumeral{
@@ -536,16 +535,16 @@ var allRomanNumerals = []RomanNumeral{
 }
 ```
 
-## Parsing Roman Numerals
+## Рашчлањивање римских бројева
 
-We're not done yet. Next we're going to write a function that converts _from_ a Roman Numeral to an `int`
+Још нисмо завршили. Даље ћемо написати функцију која _из_ римског броја претвара у `int`
 
 
 ## Прво напишите тест
 
-We can re-use our test cases here with a little refactoring
+Овде можемо поново да користимо наше тест случајеве уз мало рефакторирања
 
-Move the `cases` variable outside of the test as a package variable in a `var` block.
+Преместите променљиву `cases` изван теста као променљиву пакета у блок `var`.
 
 ```go
 func TestConvertingToArabic(t *testing.T) {
@@ -560,7 +559,7 @@ func TestConvertingToArabic(t *testing.T) {
 }
 ```
 
-Notice I am using the slice functionality to just run one of the tests for now (`cases[:1]`) as trying to make all of those tests pass all at once is too big a leap
+Приметите да за сада користим функцију пресека да бих само покренуо један од тестова (`cases[:1]`), јер је покушај да сви ти тестови прођу одједном превелики скок
 
 ## Покушајте да покренете тест
 
@@ -570,7 +569,7 @@ Notice I am using the slice functionality to just run one of the tests for now (
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-Add our new function definition
+Додајте нашу нову дефиницију функције
 
 ```go
 func ConvertToArabic(roman string) int {
@@ -578,7 +577,7 @@ func ConvertToArabic(roman string) int {
 }
 ```
 
-The test should now run and fail
+Тест би сада требао да се покрене и не успе
 
 ```
 --- FAIL: TestConvertingToArabic (0.00s)
@@ -588,7 +587,7 @@ The test should now run and fail
 
 ## Напишите довољно кода да прође
 
-You know what to do
+Знате шта да радите
 
 ```go
 func ConvertToArabic(roman string) int {
@@ -596,7 +595,7 @@ func ConvertToArabic(roman string) int {
 }
 ```
 
-Next, change the slice index in our test to move to the next test case (e.g. `cases[:2]`). Make it pass yourself with the dumbest code you can think of, continue writing dumb code (best book ever right?) for the third case too. Here's my dumb code.
+Затим, промените индекс пресека у нашем тесту да бисте прешли на следећи тест случај (нпр. `cases[:2]`). Нека вам проследи најглупљи код који се можете сетити, наставите са писањем глупог кода (најбоља књига икад зар не?) И за трећи случај. Ево мог глупог кода.
 
 ```go
 func ConvertToArabic(roman string) int {
@@ -610,7 +609,7 @@ func ConvertToArabic(roman string) int {
 }
 ```
 
-Through the dumbness of _real code that works_ we can start to see a pattern like before. We need to iterate through the input and build _something_, in this case a total.
+Кроз глупост _реалног кода који ради_ можемо почети да видимо образац као и пре. Морамо да прелистамо улаз и направимо _нешто_, у овом случају укупно.
 
 ```go
 func ConvertToArabic(roman string) int {
@@ -624,7 +623,7 @@ func ConvertToArabic(roman string) int {
 
 ## Прво напишите тест
 
-Next we move to `cases[:4]` (`IV`) which now fails because it gets 2 back as that's the length of the string.
+Даље прелазимо на `cases[:4]` (`IV`) који сада не успева јер враћа 2 јер је то дужина низа.
 
 ## Напишите довољно кода да прође
 
@@ -673,16 +672,17 @@ func ConvertToArabic(roman string) int {
 }
 ```
 
-This is horrible but it does work. It's so bad I felt the need to add comments.
+Ово је ужасно, али успева. Толико је лоше да сам осетио потребу да додам коментаре.
 
-- I wanted to be able to look up an integer value for a given roman numeral so I made a type from our array of `RomanNumeral`s and then added a method to it, `ValueOf`
-- Next in our loop we need to look ahead _if_ the string is big enough _and the current symbol is a valid subtractor_. At the moment it's just `I` (1) but can also be `X` (10) or `C` (100).
-    - If it satisfies both of these conditions we need to lookup the value and add it to the total _if_ it is one of the special subtractors, otherwise ignore it
-    - Then we need to further increment `i` so we don't count this symbol twice
+- Желео сам да могу да пронађем целобројну вредност за дати римски број, па сам од нашег низа `RomanNumeral` направио тип, а затим му додао методу `ValueOf`
+- Следеће у нашој петљи морамо гледати унапред _ако је низ довољно велик _а тренутни симбол је важећи одузимач_. Тренутно је то само `I` (1), али може бити и `X` (10) или `C` (100).
+    - Ако задовољава оба ова услова, морамо да потражимо вредност и додамо је укупном _а_ ако је то један од посебних одузимача, у супротном занемарите
+    - Тада треба даље повећавати `i` тако да овај симбол не рачунамо два пута
+
 
 ## Рефактор
 
-I'm not entirely convinced this will be the long-term approach and there's potentially some interesting refactors we could do, but I'll resist that in case our approach is totally wrong. I'd rather make a few more tests pass first and see. For the meantime I made the first `if` statement slightly less horrible.
+Нисам у потпуности уверен да ће ово бити дугорочни приступ и потенцијално бисмо могли да направимо неке занимљиве рефакторе, али одупрћу се томе у случају да је наш приступ потпуно погрешан. Волео бих да прво направим још неколико тестова и видим. У међувремену сам прву изјаву `if` дао нешто мање ужасну.
 
 ```go
 func ConvertToArabic(roman string) int {
@@ -720,7 +720,7 @@ func couldBeSubtractive(index int, currentSymbol uint8, roman string) bool {
 
 ## Прво напишите тест
 
-Let's move on to `cases[:5]`
+Пређимо на `cases[:5]`
 
 ```
 === RUN   TestConvertingToArabic/'V'_gets_converted_to_5
@@ -730,7 +730,7 @@ Let's move on to `cases[:5]`
 
 ## Напишите довољно кода да прође
 
-Apart from when it is subtractive our code assumes that every character is a `I` which is why the value is 1. We should be able to re-use our `ValueOf` method to fix this.
+Осим када је одузимајући, наш код претпоставља да је сваки знак `I`, због чега је вредност 1. Требали бисмо бити у могућности да поново користимо нашу методу `ValueOf` да бисмо то поправили.
 
 ```go
 func ConvertToArabic(roman string) int {
@@ -762,7 +762,7 @@ func ConvertToArabic(roman string) int {
 
 ## Рефактор
 
-When you index strings in Go, you get a `byte`. This is why when we build up the string again we have to do stuff like `string([]byte{symbol})`. It's repeated a couple of times, let's just move that functionality so that `ValueOf` takes some bytes instead.
+Када индексујете низове у програму Го, добијате `byte`. Због тога када поново градимо низ, морамо радити ствари попут `string([]byte{symbol})`. Понавља се неколико пута, хајде да само преместимо ту функционалност тако да уместо тога `ValueOf` узме неколико бајтова.
 
 ```go
 func (r RomanNumerals) ValueOf(symbols ...byte) int {
@@ -777,7 +777,7 @@ func (r RomanNumerals) ValueOf(symbols ...byte) int {
 }
 ```
 
-Then we can just pass in the bytes as is, to our function
+Тада можемо само да пређемо у бајтовима као што је, у нашу функцију
 
 ```go
 func ConvertToArabic(roman string) int {
@@ -801,9 +801,9 @@ func ConvertToArabic(roman string) int {
 }
 ```
 
-It's still pretty nasty, but it's getting there.
+Још увек је прилично гадно, али стиже тамо.
 
-If you start moving our `cases[:xx]` number through you'll see that quite a few are passing now. Remove the slice operator entirely and see which ones fail, here's some examples from my suite
+Ако почнете да премештате наш број `cases[:xx]`, видећете да их сада пролази доста. У потпуности уклоните оператор пресека и погледајте који не успевају, ево неколико примера из мог пакета
 
 ```
 === RUN   TestConvertingToArabic/'XL'_gets_converted_to_40
@@ -817,7 +817,7 @@ If you start moving our `cases[:xx]` number through you'll see that quite a few 
         numeral_test.go:62: got 69, want 49
 ```
 
-I think all we're missing is an update to `couldBeSubtractive` so that it accounts for the other kinds of subtractive symbols
+Мислим да нам недостаје само ажурирање `couldBeSubtractive` тако да узима у обзир остале врсте субтрактивних симбола
 
 ```go
 func couldBeSubtractive(index int, currentSymbol uint8, roman string) bool {
@@ -826,23 +826,23 @@ func couldBeSubtractive(index int, currentSymbol uint8, roman string) bool {
 }
 ```
 
-Try again, they still fail. However we left a comment earlier...
+Покушајте поново, и даље не успевају. Међутим, оставили смо коментар раније ...
 
 ```go
 total++ // this is fishy...
 ```
 
-We should never be just incrementing `total` as that implies every symbol is a `I`. Replace it with:
+Никада не бисмо требали само повећавати `total`, јер то подразумева да је сваки симбол `I`. Замените га са:
 
 ```go
 total += allRomanNumerals.ValueOf(symbol)
 ```
 
-And all the tests pass! Now that we have fully working software we can indulge ourselves in some refactoring, with confidence.
+И сви тестови пролазе! Сад кад имамо потпуно радни софтвер, можемо се с поуздањем препустити некој рефакторизацији.
 
 ## Рефактор
 
-Here is all the code I finished up with. I had a few failed attempts but as I keep emphasising, that's fine and the tests help me play around with the code freely.
+Овде је сав код који сам завршио. Имао сам неколико неуспелих покушаја, али како стално наглашавам, то је у реду и тестови ми помажу да се слободно поигравам са кодом.
 
 ```go
 import "strings"
@@ -933,29 +933,29 @@ func isSubtractive(symbol uint8) bool {
 }
 ```
 
-My main problem with the previous code is similar to our refactor from earlier. We had too many concerns coupled together. We wrote an algorithm which was trying to extract Roman Numerals from a string _and_ then find their values.
+Мој главни проблем са претходним кодом је сличан нашем рефактору из ранијег. Имали смо превише брига повезаних заједно. Написали смо алгоритам који је покушавао да извуче римске бројеве из низа _и_, а затим пронашао њихове вредности.
 
-So I created a new type `windowedRoman` which took care of extracting the numerals, offering a `Symbols` method to retrieve them as a slice. This meant our `ConvertToArabic` function could simply iterate over the symbols and total them.
+Тако сам креирао нови тип `windowedRoman` који се побринуо за издвајање бројева, нудећи метод` Symbols` да их преузме као рез. То је значило да наша функција `ConvertToArabic` може једноставно прелазити преко симбола и збрајати их.
 
-I broke the code down a bit by extracting some functions, especially around the wonky if statement to figure out if the symbol we are currently dealing with is a two character subtractive symbol.
+Код сам мало разградио извлачећи неке функције, посебно око изјаве винки иф да бих открио да ли је симбол којим тренутно имамо посла одузети симбол од два знака.
 
-There's probably a more elegant way but I'm not going to sweat it. The code is there and it works and it is tested. If I (or anyone else) finds a better way they can safely change it - the hard work is done.
+Вероватно постоји елегантнији начин, али нећу га знојити. Код је ту и делује и тестиран је. Ако ја (или било ко други) нађем бољи начин да могу безбедно да га промене - тежак посао је завршен.
 
-## An intro to property based tests
+## Увод у тестове засноване на својствима
 
-There have been a few rules in the domain of Roman Numerals that we have worked with in this chapter
+У домену римских бројева било је неколико правила са којима смо радили у овом поглављу
 
-- Can't have more than 3 consecutive symbols
-- Only I (1), X (10) and C (100) can be "subtractors"
-- Taking the result of `ConvertToRoman(N)` and passing it to `ConvertToArabic` should return us `N`
+- Не може имати више од 3 узастопна симбола
+- Само I (1), X (10) и C (100) могу бити „одузимачи“
+- Узимање резултата `ConvertToRoman(N)` и прослеђивање `ConvertToArabic` требало би да нам врати `N`
 
-The tests we have written so far can be described as "example" based tests where we provide the tooling some examples around our code to verify.
+Тестови које смо до сада написали могу се описати као тестови засновани на „примерима“, где пружамо алатке за примере око нашег кода за верификацију.
 
-What if we could take these rules that we know about our domain and somehow exercise them against our code?
+Шта ако бисмо могли да прихватимо ова правила која знамо о свом домену и некако их применимо против свог кода?
 
-Property based tests help you do this by throwing random data at your code and verifying the rules you describe always hold true. A lot of people think property based tests are mainly about random data but they would be mistaken. The real challenge about property based tests is having a _good_ understanding of your domain so you can write these properties.
+Тестови засновани на својствима помажу вам у томе бацајући случајне податке на ваш код и верификујући да правила која описујете увек важе. Многи људи мисле да се тестови засновани на својствима углавном односе на случајне податке, али би погрешили. Прави изазов у тестовима заснованим на својствима је добро разумевање вашег домена како бисте могли да напишете ова својства.
 
-Enough words, let's see some code
+Доста речи, да видимо неки код
 
 ```go
 func TestPropertiesOfConversion(t *testing.T) {
@@ -971,30 +971,31 @@ func TestPropertiesOfConversion(t *testing.T) {
 }
 ```
 
-### Rationale of property
+### Образложење вредности
 
-Our first test will check that if we transform a number into Roman, when we use our other function to convert it back to a number that we get what we originally had.
+Наш први тест ће проверити да ако трансформишемо број у римски, када користимо нашу другу функцију да бисмо га претворили у број да ћемо добити оно што смо првобитно имали.
 
-- Given random number (e.g `4`).
-- Call `ConvertToRoman` with random number (should return `IV` if `4`).
-- Take the result of above and pass it to `ConvertToArabic`.
-- The above should give us our original input (`4`).
+- Дати случајни број (нпр. `4`).
+- Позовите `ConvertToRoman` са случајним бројем (требало би вратити `IV` ако је `4`).
+- Узмите горњи резултат и проследите га `ConvertToArabic`.
+- Горе наведено требало би да нам пружи изворни унос (`4`).
 
-This feels like a good test to build us confidence because it should break if there's a bug in either. The only way it could pass is if they have the same kind of bug; which isn't impossible but feels unlikely.
+Ово нам се чини као добар тест за изградњу самопоуздања, јер би требало да пукне ако у било којој грешци има грешке. Једини начин на који би то могло проћи је ако имају исту врсту грешке; што није немогуће, али се осећа мало вероватно.
 
-### Technical explanation
+### Техничко објашњење
 
- We're using the [testing/quick](https://golang.org/pkg/testing/quick/) package from the standard library
+Користимо пакет [testing/quick](https://golang.org/pkg/testing/quick/) из стандардне библиотеке
 
- Reading from the bottom, we provide `quick.Check` a function that it will run against a number of random inputs, if the function returns `false` it will be seen as failing the check.
+Читајући одоздо, пружамо функцију `quick.Check` која ће се покретати против одређеног броја случајних улаза, ако функција врати `false`, видеће се као неуспешна провера.
 
- Our `assertion` function above takes a random number and runs our functions to test the property.
+Наша горња функција `assertion` узима случајни број и покреће наше функције за тестирање својства.
 
- ### Run our test
+### Покрените наш тест
 
- Try running it; your computer may hang for a while, so kill it when you're bored :)
+Покушајте да га покренете; рачунар вам може неко време висити, па га убијте кад вам досади :)
 
- What's going on? Try adding the following to the assertion code.
+Шта се дешава? Покушајте да додате следеће коду тврдње.
+
 
  ```go
 assertion := func(arabic int) bool {
@@ -1008,7 +1009,7 @@ assertion := func(arabic int) bool {
 }
 ```
 
-You should see something like this:
+Требали бисте видети нешто овако:
 
 ```
 === RUN   TestPropertiesOfConversion
@@ -1021,19 +1022,20 @@ You should see something like this:
 2019/07/09 14:41:27 562755830018219185
 ```
 
-Just running this very simple property has exposed a flaw in our implementation. We used `int` as our input but:
-- You can't do negative numbers with Roman Numerals
-- Given our rule of a max of 3 consecutive symbols we can't represent a value greater than 3999 ([well, kinda](https://www.quora.com/Which-is-the-maximum-number-in-Roman-numerals)) and `int` has a much higher maximum value than 3999.
+Само покретање овог врло једноставног својства открило је пропуст у нашој имплементацији. Као улаз користили смо `int`, али:
+- Не можете да радите негативне бројеве са римским бројевима
+- С обзиром на наше правило од највише 3 узастопна симбола, не можемо представити вредност већу од 3999 ([добро, некако](https://www.quora.com/Which-is-the-maximum-number-in-Roman-numerals)) и `int` има много већу максималну вредност од 3999.
 
-This is great! We've been forced to think more deeply about our domain which is a real strength of property based tests.
+Ово је супер! Били смо присиљени да дубље размислимо о свом домену који је стварна снага тестова заснованих на имовини.
 
-Clearly `int` is not a great type. What if we tried something a little more appropriate?
+Јасно је да `инт` није сјајан тип. Шта ако бисмо пробали нешто мало прикладније?
+
 
 ### [`uint16`](https://golang.org/pkg/builtin/#uint16)
 
-Go has types for _unsigned integers_, which means they cannot be negative; so that rules out one class of bug in our code immediately. By adding 16, it means it is a 16 bit integer which can store a max of `65535`, which is still too big but gets us closer to what we need.
+Го има типове за _непотписане целе бројеве_, што значи да не могу бити негативни; тако да се одмах искључује једна класа грешака у нашем коду. Додавањем 16 то значи да је то 16-битни цели број који може да ускладишти максимум `65535`, што је и даље превелико, али нас приближава ономе што нам треба.
 
-Try updating the code to use `uint16` rather than `int`. I updated `assertion` in the test to give a bit more visibility.
+Покушајте да ажурирате код тако да користи `uint16` уместо `int`. Ажурирао сам `assertion` у тесту како бих пружио мало већу видљивост.
 
 ```go
 assertion := func(arabic uint16) bool {
@@ -1047,9 +1049,9 @@ assertion := func(arabic uint16) bool {
 }
 ```
 
-If you run the test they now actually run and you can see what is being tested. You can run multiple times to see our code stands up well to the various values! This gives me a lot of confidence that our code is working how we want.
+Ако покренете тест, они сада стварно раде и можете видети шта се тестира. Можете покренути више пута да бисте видели да наш код добро стоји према различитим вредностима! Ово ми даје пуно самопоуздања да наш код ради како желимо.
 
-The default number of runs `quick.Check` performs is 100 but you can change that with a config.
+Подразумевани број извођења `quick.Check` је 100, али то можете променити помоћу конфигурације.
 
 ```go
 if err := quick.Check(assertion, &quick.Config{
@@ -1059,69 +1061,67 @@ if err := quick.Check(assertion, &quick.Config{
 }
 ```
 
-### Further work
+### Даљи рад
 
-- Can you write property tests that check the other properties we described?
-- Can you think of a way of making it so it's impossible for someone to call our code with a number greater than 3999?
-    - You could return an error
-    - Or create a new type that cannot represent > 3999
-        - What do you think is best?
+- Можете ли да напишете тестове својстава која проверавају друга својства која смо описали?
+- Можете ли да смислите начин да то учините тако да је немогуће да неко зове наш код бројем већим од 3999?
+    - Могли бисте да вратите грешку
+    - Или креирајте нови тип који не може представљати> 3999
+        - Шта мислиш да је најбоље?
 
 ## Окончање
 
-### More TDD practice with iterative development
+### Још ТДД праксе са итеративним развојем
 
-Did the thought of writing code that converts 1984 into MCMLXXXIV feel intimidating to you at first? It did to me and I've been writing software for quite a long time.
+Да ли вам се помисао на писање кода који 1984. претвара у МЦМЛКСКСКСИВ у почетку осећала застрашујуће? Било ми је и већ дуго пишем софтвер.
 
-The trick, as always, is to **get started with something simple** and take **small steps**.
+Трик је, као и увек, **започети нешто једноставно** и предузети **мале кораке**.
 
-At no point in this process did we make any large leaps, do any huge refactorings, or get in a mess.
+Ни у једном тренутку у овом процесу нисмо направили неке велике скокове, направили било какве огромне преправке или ушли у неред.
 
-I can hear someone cynically saying "this is just a kata". I can't argue with that, but I still take this same approach for every project I work on. I never ship a big distributed system in my first step, I find the simplest thing the team could ship (usually a "Hello world" website) and then iterate on small bits of functionality in manageable chunks, just like how we did here.
+Чујем како неко цинично говори „ово је само ката“. Не могу се расправљати с тим, али и даље користим исти приступ за сваки пројекат на којем радим. У првом кораку никада не испоручујем велики дистрибуирани систем, проналазим најједноставнију ствар коју би тим могао да испоручи (обично веб страницу „Хелло ворлд“), а затим понављам мале делове функционалности у управљачким деловима, баш као што смо то радили овде.
 
-The skill is knowing _how_ to split work up, and that comes with practice and with some lovely TDD to help you on your way.
+Вештина је знати _како_ поделити посао, а то долази са вежбом и неким дивним ТДД-ом који ће вам помоћи на путу.
 
-### Property based tests
+### Испитивања заснована на својствима
 
-- Built into the standard library
-- If you can think of ways to describe your domain rules in code, they are an excellent tool for giving you more confidence
-- Force you to think about your domain deeply
-- Potentially a nice complement to your test suite
+- Уграђено у стандардну библиотеку
+- Ако можете да смислите начине за описивање правила домена у коду, она су одличан алат који вам даје више самопоуздања
+- Присилите вас да дубоко размислите о свом домену
+- Потенцијално лепа допуна вашем тест пакету
 
 ## Postscript
 
-This book is reliant on valuable feedback from the community.
-[Dave](http://github.com/gypsydave5) is an enormous help in practically every
-chapter. But he had a real rant about my use of 'Arabic numerals' in this
-chapter so, in the interests of full disclosure, here's what he said.
+Ова књига се ослања на драгоцене повратне информације из заједнице.
+[Dave](http://github.com/gypsydave5)  је од огромне помоћи у практично сваком поглавље. Али он се стварно бунио о мојој употреби 'арапских бројева' у овоме поглавље, у интересу потпуног обелодањивања, ево шта је рекао.
 
-> Just going to write up why a value of type `int` isn't really an 'arabic
-> numeral'. This might be me being way too precise so I'll completely understand
-> if you tell me to f off.
+> Само ћу написати зашто вредност типа `int` заправо није "арапски"
+> број '. Ово је можда превише прецизно, па ћу у потпуности разумети
+> ако ми кажеш да се искључим.
 >
-> A _digit_ is a character used in the representation of numbers - from the Latin
-> for 'finger', as we usually have ten of them. In the Arabic (also called
-> Hindu-Arabic) number system there are ten of them. These Arabic digits are:
+> _Дигит_ је знак који се користи за представљање бројева - од латинског
+> за 'прст', као што их обично имамо десет. На арапском (такође се зове
+> Хинду-арапски) бројевни систем има их десет. Ове арапске цифре су:
 >
 >     0 1 2 3 4 5 6 7 8 9
 >
-> A _numeral_ is the representation of a number using a collection of digits.
-> An Arabic numeral is a number represented by Arabic digits in a base 10
-> positional number system. We say 'positional' because each digit has
-> a different value based upon its position in the numeral. So
+> _Број_ представља приказ броја помоћу збирке цифара.
+> Арапски број је број представљен арапским цифрама у основи 10
+> позициони систем бројева. Кажемо „позициони“ јер свака цифра има
+> различита вредност на основу њеног положаја у бројци. Тако
 >
 >     1337
 >
-> The `1` has a value of one thousand because its the first digit in a four
-> digit numeral.
+> `1` има вредност хиљаду јер је прва цифра у четворки
+> цифрени број.
 >
-> Roman are built using a reduced number of digits (`I`, `V` etc...) mainly as
-> values to produce the numeral. There's a bit of positional stuff but it's
-> mostly `I` always representing 'one'.
+> Римљани се граде помоћу смањеног броја цифара (`I`, `V` итд ...) углавном као
+> вредности за добијање броја. Има мало позиционих ствари, али то је
+> углавном `/home/marcetin/GoProjects/nauci-go-sa-testovima/roman-numerals.md` увек представљам 'један'.
 >
-> So, given this, is `int` an 'Arabic number'? The idea of a number is not at
-> all tied to its representation - we can see this if we ask ourselves what the
-> correct representation of this number is:
+> Дакле, с обзиром на ово, да ли је `int` арапски број '? Идеја броја није у томе
+> све везано за његову репрезентацију - то можемо видети ако се запитамо шта је
+> тачан приказ овог броја је:
 >
 >     255
 >     11111111
@@ -1129,18 +1129,18 @@ chapter so, in the interests of full disclosure, here's what he said.
 >     FF
 >     377
 >
-> Yes, this is a trick question. They're all correct. They're the representation
-> of the same number in the decimal,  binary, English, hexadecimal and octal
-> number systems respectively.
+> Да, ово је трик питање. Сви су тачни. Они су представништво
+> истог броја у децималном, бинарном, енглеском, хексадецималном и окталном облику
+> бројевни системи.
 >
-> The representation of a number as a numeral is _independent_ of its properties
-> as a number - and we can see this when we look at integer literals in Go:
+> Приказ броја као броја је _зависан_ од његових својстава
+> као број - а то можемо видети када у Го-у погледамо целобројне литерале:
 >
 > ```go
 >  0xFF == 255 // true
 > ```
 >
-> And how we can print integers in a format string:
+> И како можемо исписати читаве бројеве у низу формата:
 >
 > ```go
 > n := 255
@@ -1148,27 +1148,27 @@ chapter so, in the interests of full disclosure, here's what he said.
 > // 11111111 ÿ 255 377 'ÿ' ff FF U+00FF
 > ```
 >
-> We can write the same integer both as a hexadecimal and an Arabic (decimal)
-> numeral.
+> Можемо написати исти цијели број и као хексадецимални и као арапски (децимални)
+> број.
 >
-> So when the function signature looks like `ConvertToRoman(arabic int) string`
-> it's making a bit of an assumption about how it's being called. Because
-> sometimes `arabic` will be written as a decimal integer literal
+> Дакле, када потпис функције изгледа као `ConvertToRoman(arabic int) string`
+> помало претпоставља како се зове. Јер
+> понекад ће се `arabic` писати као децимални цео број
 >
 > ```go
 > ConvertToRoman(255)
 > ```
 >
-> But it could just as well be written
+> Али могло би се исто тако написати
 >
 > ```go
 > ConvertToRoman(0xFF)
 > ```
 >
-> Really, we're not 'converting' from an Arabic numeral at all, we're 'printing'  -
-> representing - an `int` as a Roman numeral - and `int`s are not numerals,
-> Arabic or otherwise; they're just numbers. The `ConvertToRoman` function is
-> more like `strconv.Itoa` in that it's turning an `int` into a `string`.
+> Заиста, уопште не „конвертујемо“ из арапског броја, већ „штампамо“ -
+> представљање - `int` као римски број - и `int` нису бројеви,
+> Арапски или на неки други начин; то су само бројеви. Функција `ConvertToRoman` је
+> више попут `strconv.Itoa` по томе што претвара `int` у `string`.
 >
-> But every other version of the kata doesn't care about this distinction so
+> Али сваку другу верзију кате није брига за ову разлику
 > :shrug:
