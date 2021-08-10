@@ -1,19 +1,19 @@
-# Select
+# Селектовање
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/select)**
 
-You have been asked to make a function called `WebsiteRacer` which takes two URLs and "races" them by hitting them with an HTTP GET and returning the URL which returned first. If none of them return within 10 seconds then it should return an `error`.
+Од вас је затражено да направите функцију под називом `WebsiteRacer` која узима два УРЛ -а и "трка" их тако што их погађа HTTP GET-ом и враћа URL који се први вратио. Ако се ниједан од њих не врати у року од 10 секунди, требало би да врати `error`.
 
-For this, we will be using
+За ово ћемо користити
 
-- `net/http` to make the HTTP calls.
-- `net/http/httptest` to help us test them.
-- goroutines.
-- `select` to synchronise processes.
+- `net/http` за упућивање HTTP позива.
+- `net/http/httptest` да нам помогне да их тестирамо.
+- Го рутине.
+- `select` за синхронизацију процеса.
 
 ## Прво напишите тест
 
-Let's start with something naive to get us going.
+Почнимо са нечим простим.
 
 ```go
 func TestRacer(t *testing.T) {
@@ -29,7 +29,7 @@ func TestRacer(t *testing.T) {
 }
 ```
 
-We know this isn't perfect and has problems but it will get us going. It's important not to get too hung-up on getting things perfect first time.
+Знамо да ово није савршено и да има проблема, али то ће нас покренути. Важно је да се не заморите превише око тога да ствари буду савршене први пут.
 
 ## Покушајте да покренете тест
 
@@ -65,29 +65,29 @@ func Racer(a, b string) (winner string) {
 }
 ```
 
-For each URL:
+За сваки URL:
 
-1. We use `time.Now()` to record just before we try and get the `URL`.
-1. Then we use [`http.Get`](https://golang.org/pkg/net/http/#Client.Get) to try and get the contents of the `URL`. This function returns an [`http.Response`](https://golang.org/pkg/net/http/#Response) and an `error` but so far we are not interested in these values.
-1. `time.Since` takes the start time and returns a `time.Duration` of the difference.
+1. Користимо `time.Now()` за снимање непосредно пре него што покушамо да добијемо `URL`.
+2. Затим користимо [`http.Get`](https://golang.org/pkg/net/http/#Client.Get) да покушамо да добијемо садржај `URL`. Ова функција враћа [`http.Response`](https://golang.org/pkg/net/http/#Response) као и `error`, али засад нас не занимају ове вредности.
+3. `time.Since` узима почетно време и враћа `time.Duration` разлике.
 
-Once we have done this we simply compare the durations to see which is the quickest.
+Када ово учинимо, једноставно упоредимо трајање да видимо који је најбржи.
 
-### Problems
+### Проблеми
 
-This may or may not make the test pass for you. The problem is we're reaching out to real websites to test our own logic.
+Ово вам може, али и не мора, проћи тест. Проблем је у томе што се обраћамо правим веб страницама како бисмо тестирали сопствену логику.
 
-Testing code that uses HTTP is so common that Go has tools in the standard library to help you test it.
+Тестирање кода који користи HTTP је толико уобичајено да Го има алате у стандардној библиотеци који ће вам помоћи да га тестирате.
 
-In the mocking and dependency injection chapters, we covered how ideally we don't want to be relying on external services to test our code because they can be
+У поглављима исмевања и убризгавања зависности говорили смо о томе како идеално не желимо да се ослањамо на спољне услуге за тестирање нашег кода јер они могу бити
 
-- Slow
-- Flaky
-- Can't test edge cases
+- Спор
+- Пахуљице
+- Не могу да тестирам ивице
 
-In the standard library, there is a package called [`net/http/httptest`](https://golang.org/pkg/net/http/httptest/) where you can easily create a mock HTTP server.
+У стандардној библиотеци постоји пакет под називом [`net/http/httptest`](https://golang.org/pkg/net/http/httptest/) где можете лако да направите лажни HTTP сервер.
 
-Let's change our tests to use mocks so we have reliable servers to test against that we can control.
+Хајде да променимо наше тестове тако да користе лажне, тако да имамо поуздане сервере за тестирање против оних које можемо контролисати.
 
 ```go
 func TestRacer(t *testing.T) {
@@ -116,23 +116,23 @@ func TestRacer(t *testing.T) {
 }
 ```
 
-The syntax may look a bit busy but just take your time.
+Синтакса може изгледати мало заузето, али само одвојите време.
 
-`httptest.NewServer` takes an `http.HandlerFunc` which we are sending in via an _anonymous function_.
+`httptest.NewServer` узима `http.HandlerFunc` који шаљемо путем _анонимне функције_.
 
-`http.HandlerFunc` is a type that looks like this: `type HandlerFunc func(ResponseWriter, *Request)`.
+`http.HandlerFunc` је тип који изгледа овако: `type HandlerFunc func(ResponseWriter, *Request)`.
 
-All it's really saying is it needs a function that takes a `ResponseWriter` and a `Request`, which is not too surprising for an HTTP server.
+Све што заиста каже је да му је потребна функција која узима `ResponseWriter` и` Request`, што није превише изненађујуће за HTTP сервер.
 
-It turns out there's really no extra magic here, **this is also how you would write a _real_ HTTP server in Go**. The only difference is we are wrapping it in an `httptest.NewServer` which makes it easier to use with testing, as it finds an open port to listen on and then you can close it when you're done with your test.
+Испоставило се да овде заиста нема додатне магије, **тако бисте и ви написали _реални_ HTTP сервер у Го **. Једина разлика је у томе што га омотавамо у `httptest.NewServer` што га чини лакшим за тестирање, јер налази отворен порт за слушање, а затим га можете затворити када завршите са тестом.
 
-Inside our two servers, we make the slow one have a short `time.Sleep` when we get a request to make it slower than the other one. Both servers then write an `OK` response with `w.WriteHeader(http.StatusOK)` back to the caller.
+Унутар наша два сервера, спори ћемо имати кратко `time.Sleep` када добијемо захтев да буде спорији од другог. Оба сервера затим уписују `OK` одговор са `w.WriteHeader(http.StatusOK)` назад позиваоцу.
 
-If you re-run the test it will definitely pass now and should be faster. Play with these sleeps to deliberately break the test.
+Ако поново покренете тест, дефинитивно ће проћи сада и требало би да буде бржи. Играјте се са овим "спавањем" да бисте намерно прекинули тест.
 
 ## Рефактор
 
-We have some duplication in both our production code and test code.
+Имамо дуплирање и у нашем производном коду и у тестном коду.
 
 ```go
 func Racer(a, b string) (winner string) {
@@ -153,7 +153,7 @@ func measureResponseTime(url string) time.Duration {
 }
 ```
 
-This DRY-ing up makes our `Racer` code a lot easier to read.
+Ово "СУШЕЊЕ" чини наш `Racer` код много лакшим за читање.
 
 ```go
 func TestRacer(t *testing.T) {
@@ -183,24 +183,24 @@ func makeDelayedServer(delay time.Duration) *httptest.Server {
 }
 ```
 
-We've refactored creating our fake servers into a function called `makeDelayedServer` to move some uninteresting code out of the test and reduce repetition.
+Преобликовали смо креирање наших лажних сервера у функцију звану `makeDelayedServer` како бисмо избацили неки незанимљив код из теста и смањили понављање.
 
 ### `defer`
 
-By prefixing a function call with `defer` it will now call that function _at the end of the containing function_.
+Префиксом позива функције са `defer' сада ће позвати ту функцију _на крају функције која садржи_.
 
-Sometimes you will need to cleanup resources, such as closing a file or in our case closing a server so that it does not continue to listen to a port.
+Понекад ћете морати да очистите ресурсе, као што је затварање датотеке или у нашем случају затварање сервера тако да не наставља да слуша порт.
 
-You want this to execute at the end of the function, but keep the instruction near where you created the server for the benefit of future readers of the code.
+Желите да се ово изврши на крају функције, али држите упутство близу места где сте креирали сервер за добробит будућих читалаца кода.
 
-Our refactoring is an improvement and is a reasonable solution given the Go features covered so far, but we can make the solution simpler.
+Наше прерађивање је побољшање и разумно је решење с обзиром на Го функције које смо до сада покривали, али решење можемо учинити једноставнијим.
 
-### Synchronising processes
+### Синхронизовање процеса
 
-- Why are we testing the speeds of the websites one after another when Go is great at concurrency? We should be able to check both at the same time.
-- We don't really care about _the exact response times_ of the requests, we just want to know which one comes back first.
+- Зашто тестирамо брзине веб локација једну за другом када је Го одличан у истовремености? Требало би да можемо да проверимо обоје истовремено.
+- Не занима нас _тачно време одговора_ на захтеве, само желимо да знамо који ће се први вратити.
 
-To do this, we're going to introduce a new construct called `select` which helps us synchronise processes really easily and clearly.
+Да бисмо то урадили, представићемо нову конструкцију под називом `select` која нам помаже да синхронизујемо процесе заиста лако и јасно.
 
 ```go
 func Racer(a, b string) (winner string) {
@@ -224,35 +224,36 @@ func ping(url string) chan struct{} {
 
 #### `ping`
 
-We have defined a function `ping` which creates a `chan struct{}` and returns it.
+Дефинирали смо функцију `ping` која ствара `chan struct{}` и враћа је.
 
-In our case, we don't _care_ what type is sent to the channel, _we just want to signal we are done_ and closing the channel works perfectly!
+У нашем случају, не _маримо_ који тип се шаље на канал, већ _само желимо да сигнализирамо да смо готови_ и затварање канала ради савршено!
 
-Why `struct{}` and not another type like a `bool`? Well, a `chan struct{}` is the smallest data type available from a memory perspective so we
-get no allocation versus a `bool`. Since we are closing and not sending anything on the chan, why allocate anything?
+Зашто `struct{}` а не неки други тип попут `bool`? Па, `chan struct{}` је најмањи тип података доступан из меморијске перспективе па смо
+не добијају алокацију у односу на `bool`. Пошто затварамо и не шаљемо ништа на каналу, зашто бисмо било шта додељивали?
 
-Inside the same function, we start a goroutine which will send a signal into that channel once we have completed `http.Get(url)`.
+Унутар исте функције покрећемо рутину која ће слати сигнал у тај канал када завршимо `http.Get(url)`.
 
-##### Always `make` channels
+##### Увек `make` канале
 
-Notice how we have to use `make` when creating a channel; rather than say `var ch chan struct{}`. When you use `var` the variable will be initialised with the "zero" value of the type. So for `string` it is `""`, `int` it is 0, etc.
+Обратите пажњу на то како морамо да користимо `make` при креирању канала; уместо да кажете `var ch chan struct{}`. Када користите `var` променљива ће бити иницијализована са" нултом "вредношћу типа. Дакле, за `string` је `"" `, `int` је 0 итд.
 
-For channels the zero value is `nil` and if you try and send to it with `<-` it will block forever because you cannot send to `nil` channels
+За канале нулта вредност је `nil` и ако покушате да јој пошаљете са` <-` блокираће се заувек јер не можете да шаљете на `nil` канале
 
-[You can see this in action in The Go Playground](https://play.golang.org/p/IIbeAox5jKA)
+[Ово можете видети на делу на Го Игралишту](https://play.golang.org/p/IIbeAox5jKA)
+
 #### `select`
 
-If you recall from the concurrency chapter, you can wait for values to be sent to a channel with `myVar := <-ch`. This is a _blocking_ call, as you're waiting for a value.
+Ако се сећате из поглавља о паралелности, можете чекати да се вредности пошаљу на канал са `myVar := <-ch`. Ово је _блокирајући_ позив, јер чекате вредност.
 
-What `select` lets you do is wait on _multiple_ channels. The first one to send a value "wins" and the code underneath the `case` is executed.
+Оно што вам `select` омогућава је да чекате на _мултипле_ канала. Први који пошаље вредност "вин" и код испод `case` се извршава.
 
-We use `ping` in our `select` to set up two channels for each of our `URL`s. Whichever one writes to its channel first will have its code executed in the `select`, which results in its `URL` being returned (and being the winner).
+Користимо `ping` у свом `select` за постављање два канала за сваки од `URL`-ова. Ко год прво упише на свој канал, његов код ће бити извршен у `select`, што резултира враћањем `URL`-а (и победом).
 
-After these changes, the intent behind our code is very clear and the implementation is actually simpler.
+Након ових промена, намера нашег кода је врло јасна, а имплементација је заправо једноставнија.
 
-### Timeouts
+### Временска ограничења
 
-Our final requirement was to return an error if `Racer` takes longer than 10 seconds.
+Наш последњи захтев био је да вратимо грешку ако `Racer` потраје дуже од 10 секунди.
 
 ## Прво напишите тест
 
@@ -272,7 +273,7 @@ t.Run("returns an error if a server doesn't respond within 10s", func(t *testing
 })
 ```
 
-We've made our test servers take longer than 10s to return to exercise this scenario and we are expecting `Racer` to return two values now, the winning URL (which we ignore in this test with `_`) and an `error`.
+Учинили смо да нашим тестним серверима треба више од 10 секунди да се врате у овај сценарио и очекујемо да ће `Racer` сада вратити две вредности, победничку УРЛ адресу (коју у овом тесту занемарујемо са `_`) и `error`.
 
 ## Покушајте да покренете тест
 
@@ -291,11 +292,11 @@ func Racer(a, b string) (winner string, error error) {
 }
 ```
 
-Change the signature of `Racer` to return the winner and an `error`. Return `nil` for our happy cases.
+Промените потпис `Racer` да бисте вратили победника и `error`. Вратите `nil` за наше срећне случајеве.
 
-The compiler will complain about your _first test_ only looking for one value so change that line to `got, _ := Racer(slowURL, fastURL)`, knowing that we should check we _don't_ get an error in our happy scenario.
+Компајлер ће се жалити на ваш _први тест_ само у потрази за једном вредношћу, па промените ту линију у `got, _ := Racer(slowURL, fastURL)`, знајући да треба да проверимо да _не_ добија грешку у нашем срећном сценарију.
 
-If you run it now after 11 seconds it will fail.
+Ако га покренете сада након 11 секунди, неће успети.
 
 ```
 --- FAIL: TestRacer (12.00s)
@@ -318,15 +319,16 @@ func Racer(a, b string) (winner string, error error) {
 }
 ```
 
-`time.After` is a very handy function when using `select`. Although it didn't happen in our case you can potentially write code that blocks forever if the channels you're listening on never return a value. `time.After` returns a `chan` (like `ping`) and will send a signal down it after the amount of time you define.
+`time.After` је врло згодна функција када се користи `select`. Иако се то у нашем случају није догодило, потенцијално можете написати код који заувијек блокира ако канали на којима слушате никада не врате вриједност. `time.After` враћа `chan` (попут `ping`) и послаће сигнал низ њега након одређеног времена.
 
-For us this is perfect; if `a` or `b` manage to return they win, but if we get to 10 seconds then our `time.After` will send a signal and we'll return an `error`.
+За нас је ово савршено; ако `a` или `b` успеју да врате, они побеђују, али ако дођемо до 10 секунди онда ће наше `time.After` послати сигнал, а ми ћемо вратити `error`.
 
-### Slow tests
+### Спори тестови
 
-The problem we have is that this test takes 10 seconds to run. For such a simple bit of logic, this doesn't feel great.
+Проблем који имамо је што овај тест траје 10 секунди. За тако једноставну логику, ово се не осећа сјајно.
 
-What we can do is make the timeout configurable. So in our test, we can have a very short timeout and then when the code is used in the real world it can be set to 10 seconds.
+Оно што можемо учинити је да подесимо временско ограничење. Дакле, у нашем тесту можемо имати врло кратко временско ограничење, а онда када се код користи у стварном свету може се поставити на 10 секунди.
+
 
 ```go
 func Racer(a, b string, timeout time.Duration) (winner string, error error) {
@@ -341,14 +343,14 @@ func Racer(a, b string, timeout time.Duration) (winner string, error error) {
 }
 ```
 
-Our tests now won't compile because we're not supplying a timeout.
+Наши тестови се сада неће компајлирати јер не испоручујемо временско ограничење.
 
-Before rushing in to add this default value to both our tests let's _listen to them_.
+Пре него што пожуримо да додамо ову подразумевану вредност у оба теста, _послушајмо их_.
 
-- Do we care about the timeout in the "happy" test?
-- The requirements were explicit about the timeout.
+- Да ли нам је стало до истека рока у „срећном“ тесту?
+- Захтеви су били експлицитни у вези са временским ограничењем.
 
-Given this knowledge, let's do a little refactoring to be sympathetic to both our tests and the users of our code.
+С обзиром на ово знање, учинимо мало преобликовање како бисмо били наклоњени и нашим тестовима и корисницима нашег кода.
 
 ```go
 var tenSecondTimeout = 10 * time.Second
@@ -369,7 +371,7 @@ func ConfigurableRacer(a, b string, timeout time.Duration) (winner string, error
 }
 ```
 
-Our users and our first test can use `Racer` (which uses `ConfigurableRacer` under the hood) and our sad path test can use `ConfigurableRacer`.
+Наши корисници и наш први тест могу да користе `Racer` (који користи `ConfigurableRacer` испод хаубе), а наш тест тужне путање може да користи `ConfigurableRacer`.
 
 ```go
 func TestRacer(t *testing.T) {
@@ -410,16 +412,16 @@ func TestRacer(t *testing.T) {
 }
 ```
 
-I added one final check on the first test to verify we don't get an `error`.
+Додао сам последњу проверу на првом тесту како бих потврдио да не добијамо `error`.
 
 ## Окончање
 
 ### `select`
 
-- Helps you wait on multiple channels.
-- Sometimes you'll want to include `time.After` in one of your `cases` to prevent your system blocking forever.
+- Помаже вам да чекате на више канала.
+- Понекад ћете желети да уврстите `time.After` у један од својих `cases` како бисте спречили заувек блокирање система.
 
 ### `httptest`
 
-- A convenient way of creating test servers so you can have reliable and controllable tests.
-- Using the same interfaces as the "real" `net/http` servers which is consistent and less for you to learn.
+- Погодан начин за креирање тест сервера како бисте имали поуздане и контролисане тестове.
+- Коришћење истих интерфејса као и "стварних" `net/http` сервера што је доследно и мање за учење.
