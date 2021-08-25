@@ -2,6 +2,17 @@
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/pointers)**
 
+О структурама смо сазнали у последњем одељку који нам омогућавају да ухватимо бројне вредности повезане са концептом.
+
+У неком тренутку ћете можда желети да користите структуре за управљање стањем, излажући методе које омогућавају корисницима да промене стање на начин који можете контролисати.
+
+** Финтецх воли Го ** и уххх биткоине? Па хајде да покажемо какав невероватан банкарски систем можемо направити.
+
+Направимо структуру `Wallet` која нам омогућава депоновање `Bitcoin`.
+
+
+
+
 We learned about structs in the last section which let us capture a number of values related around a concept.
 
 At some point you may wish to use structs to manage state, exposing methods to let users change the state in a way that you can control.

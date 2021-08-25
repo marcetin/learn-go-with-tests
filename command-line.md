@@ -1,16 +1,16 @@
-# Command line and project structure
+# Командна линија и структура пројекта
 
 **[Сав код за ово поглавље можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/command-line)**
 
-Our product owner now wants to _pivot_ by introducing a second application - a command line application.
+Наш власник производа сада жели _пивот_ увођењем друге апликације - апликације командне линије.
 
-For now, it will just need to be able to record a player's win when the user types `Ruth wins`. The intention is to eventually be a tool for helping users play poker.
+За сада ће само бити потребно да се забележи играчева победа када корисник откуца `Ruth wins`. Намера је да на крају постане алат за помоћ корисницима у игрању покера.
 
-The product owner wants the database to be shared amongst the two applications so that the league updates according to wins recorded in the new application.
+Власник производа жели да се база података дели између две апликације, тако да се лига ажурира према победама забележеним у новој апликацији.
 
-## A reminder of the code
+## Подсетник на код
 
-We have an application with a `main.go` file that launches an HTTP server. The HTTP server won't be interesting to us for this exercise but the abstraction it uses will. It depends on a `PlayerStore`.
+Имамо апликацију са `main.go` датотеком која покреће ХТТП сервер. ХТТП сервер нам неће бити занимљив за ову вежбу, али апстракција коју користи хоће. Зависи од `PlayerStore`-а.
 
 ```go
 type PlayerStore interface {
@@ -20,29 +20,29 @@ type PlayerStore interface {
 }
 ```
 
-In the previous chapter, we made a `FileSystemPlayerStore` which implements that interface. We should be able to re-use some of this for our new application.
+У претходном поглављу направили смо `FileSystemPlayerStore` који имплементира тај интерфејс. Требали бисмо бити у могућности поново користити ово за нашу нову апликацију.
 
-## Some project refactoring first
+## Прво преобликовање пројеката
 
-Our project now needs to create two binaries, our existing web server and the command line app.
+Наш пројекат сада треба да створи две бинарне датотеке, наш постојећи веб сервер и апликацију за командну линију.
 
-Before we get stuck into our new work we should structure our project to accommodate this.
+Пре него што се заглавимо у новом послу, требало би да структурирамо наш пројекат да то прилагоди.
 
-So far all the code has lived in one folder, in a path looking like this
+До сада је сав код живио у једној фасцикли, на путањи која изгледа овако
 
 `$GOPATH/src/github.com/your-name/my-app`
 
-In order for you to make an application in Go, you need a `main` function inside a `package main`. So far all of our "domain" code has lived inside `package main` and our `func main` can reference everything.
+Да бисте могли да направите апликацију у Го -у, потребна вам је функција `main` унутар `package main`. До сада је сав наш "домен" код живео у `package main` и наш `func main` се може позивати на све.
 
-This was fine so far and it is good practice not to go over-the-top with package structure. If you take the time to look through the standard library you will see very little in the way of lots of folders and structure.
+Ово је до сада било у реду и добра је пракса да не претерујете са структуром пакета. Ако одвојите мало времена да прегледате стандардну библиотеку, видећете врло мало у смислу пуно фасцикли и структуре.
 
-Thankfully it's pretty straightforward to add structure _when you need it_.
+Срећом, прилично је једноставно додати структуру _ када вам затреба_.
 
-Inside the existing project create a `cmd` directory with a `webserver` directory inside that (e.g `mkdir -p cmd/webserver`).
+Унутар постојећег пројекта креирајте `func main` директоријум са директоријем` webserver` унутар њега (нпр. `mkdir -p cmd/webserver`).
 
-Move the `main.go` inside there.
+Померите `main.go` унутра.
 
-If you have `tree` installed you should run it and your structure should look like this
+Ако имате `tree` инсталирано, требали бисте га покренути и ваша структура би требала изгледати овако
 
 ```
 .
@@ -59,13 +59,13 @@ If you have `tree` installed you should run it and your structure should look li
 └── tape_test.go
 ```
 
-We now effectively have a separation between our application and the library code but we now need to change some package names. Remember when you build a Go application its package _must_ be `main`.
+Сада заправо имамо раздвајање између наше апликације и библиотечког кода, али сада морамо да променимо нека имена пакета. Запамтите да када правите Го апликацију њен пакет _мора_ бити `main`.
 
-Change all the other code to have a package called `poker`.
+Промените све остале кодове да бисте добили пакет под називом `poker`.
 
-Finally, we need to import this package into `main.go` so we can use it to create our web server. Then we can use our library code by using `poker.FunctionName`.
+Коначно, морамо да увозимо овај пакет у `main.go` тако да га можемо користити за креирање нашег веб сервера. Тада можемо користити наш библиотечки код помоћу `poker.FunctionName`.
 
-The paths will be different on your computer, but it should be similar to this:
+Путања ће бити различита на вашем рачунару, али би требало да буде слична овој:
 
 ```go
 //cmd/webserver/main.go
@@ -99,21 +99,21 @@ func main() {
 }
 ```
 
-The full path may seem a bit jarring, but this is how you can import _any_ publicly available library into your code.
+Читав пут може изгледати помало узнемирујуће, али овако можете увести _било коју_ јавно доступну библиотеку у свој код.
 
-By separating our domain code into a separate package and committing it to a public repo like GitHub any Go developer can write their own code which imports that package the features we've written available. The first time you try and run it will complain it is not existing but all you need to do is run `go get`.
+Одвајањем нашег кода домена у посебан пакет и предавањем на јавни репо, попут ГитХуб -а, сваки Го програмер може написати свој код који увози тај пакет доступних функција. Први пут када покушате да га покренете жалиће се да не постоји, али све што треба да урадите је да покренете `go get`.
 
-In addition, users can view [the documentation at godoc.org](https://godoc.org/github.com/marcetin/nauci-go-sa-testovima/command-line/v1).
+Осим тога, корисници могу прегледати [докумантацију на godoc.org](https://godoc.org/github.com/marcetin/nauci-go-sa-testovima/command-line/v1).
 
-### Final checks
+### Завршне провере
 
-- Inside the root run `go test` and check they're still passing
-- Go inside our `cmd/webserver` and do `go run main.go`
-  - Visit `http://localhost:5000/league` and you should see it's still working
+- Унутар роот-а покрените `go test` и проверите да ли још увек пролази
+- Уђите у наш `cmd/webserver` и `go run main.go`
+    - Посетите `http://localhost:5000/league` и требало би да видите да и даље ради
 
-### Walking skeleton
+### Пешачки костур
 
-Before we get stuck into writing tests, let's add a new application that our project will build. Create another directory inside `cmd` called `cli` (command line interface) and add a `main.go` with the following
+Пре него што се заглавимо у писању тестова, додајмо нову апликацију коју ће наш пројекат изградити. Направите још један директоријум унутар `cmd` -а под називом` cli` (интерфејс командне линије) и додајте `main.go` са следећим
 
 ```go
 //cmd/cli/main.go
@@ -126,15 +126,15 @@ func main() {
 }
 ```
 
-The first requirement we'll tackle is recording a win when the user types `{PlayerName} wins`.
+Први услов који ћемо решити је бележење победе када корисник откуца `{PlayerName} wins`.
 
 ## Прво напишите тест
 
-We know we need to make something called `CLI` which will allow us to `Play` poker. It'll need to read user input and then record wins to a `PlayerStore`.
+Знамо да морамо да направимо нешто што се зове `CLI` што ће нам омогућити да` Play` покер. Мораће да прочита унос корисника, а затим забележи победе у `PlayerStore`.
 
-Before we jump too far ahead though, let's just write a test to check it integrates with the `PlayerStore` how we'd like.
+Пре него што одемо предалеко, само да напишемо тест да проверимо да ли се интегрише са `PlayerStore` -ом онако како бисмо желели.
 
-Inside `CLI_test.go` (in the root of the project, not inside `cmd`)
+Унутар `CLI_test.go` (у корену пројекта, не унутар `cmd`)
 
 ```go
 //CLI_test.go
@@ -153,10 +153,10 @@ func TestCLI(t *testing.T) {
 }
 ```
 
-- We can use our `StubPlayerStore` from other tests
-- We pass in our dependency into our not yet existing `CLI` type
-- Trigger the game by an unwritten `PlayPoker` method
-- Check that a win is recorded
+- Можемо користити наш `StubPlayerStore` из других тестова
+- Своју зависност преносимо у наш још не постојећи тип `CLI`
+- Покрените игру по неписаној `PlayPoker` методи
+- Проверите да ли је забележена победа
 
 ## Покушајте да покренете тест
 
@@ -167,9 +167,9 @@ func TestCLI(t *testing.T) {
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-At this point, you should be comfortable enough to create our new `CLI` struct with the respective field for our dependency and add a method.
+У овом тренутку би вам требало бити довољно удобно да креирате нашу нову `CLI` структуру са одговарајућим пољем за нашу зависност и додате методу.
 
-You should end up with code like this
+Требало би да завршите са оваквим кодом
 
 ```go
 //CLI.go
@@ -182,7 +182,7 @@ type CLI struct {
 func (cli *CLI) PlayPoker() {}
 ```
 
-Remember we're just trying to get the test running so we can check the test fails how we'd hope
+Упамтите да само покушавамо покренути тест како бисмо могли провјерити да тест није успио како смо се надали
 
 ```
 --- FAIL: TestCLI (0.00s)
@@ -199,11 +199,11 @@ func (cli *CLI) PlayPoker() {
 }
 ```
 
-That should make it pass.
+То би требало да прође.
 
-Next, we need to simulate reading from `Stdin` (the input from the user) so that we can record wins for specific players.
+Затим морамо симулирати читање са `Stdin` (унос од корисника) како бисмо могли забиљежити побједе за одређене играче.
 
-Let's extend our test to exercise this.
+Хајде да проширимо наш тест на ово.
 
 ## Прво напишите тест
 
@@ -229,9 +229,9 @@ func TestCLI(t *testing.T) {
 }
 ```
 
-`os.Stdin` is what we'll use in `main` to capture the user's input. It is a `*File` under the hood which means it implements `io.Reader` which as we know by now is a handy way of capturing text.
+`os.Stdin` је оно што ћемо користити у `main` за хватање уноса корисника. То је `*File` испод хаубе, што значи да имплементира `io.Reader` који је до сада познат згодан начин за снимање текста.
 
-We create an `io.Reader` in our test using the handy `strings.NewReader`, filling it with what we expect the user to type.
+Ми стварамо `io.Reader` у нашем тесту помоћу практичних `strings.NewReader`, испуњавајући га оним што очекујемо од корисника да откуца.
 
 ## Покушајте да покренете тест
 
@@ -239,7 +239,7 @@ We create an `io.Reader` in our test using the handy `strings.NewReader`, fillin
 
 ## Напиши минималну количину кода за покретање теста и провери неуспешне резултате теста
 
-We need to add our new dependency into `CLI`.
+Морамо додати нашу нову зависност у `CLI`.
 
 ```go
 //CLI.go
@@ -257,7 +257,7 @@ type CLI struct {
 FAIL
 ```
 
-Remember to do the strictly easiest thing first
+Не заборавите да прво учините најједноставнију ствар
 
 ```go
 func (cli *CLI) PlayPoker() {
@@ -265,11 +265,11 @@ func (cli *CLI) PlayPoker() {
 }
 ```
 
-The test passes. We'll add another test to force us to write some real code next, but first, let's refactor.
+Тест пролази. Додаћемо још један тест који ће нас натерати да следећи напишемо прави код, али прво, хајде да преуредимо.
 
 ## Рефактор
 
-In `server_test` we earlier did checks to see if wins are recorded as we have here. Let's DRY that assertion up into a helper
+У `server_test` смо раније проверили да ли су победе забележене као што имамо овде. СУШИМО ту тврдњу у помоћника
 
 ```go
 //server_test.go
@@ -286,9 +286,9 @@ func assertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
 }
 ```
 
-Now replace the assertions in both `server_test.go` and `CLI_test.go`.
+Сада замените тврдње у `server_test.go` и `CLI_test.go`.
 
-The test should now read like so
+Тест би сада требао да изгледа овако
 
 ```go
 //CLI_test.go
@@ -303,7 +303,7 @@ func TestCLI(t *testing.T) {
 }
 ```
 
-Now let's write _another_ test with different user input to force us into actually reading it.
+Хајде сада да напишемо још један тест са различитим корисничким уносом који ће нас натерати да га заиста читамо.
 
 ## Прво напишите тест
 
@@ -349,11 +349,11 @@ FAIL
 
 ## Напишите довољно кода да прође
 
-We'll use a [`bufio.Scanner`](https://golang.org/pkg/bufio/) to read the input from the `io.Reader`.
+Користићемо [`bufio.Scanner`](https://golang.org/pkg/bufio/) за читање уноса из `io.Reader`.
 
-> Package bufio implements buffered I/O. It wraps an io.Reader or io.Writer object, creating another object (Reader or Writer) that also implements the interface but provides buffering and some help for textual I/O.
+> Бufio пакет имплементира међуспремник I/O. Обухвата io.Reader или io.Writer објекат, стварајући други објекат (Reader или Writer) који такође имплементира интерфејс, али пружа баферисање и одређену помоћ за текстуални `I/O`.
 
-Update the code to the following
+Ажурирајте код на следеће
 
 ```go
 //CLI.go
@@ -373,14 +373,14 @@ func extractWinner(userInput string) string {
 }
 ```
 
-The tests will now pass.
+Сада ће тестови проћи.
 
-- `Scanner.Scan()` will read up to a newline.
-- We then use `Scanner.Text()` to return the `string` the scanner read to.
+- `Scanner.Scan()` ће читати до новог реда.
+- Затим користимо `Scanner.Text()` да вратимо `string` у који је скенер читао.
 
-Now that we have some passing tests, we should wire this up into `main`. Remember we should always strive to have fully-integrated working software as quickly as we can.
+Сада када имамо неке положене тестове, требали бисмо ово повезати у `main`. Упамтите да бисмо увек требали настојати да имамо што интегрисанији радни софтвер што је брже могуће.
 
-In `main.go` add the following and run it. (you may have to adjust the path of the second dependency to match what's on your computer)
+У `main.go` додајте следеће и покрените га. (можда ћете морати да прилагодите путању друге зависности тако да одговара ономе што је на вашем рачунару)
 
 ```go
 package main
@@ -415,34 +415,34 @@ func main() {
 }
 ```
 
-You should get an error
+Требало би да добијете грешку
 
 ```
 command-line/v3/cmd/cli/main.go:32:25: implicit assignment of unexported field 'playerStore' in poker.CLI literal
 command-line/v3/cmd/cli/main.go:32:34: implicit assignment of unexported field 'in' in poker.CLI literal
 ```
 
-What's happening here is because we are trying to assign to the fields `playerStore` and `in` in `CLI`. These are unexported (private) fields. We _could_ do this in our test code because our test is in the same package as `CLI` (`poker`). But our `main` is in package `main` so it does not have access.
+Оно што се овде дешава је зато што покушавамо да доделимо поља `playerStore` и` in` у `CLI`. То су неекспортована (приватна) поља. Ово можемо _учинити_ у нашем тестном коду јер је наш тест у истом пакету као `CLI` (` poker`). Али наш `main` је у пакету` main` па нема приступ.
 
-This highlights the importance of _integrating your work_. We rightfully made the dependencies of our `CLI` private (because we don't want them exposed to users of `CLI`s) but haven't made a way for users to construct it.
+Ово наглашава важност _интегрисања вашег рада_. С правом смо учинили зависности нашег `CLI`-а приватним (јер не желимо да буду изложени корисницима` "CLI"-а), али нисмо направили начин да га корисници конструишу.
 
-Is there a way to have caught this problem earlier?
+Постоји ли начин да се овај проблем ухвати раније?
 
 ### `package mypackage_test`
 
-In all other examples so far, when we make a test file we declare it as being in the same package that we are testing.
+У свим осталим примерима до сада, када правимо пробну датотеку, изјављујемо да се налази у истом пакету који тестирамо.
 
-This is fine and it means on the odd occasion where we want to test something internal to the package we have access to the unexported types.
+Ово је у реду и значи да у чудним приликама када желимо да тестирамо нешто интерно у пакету имамо приступ неекспортованим типовима.
 
-But given we have advocated for _not_ testing internal things _generally_, can Go help enforce that? What if we could test our code where we only have access to the exported types (like our `main` does)?
+Али с обзиром да смо се залагали за _не_ тестирање унутрашњих ствари _опћенито_, може ли Го помоћи да се то спроведе? Шта ако бисмо могли да тестирамо наш код где имамо приступ само извезеним типовима (попут нашег `main`-а)?
 
-When you're writing a project with multiple packages I would strongly recommend that your test package name has `_test` at the end. When you do this you will only be able to have access to the public types in your package. This would help with this specific case but also helps enforce the discipline of only testing public APIs. If you still wish to test internals you can make a separate test with the package you want to test.
+Када пишете пројекат са више пакета, топло бих вам препоручио да назив вашег тестног пакета има `_test` на крају. Када то учините, моћи ћете да имате приступ само јавним типовима у свом пакету. Ово би помогло у овом конкретном случају, али такође помаже у примени дисциплине само тестирања јавних АПИ -ја. Ако и даље желите да тестирате унутрашњост, можете направити посебан тест са пакетом који желите да тестирате.
 
-An adage with TDD is that if you cannot test your code then it is probably hard for users of your code to integrate with it. Using `package foo_test` will help with this by forcing you to test your code as if you are importing it like users of your package will.
+Изрека за ТДД је да ако не можете да тестирате свој код, онда ће корисницима вашег кода вероватно бити тешко да се интегришу са њим. Употреба `package foo_test` ће вам помоћи у томе, приморавши вас да тестирате свој код као да га увозите као што ће то учинити корисници вашег пакета.
 
-Before fixing `main` let's change the package of our test inside `CLI_test.go` to `poker_test`.
+Пре него што поправимо `маин`, променимо пакет нашег теста унутар `CLI_test.go` у `poker_test`.
 
-If you have a well-configured IDE you will suddenly see a lot of red! If you run the compiler you'll get the following errors
+Ако имате добро конфигурисан ИДЕ, одједном ћете видети много црвене боје! Ако покренете компајлер, добићете следеће грешке
 
 ```
 ./CLI_test.go:12:19: undefined: StubPlayerStore
@@ -451,17 +451,17 @@ If you have a well-configured IDE you will suddenly see a lot of red! If you run
 ./CLI_test.go:27:3: undefined: assertPlayerWin
 ```
 
-We have now stumbled into more questions on package design. In order to test our software we made unexported stubs and helper functions which are no longer available for us to use in our `CLI_test` because the helpers are defined in the `_test.go` files in the `poker` package.
+Сада смо наишли на још питања о дизајну паковања. Да бисмо тестирали наш софтвер, направили смо неекспортиране стубове и помоћне функције које нам више нису доступне за употребу у нашем `CLI_test` јер су помагачи дефинисани у `_test.go` датотекама у `poker` пакету.
 
-#### Do we want to have our stubs and helpers 'public'?
+#### Да ли желимо да наши стубови и помагачи буду „јавни“?
 
-This is a subjective discussion. One could argue that you do not want to pollute your package's API with code to facilitate tests.
+Ово је субјективна дискусија. Могло би се тврдити да не желите да загађујете АПИ свог пакета кодом ради олакшавања тестова.
 
-In the presentation ["Advanced Testing with Go"](https://speakerdeck.com/mitchellh/advanced-testing-with-go?slide=53) by Mitchell Hashimoto, it is described how at HashiCorp they advocate doing this so that users of the package can write tests without having to re-invent the wheel writing stubs. In our case, this would mean anyone using our `poker` package won't have to create their own stub `PlayerStore` if they wish to work with our code.
+У презентацији ["Напредно тестирање уз Го"](https://speakerdeck.com/mitchellh/advanced-testing-with-go?slide=53) аутора Митчела Хашимотоа, описано је како се у ХасхиЦорп-у залажу за то како би корисници пакета могли писати тестове без потребе за поновним проналажењем точкића за писање котача. У нашем случају, ово би значило да било ко ко користи наш `poker` пакет неће морати да креира сопствени стуб `PlayerStore` ако жели да ради са нашим кодом.
 
-Anecdotally I have used this technique in other shared packages and it has proved extremely useful in terms of users saving time when integrating with our packages.
+Анегдотски сам користио ову технику у другим дељеним пакетима и показала се изузетно корисном у смислу уштеде времена корисника приликом интеграције са нашим пакетима.
 
-So let's create a file called `testing.go` and add our stub and our helpers.
+Хајде да направимо датотеку под називом `testing.go` и додамо наш стуб и наше помоћнике.
 
 ```go
 //testing.go
@@ -503,9 +503,9 @@ func AssertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
 // todo for you - the rest of the helpers
 ```
 
-You'll need to make the helpers public (remember exporting is done with a capital letter at the start) if you want them to be exposed to importers of our package.
+Морате да учините помоћнике јавним (запамтите да се извоз врши великим словом на почетку) ако желите да буду изложени увозницима нашег пакета.
 
-In our `CLI` test you'll need to call the code as if you were using it within a different package.
+У нашем `CLI` тесту морате да позовете код као да га користите у другом пакету.
 
 ```go
 //CLI_test.go
@@ -534,7 +534,7 @@ func TestCLI(t *testing.T) {
 }
 ```
 
-You'll now see we have the same problems as we had in `main`
+Сада ћете видети да имамо исте проблеме као и у `main`-у
 
 ```
 ./CLI_test.go:15:26: implicit assignment of unexported field 'playerStore' in poker.CLI literal
@@ -543,7 +543,7 @@ You'll now see we have the same problems as we had in `main`
 ./CLI_test.go:25:39: implicit assignment of unexported field 'in' in poker.CLI literal
 ```
 
-The easiest way to get around this is to make a constructor as we have for other types. We'll also change `CLI` so it stores a `bufio.Scanner` instead of the reader as it's now automatically wrapped at construction time.
+Најлакши начин да то заобиђете је да направите конструктор какав имамо за друге типове. Такође ћемо променити `CLI` тако да он складишти `bufio.Scanner` уместо читача јер је сада аутоматски умотан у време изградње.
 
 ```go
 //CLI.go
@@ -560,7 +560,7 @@ func NewCLI(store PlayerStore, in io.Reader) *CLI {
 }
 ```
 
-By doing this, we can then simplify and refactor our reading code
+Радећи ово, тада можемо поједноставити и прерадити наш код за читање
 
 ```go
 //CLI.go
@@ -579,20 +579,20 @@ func (cli *CLI) readLine() string {
 }
 ```
 
-Change the test to use the constructor instead and we should be back to the tests passing.
+Промените тест да бисте уместо њега користили конструктор и требало би да се вратимо на пролаз тестова.
 
-Finally, we can go back to our new `main.go` and use the constructor we just made
+Коначно, можемо се вратити на наш нови `main.go` и користити конструктор који смо управо направили
 
 ```go
 //cmd/cli/main.go
 game := poker.NewCLI(store, os.Stdin)
 ```
 
-Try and run it, type "Bob wins".
+Покушајте да га покренете, откуцајте "Bob wins".
 
 ### Рефактор
 
-We have some repetition in our respective applications where we are opening a file and creating a `file_system_store` from its contents. This feels like a slight weakness in our package's design so we should make a function in it to encapsulate opening a file from a path and returning you the `PlayerStore`.
+Имамо неколико понављања у нашим одговарајућим апликацијама где отварамо датотеку и правимо `file_system_store` од њеног садржаја. Ово се осећа као мала слабост у дизајну нашег пакета, па бисмо у њему требали направити функцију која инкапсулира отварање датотеке са путање и враћање `PlayerStore`-а.
 
 ```go
 //file_system_store.go
@@ -617,9 +617,9 @@ func FileSystemPlayerStoreFromFile(path string) (*FileSystemPlayerStore, func(),
 }
 ```
 
-Now refactor both of our applications to use this function to create the store.
+Сада прерадите обе наше апликације да користе ову функцију за креирање продавнице.
 
-#### CLI application code
+#### CLI код апликације
 
 ```go
 //cmd/cli/main.go
@@ -648,7 +648,7 @@ func main() {
 }
 ```
 
-#### Web server application code
+#### Код апликације веб сервера
 
 ```go
 //cmd/webserver/main.go
@@ -678,23 +678,23 @@ func main() {
 }
 ```
 
-Notice the symmetry: despite being different user interfaces the setup is almost identical. This feels like good validation of our design so far.
-And notice also that `FileSystemPlayerStoreFromFile` returns a closing function, so we can close the underlying file once we are done using the Store.
+Уочите симетрију: упркос различитим корисничким интерфејсима, подешавање је готово идентично. Ово се чини као добра потврда нашег дизајна до сада.
+Такође приметите да `FileSystemPlayerStoreFromFile` враћа функцију затварања, тако да можемо затворити основну датотеку када завршимо са коришћењем продавнице.
 
 ## Окончање
 
-### Package structure
+### Структура пакета
 
-This chapter meant we wanted to create two applications, re-using the domain code we've written so far. In order to do this, we needed to update our package structure so that we had separate folders for our respective `main`s.
+Ово поглавље је значило да желимо да направимо две апликације, користећи поново код домена који смо до сада написали. Да бисмо то учинили, морали смо да ажурирамо нашу структуру пакета тако да имамо посебне фасцикле за наш `main`.
 
-By doing this we ran into integration problems due to unexported values so this further demonstrates the value of working in small "slices" and integrating often.
+Тиме смо наишли на проблеме интеграције због неекспортованих вредности, па ово додатно показује вредност рада у малим „кришкама“ и често интегрисање.
 
-We learned how `mypackage_test` helps us create a testing environment which is the same experience for other packages integrating with your code, to help you catch integration problems and see how easy (or not!) your code is to work with.
+Научили смо како нам `mypackage_test` помаже у стварању окружења за тестирање које је исто искуство за остале пакете који се интегришу са вашим кодом, како би вам помогло да ухватите проблеме при интеграцији и видите са колико је лако (или не!) Радити са вашим кодом.
 
-### Reading user input
+### Читање корисничког уноса
 
-We saw how reading from `os.Stdin` is very easy for us to work with as it implements `io.Reader`. We used `bufio.Scanner` to easily read line by line user input.
+Видели смо како нам је читање из `os.Stdin` -а веома лако радити јер имплементира `io.Reader`. Користили смо `bufio.Scanner` за лако читање уноса корисника по редак.
 
-### Simple abstractions leads to simpler code re-use
+### Једноставне апстракције доводе до једноставније поновне употребе кода
 
-It was almost no effort to integrate `PlayerStore` into our new application (once we had made the package adjustments) and subsequently testing was very easy too because we decided to expose our stub version too.
+Готово да није било напора да интегришемо `PlayerStore` у нашу нову апликацију (након што смо извршили прилагођавања пакета), а касније је и тестирање било врло једноставно јер смо одлучили да откријемо и нашу верзију стуб -а.
