@@ -2,22 +2,23 @@
 
 **[Сав код можете пронаћи овде](https://github.com/marcetin/nauci-go-sa-testovima/tree/main/q-and-a/os-exec)**
 
-[keith6014](https://www.reddit.com/user/keith6014) asks on [reddit](https://www.reddit.com/r/golang/comments/aaz8ji/testdata_and_function_setup_help/)
+[keith6014](https://www.reddit.com/user/keith6014) пита на [reddit](https://www.reddit.com/r/golang/comments/aaz8ji/testdata_and_function_setup_help/)
 
-> I am executing a command using os/exec.Command() which generated XML data. The command will be executed in a function called GetData().
+> Извршавам команду помоћу os/exec.Command() која је генерисала "XML" податке. Команда ће се извршавати у функцији која се зове GetData().
 
-> In order to test GetData(), I have some testdata which I created.
+> Да бих тестирао GetData(), имам неке тестне податке које сам направио.
 
-> In my _test.go I have a TestGetData which calls GetData() but that will use os.exec, instead I would like for it to use my testdata.
+> У мом _test.go имам ТестГетДата који позива GetData(), али који ће користити os.exec, уместо тога бих волео да он користи моје тестне податке.
 
-> What is a good way to achieve this? When calling GetData should I have a "test" flag mode so it will read a file ie GetData(mode string)?
+> Који је добар начин да се то постигне? Приликом позивања GetData требам ли имати "тест" начин означавања тако да чита датотеку, тј. GetData (низ начина)?
 
-A few things
+Неколико ствари
 
-- When something is difficult to test, it's often due to the separation of concerns not being quite right
-- Don't add "test modes" into your code, instead use [Dependency Injection](/dependency-injection.md) so that you can model your dependencies and separate concerns.
+- Када је нешто тешко тестирати, то је често због тога што раздвајање брига није сасвим у реду
+- Не додавајте "тест моде" у свој код, уместо тога користите [Dependency Injection](/dependency-injection.md) тако да можете моделирати своје зависности и одвојити бриге.
 
-I have taken the liberty of guessing what the code might look like
+Узео сам слободу да погодим како би код могао изгледати
+
 
 ```go
 type Payload struct {
@@ -40,10 +41,10 @@ func GetData() string {
 }
 ```
 
-- It uses `exec.Command` which allows you to execute an external command to the process
-- We capture the output in `cmd.StdoutPipe` which returns us a `io.ReadCloser` (this will become important)
-- The rest of the code is more or less copy and pasted from the [excellent documentation](https://golang.org/pkg/os/exec/#example_Cmd_StdoutPipe).
-    - We capture any output from stdout into an `io.ReadCloser` and then we `Start` the command and then wait for all the data to be read by calling `Wait`. In between those two calls we decode the data into our `Payload` struct.
+- Користи `exec.Command` који вам омогућава извршавање спољне команде процеса
+- Снимамо излаз у `cmd.StdoutPipe` који нам враћа `io.ReadCloser` (ово ће постати важно)
+- Остатак кода је мање -више копиран и залепљен из [одличне документације](https://golang.org/pkg/os/exec/#example_Cmd_StdoutPipe).
+    - Снимимо било који излаз са стдоут -а у `io.ReadCloser` и затим `Start` команду, а затим сачекамо да се сви подаци прочитају позивањем `Wait`. Између та два позива декодирамо податке у нашу `Payload` структуру.
 
 Here is what is contained inside `msg.xml`
 
@@ -53,7 +54,7 @@ Here is what is contained inside `msg.xml`
 </payload>
 ```
 
-I wrote a simple test to show it in action
+Написао сам једноставан тест да то покажем на делу
 
 ```go
 func TestGetData(t *testing.T) {
@@ -66,22 +67,22 @@ func TestGetData(t *testing.T) {
 }
 ```
 
-## Testable code
+## Код који се може тестирати
 
-Testable code is decoupled and single purpose. To me it feels like there are two main concerns for this code
+Код за тестирање је одвојен и има једну намену. Мени се чини да постоје два главна проблема за овај код
 
-1. Retrieving the raw XML data
-2. Decoding the XML data and applying our business logic (in this case `strings.ToUpper` on the `<message>`)
+1. Преузимање сирових "XML" података
+2. Декодирање "XML" података и примена наше пословне логике (у овом случају `strings.ToUpper` на` <message> `)
 
-The first part is just copying the example from the standard lib.
+Први део је само копирање примера из стандардног либ -а.
 
-The second part is where we have our business logic and by looking at the code we can see where the "seam" in our logic starts; it's where we get our `io.ReadCloser`. We can use this existing abstraction to separate concerns and make our code testable.
+Други део је где имамо своју пословну логику и гледајући код можемо видети где почиње "шав" у нашој логици; ту добијамо `io.ReadCloser`. Можемо користити ову постојећу апстракцију да одвојимо забринутости и учинимо наш код тестираним.
 
-**The problem with GetData is the business logic is coupled with the means of getting the XML. To make our design better we need to decouple them**
+**Проблем са ГетДата -ом је што је пословна логика повезана са средствима за добијање "XML"-а. Да бисмо наш дизајн учинили бољим, морамо их одвојити**
 
-Our `TestGetData` can act as our integration test between our two concerns so we'll keep hold of that to make sure it keeps working.
+Наши `TestGetData` могу деловати као наш тест интеграције између наше две бриге, па ћемо се тога држати како бисмо били сигурни да наставља да ради.
 
-Here is what the newly separated code looks like
+Ево како изгледа ново раздвојени код
 
 ```go
 type Payload struct {
@@ -115,7 +116,7 @@ func TestGetDataIntegration(t *testing.T) {
 }
 ```
 
-Now that `GetData` takes its input from just an `io.Reader` we have made it testable and it is no longer concerned how the data is retrieved; people can re-use the function with anything that returns an `io.Reader` (which is extremely common). For example we could start fetching the XML from a URL instead of the command line.
+Сада када `GetData` узима своје уносе само из `io.Reader`-а, учинили смо га тестираним и више се не брине како се подаци преузимају; људи могу поново користити функцију са било чим што враћа `io.Reader` (што је изузетно уобичајено). На пример, могли бисмо да почнемо са преузимањем "XML" -а са УРЛ -а уместо из командне линије.
 
 ```go
 func TestGetData(t *testing.T) {
@@ -134,6 +135,6 @@ func TestGetData(t *testing.T) {
 
 ```
 
-Here is an example of a unit test for `GetData`.
+Ево примера јединичног теста за `GetData`.
 
-By separating the concerns and using existing abstractions within Go testing our important business logic is a breeze.
+Одвајањем брига и употребом постојећих апстракција у оквиру Го тестирања, наша важна пословна логика је лака.
